@@ -1,0 +1,1149 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Parameters</TITLE>
+<link href="zsh_16.html" rel=Next>
+<link href="zsh_14.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_14.html">previous</A>, <A HREF="zsh_16.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC52" HREF="zsh_toc.html#TOC52">Parameters</A></H1>
+<P>
+<A NAME="IDX519"></A>
+
+</P>
+<P>
+A parameter has a name, a value, and a number of attributes.  A name may
+be any sequence of alphanumeric characters and <CODE>_</CODE>'s, or the single
+characters <CODE>*</CODE>, <CODE>@</CODE>, <CODE>#</CODE>, <CODE>?</CODE>, <CODE>-</CODE>, <CODE>$</CODE>,
+or <CODE>!</CODE>.  The value may be either a scalar (a string), an
+integer, or an array.  To assign a scalar or integer value to a
+parameter, use the <CODE>typeset</CODE> builtin.  To assign an array value,
+<A NAME="IDX520"></A>
+use <SAMP>`set -A <VAR>name</VAR> <VAR>value</VAR> ...'</SAMP>.  The value of a
+<A NAME="IDX521"></A>
+parameter may also be assigned by writing:
+
+</P>
+<P>
+<CODE><VAR>name</VAR>=<VAR>value</VAR> ...</CODE>
+
+</P>
+<P>
+If the integer attribute, <SAMP>`-i'</SAMP>, is set for <VAR>name</VAR>, the
+<VAR>value</VAR> is subject to arithmetic evaluation.
+
+</P>
+
+
+
+<H2><A NAME="SEC53" HREF="zsh_toc.html#TOC53">Array Parameters</A></H2>
+
+<P>
+The value of an array parameter may be assigned by writing:
+
+</P>
+<P>
+<VAR>name</VAR>=(<VAR>value</VAR> ...) ...
+
+</P>
+<P>
+Individual elements of an array may be selected using a subscript.  A
+<A NAME="IDX522"></A>
+subscript of the form <CODE>[<VAR>exp</VAR>]</CODE> selects the single element
+<VAR>exp</VAR>, where <VAR>exp</VAR> is an arithmetic expression which will be subject
+to arithmetic expansion as if it were surrounded by <CODE>$((...))</CODE>.  The 
+elements are numbered beginning with 1 unless the <CODE>KSH_ARRAYS</CODE> option
+is set when they are numbered from zero.
+<A NAME="IDX523"></A>
+<A NAME="IDX524"></A>
+
+</P>
+<P>
+A subscript of the form <CODE>[*]</CODE> or <CODE>[@]</CODE> evaluates to all elements of
+an array; there is no difference between the two except when they appear 
+within double quotes.  <CODE>"$foo[*]"</CODE> evaluates to <CODE>"$foo[1] $foo[2] 
+..."</CODE>, while <CODE>"$foo[@]"</CODE> evaluates to <CODE>"$foo[1]"</CODE> 
+<CODE>"$foo[2]"</CODE>, etc.  
+
+</P>
+<P>
+A subscript of the form <CODE>[<VAR>exp1</VAR>,<VAR>exp2</VAR>]</CODE>
+selects all elements in the range <VAR>exp1</VAR> to <VAR>exp2</VAR>, inclusive.  If 
+one of the subscripts evaluates to a negative number, say <CODE>-<VAR>n</VAR></CODE>, then
+the <VAR>n</VAR>'th element from the end of the array is used.  Thus
+<CODE>$foo[-3]</CODE> is the third element from the end of the array
+<CODE>foo</CODE>, and <CODE>$foo[1,-1]</CODE> is the same as <CODE>$foo[*]</CODE>.
+
+</P>
+<P>
+Subscripting may also be performed on non-array values, in which case
+<A NAME="IDX525"></A>
+the subscripts specify a substring to be extracted.  For example, if
+<CODE>FOO</CODE> is set to <CODE>foobar</CODE>, then <CODE>echo $<VAR>FOO</VAR>[2,5]</CODE> prints
+<CODE>ooba</CODE>.
+
+</P>
+<P>
+Subscripts may be used inside braces used to delimit a parameter name, thus 
+<CODE>${foo[2]}</CODE> is equivalent to <CODE>$foo[2]</CODE>.  If the <CODE>KSH_ARRAYS</CODE> 
+option is set, the braced form is the only one that will work, the subscript 
+otherwise not being treated specially.
+
+</P>
+<P>
+If a subscript is used on the left side of an assignment the selected
+range is replaced by the expression on the right side.
+
+</P>
+<P>
+If the opening bracket or the comma is directly followed by an opening
+parenthesis the string up to the matching closing parenthesis is
+considered to be a list of flags.  The flags currently understood are:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>e</CODE>
+<DD>
+This option has no effect and retained for backward compatibility only.
+
+<DT><CODE>w</CODE>
+<DD>
+If the parameter subscripted is a scalar, then this flag makes
+subscription work on a per-word basis instead of characters.
+
+<DT><CODE>s:<VAR>string</VAR>:</CODE>
+<DD>
+Defines the <VAR>string</VAR> that separates words (for use with the <CODE>w</CODE>
+flag).
+
+<DT><CODE>p</CODE>
+<DD>
+Recognize the same escape sequences as the <CODE>print</CODE> builtin in the 
+string argument of a subsequent <CODE>s</CODE> flag.
+
+<DT><CODE>f</CODE>
+<DD>
+If the parameter subscripted is a scalar than this flag makes subscription 
+work on a per-line basis instead of characters.   This is a shorthand for 
+<CODE>pws:\n:</CODE>.
+
+<DT><CODE>r</CODE>
+<DD>
+If this flag is given the exp is taken as a pattern and the result is the 
+first matching array element, substring or word (if the parameter is an array,
+if it is a scalar, or if it is a scalar and the <CODE>w</CODE> flag is given,
+respectively); note that this is like giving a number: <CODE>$foo[(r)??,3]</CODE> 
+and <CODE>$foo[(r)??,(r)f*]</CODE> work.
+
+<DT><CODE>R</CODE>
+<DD>
+Like <CODE>r</CODE>, but gives the last match.
+
+<DT><CODE>i</CODE>
+<DD>
+Like <CODE>r</CODE>, but gives the index of the match instead; this may not be
+combined with a second argument.
+
+<DT><CODE>I</CODE>
+<DD>
+Like <CODE>i</CODE>, but gives the index of the last match.
+
+<DT><CODE>n:<VAR>expr</VAR>:</CODE>
+<DD>
+If combined with <CODE>r</CODE>, <CODE>R</CODE>, <CODE>i</CODE>, or <CODE>I</CODE>, makes them
+return the <VAR>n</VAR>'th or <VAR>n</VAR>'th last match (if <VAR>expr</VAR>
+evaluates to <VAR>n</VAR>).
+</DL>
+
+
+
+<H2><A NAME="SEC54" HREF="zsh_toc.html#TOC54">Positional Parameters</A></H2>
+
+<P>
+Positional parameters are set by the shell on invocation, by the
+<CODE>set</CODE> builtin, or by direct assignment.  The parameter <VAR>n</VAR>,
+where <VAR>n</VAR> is a number, is the <VAR>n</VAR>'th positional parameter.  The
+parameters <CODE>*</CODE>, <CODE>@</CODE>, and <CODE>argv</CODE> are arrays containing
+all the positional parameters; thus <CODE>argv[<VAR>n</VAR>]</CODE>, is equivalent
+to simply <VAR>n</VAR>.
+
+</P>
+
+
+<H2><A NAME="SEC55" HREF="zsh_toc.html#TOC55">Parameters Set By The Shell</A></H2>
+
+<P>
+The following parameters are automatically set by the shell:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>!</CODE>
+<DD>
+<A NAME="IDX526"></A>
+The process id of the last background command invoked.
+
+<DT><CODE>#</CODE>
+<DD>
+<A NAME="IDX527"></A>
+The number of positional parameters in decimal.
+
+<DT><CODE>ARGC</CODE>
+<DD>
+<A NAME="IDX528"></A>
+Same as <CODE>#</CODE>.  It has no special meaning in sh/ksh compatibility mode.
+
+<DT><CODE>$</CODE>
+<DD>
+<A NAME="IDX529"></A>
+The process id of this shell.
+
+<DT><CODE>-</CODE>
+<DD>
+<A NAME="IDX530"></A>
+Flags supplied to the shell on invocation or by the <CODE>set</CODE> or
+<CODE>setopt</CODE> commands.
+
+<DT><CODE>*</CODE>
+<DD>
+<A NAME="IDX531"></A>
+An array containing the positional parameters.
+
+<DT><CODE>argv</CODE>
+<DD>
+<A NAME="IDX532"></A>
+Same as <CODE>*</CODE>.  It has no special meaning in sh/ksh compatibility mode.
+
+<DT><CODE>@</CODE>
+<DD>
+<A NAME="IDX533"></A>
+Same as <CODE>argv[@]</CODE> but it can be used in sh/ksh compatibility mode.
+
+<DT><CODE>?</CODE>
+<DD>
+<A NAME="IDX534"></A>
+The exit value returned by the last command.
+
+<DT><CODE>status</CODE>
+<DD>
+<A NAME="IDX535"></A>
+Same as <CODE>?</CODE>.  It has no special meaning in sh/ksh compatibility mode.
+
+<DT><CODE>_</CODE>
+<DD>
+<A NAME="IDX536"></A>
+The last argument of the previous command.  Also, this parameter is set
+in the environment of every command executed to the full pathname of the
+command.
+
+<DT><CODE>EGID</CODE>
+<DD>
+<A NAME="IDX537"></A>
+The effective group id of the shell process.  If you have sufficient
+privileges, you may change the effective group id of the shell process by
+assigning to this parameter.  Also (assuming sufficient privileges), you
+may start a single command with a different effective group id by:
+<CODE>(EGID=egid ; command)</CODE>
+
+<DT><CODE>EUID</CODE>
+<DD>
+<A NAME="IDX538"></A>
+The effective user id of the shell process.  If you have sufficient
+privileges, you may change the effective user id of the shell process by
+assigning to this parameter.  Also (assuming sufficient privileges), you
+may start a single command with a different effective user id by:
+<CODE>(EUID=euid ; command)</CODE>
+
+<DT><CODE>ERRNO</CODE>
+<DD>
+<A NAME="IDX539"></A>
+The value of <CODE>errno</CODE> as set by the most recently failed system
+call.  This value is system dependent and is intended for debugging
+purposes.
+
+<DT><CODE>GID</CODE>
+<DD>
+<A NAME="IDX540"></A>
+The group id of the shell process.  If you have sufficient privileges, you 
+may change the group id of the shell process by assigning to this 
+parameter.  Also (assuming sufficient privileges), you may start a single
+command under a different group id by:
+<CODE>(GID=gid ; command)</CODE>
+
+<DT><CODE>HOST</CODE>
+<DD>
+<A NAME="IDX541"></A>
+The current hostname.
+
+<DT><CODE>LINENO</CODE>
+<DD>
+<A NAME="IDX542"></A>
+The line number of the current line within the current script being
+executed.
+
+<DT><CODE>LOGNAME</CODE>
+<DD>
+<A NAME="IDX543"></A>
+If the corresponding variable is not set in the environment of the shell, it 
+is initialized to the login name corresponding to the current login 
+session.  This parameter is exported by default but this can be disabled
+using the <CODE>typeset</CODE> builtin.
+
+<DT><CODE>MACHTYPE</CODE>
+<DD>
+<A NAME="IDX544"></A>
+The machine type (microprocessor class or machine model), as determined at 
+compile time.
+
+<DT><CODE>OLDPWD</CODE>
+<DD>
+<A NAME="IDX545"></A>
+The previous working directory.
+
+<DT><CODE>OPTARG</CODE>
+<DD>
+<A NAME="IDX546"></A>
+The value of the last option argument processed by the <CODE>getopts</CODE>
+command.
+
+<DT><CODE>OPTIND</CODE>
+<DD>
+<A NAME="IDX547"></A>
+The index of the last option argument processed by the <CODE>getopts</CODE>
+command.
+
+<DT><CODE>OSTYPE</CODE>
+<DD>
+<A NAME="IDX548"></A>
+The operating system, as determined at compile time.
+
+<DT><CODE>PPID</CODE>
+<DD>
+<A NAME="IDX549"></A>
+The process id of the parent of the shell.
+
+<DT><CODE>PWD</CODE>
+<DD>
+<A NAME="IDX550"></A>
+The present working directory.
+
+<DT><CODE>RANDOM</CODE>
+<DD>
+<A NAME="IDX551"></A>
+A random integer from 0 to 32767, newly generated each time this
+parameter is referenced.  The random number generator can be seeded by
+assigning a numeric value to <CODE>RANDOM</CODE>.
+
+<DT><CODE>SECONDS</CODE>
+<DD>
+<A NAME="IDX552"></A>
+The number of seconds since shell invocation.  If this parameter is
+assigned a value, then the value returned upon reference will be the
+value that was assigned plus the number of seconds since the assignment.
+
+<DT><CODE>SHLVL</CODE>
+<DD>
+<A NAME="IDX553"></A>
+Incremented by one each time a new shell is started.
+
+<DT><CODE>signals</CODE>
+<DD>
+<A NAME="IDX554"></A>
+An array containing the names of the signals.
+
+<DT><CODE>TTY</CODE>
+<DD>
+<A NAME="IDX555"></A>
+The name of the tty associated with the shell, if any.
+
+<DT><CODE>TTYIDLE</CODE>
+<DD>
+<A NAME="IDX556"></A>
+The idle time of the tty associated with the shell in seconds or -1 if there 
+is no such tty.
+
+<DT><CODE>UID</CODE>
+<DD>
+<A NAME="IDX557"></A>
+The user id of the shell process.  If you have sufficient privileges, you 
+may change the user id of the shell by assigning to this parameter.  Also  
+(assuming sufficient privileges), you may start a single command under a 
+different user id by: <CODE>(UID=uid ; command)</CODE>
+
+<DT><CODE>USERNAME</CODE>
+<DD>
+<A NAME="IDX558"></A>
+The username corresponding to the user id of the shell process.  If you have
+sufficient privileges, you may change the username (and also the user id and 
+group id) of the shell by assigning to this parameter.  Also (assuming 
+sufficient privileges), you may start a single command under a different
+username (and user id and group id) by: <CODE>(USERNAME=username ; command)</CODE>
+
+<DT><CODE>VENDOR</CODE>
+<DD>
+<A NAME="IDX559"></A>
+The vendor, as determined at compile time.
+
+<DT><CODE>ZSHNAME</CODE>
+<DD>
+<DT><CODE>ZSH_NAME</CODE>
+<DD>
+<A NAME="IDX560"></A>
+<A NAME="IDX561"></A>
+Expands to the basename of the command used to invoke this instance of zsh.
+
+<DT><CODE>ZSH_VERSION</CODE>
+<DD>
+<A NAME="IDX562"></A>
+The version number of this zsh.
+</DL>
+
+
+
+<H2><A NAME="SEC56" HREF="zsh_toc.html#TOC56">Parameters Used By The Shell</A></H2>
+
+<P>
+The following parameters are used by the shell:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>ARGV0</CODE>
+<DD>
+<A NAME="IDX563"></A>
+If exported, its value is used as argv[0] of external commands.  Usually
+used in constructs like <SAMP>`ARGV0=emacs nethack'</SAMP>.
+
+<DT><CODE>BAUD</CODE>
+<DD>
+<A NAME="IDX564"></A>
+The baud rate of the current connection.  Used by the line editor update
+mechanism to compensate for a slow terminal by delaying updates until
+necessary.  This may be profitably set to a lower value in some
+circumstances, e.g. for slow modems dialing into a communications server
+which is connected to a host via a fast link; in this case, this
+variable would be set by default to the speed of the fast link, and not
+the modem.  This parameter should be set to the baud rate of the slowest
+part of the link for best performance.  The compensation mechanism can
+be turned off by setting the variable to zero.
+
+<DT><CODE>cdpath (CDPATH)</CODE>
+<DD>
+<A NAME="IDX565"></A>
+<A NAME="IDX566"></A>
+An array (colon-separated list) of directories specifying the search
+path for the <CODE>cd</CODE> command.
+
+<DT><CODE>COLUMNS</CODE>
+<DD>
+<A NAME="IDX567"></A>
+The number of columns for this terminal session.  Used for printing
+select lists and for the line editor.
+
+<DT><CODE>DIRSTACKSIZE</CODE>
+<DD>
+<A NAME="IDX568"></A>
+<A NAME="IDX569"></A>
+The maximum size of the directory stack.  If the stack gets larger than
+this, it will be truncated automatically.  This is useful with the
+<CODE>AUTO_PUSHD</CODE> option.
+
+<DT><CODE>FCEDIT</CODE>
+<DD>
+<A NAME="IDX570"></A>
+The default editor for the <CODE>fc</CODE> builtin.
+
+<DT><CODE>fignore (FIGNORE)</CODE>
+<DD>
+<A NAME="IDX571"></A>
+<A NAME="IDX572"></A>
+An array (colon-separated list) containing the suffixes of files to be
+ignored during filename completion.  However, if the completion generates
+only files which would match if this variable would be ignored, than these
+files are completed anyway.
+
+<DT><CODE>fpath (FPATH)</CODE>
+<DD>
+<A NAME="IDX573"></A>
+<A NAME="IDX574"></A>
+An array (colon-separated list) of directories specifying the search
+path for function definitions.  This path is searched when a function
+with the <SAMP>`-u'</SAMP> attribute is referenced.  If an executable file is
+found, then it is read and executed in the current environment.
+
+<DT><CODE>histchars</CODE>
+<DD>
+<A NAME="IDX575"></A>
+Three characters used by the shell's history and lexical analysis
+mechanism.  The first character signals the start of a history
+substitution (default <CODE>!</CODE>).  The second character signals the start
+of a quick history substitution (default <CODE>^</CODE>).  The third character
+is the comment character (default <CODE>#</CODE>).
+
+<DT><CODE>HISTCHARS</CODE>
+<DD>
+<A NAME="IDX576"></A>
+Depreciated. Use <CODE>histchars</CODE>.
+
+<DT><CODE>HISTFILE</CODE>
+<DD>
+<A NAME="IDX577"></A>
+The file to save the history in when an interactive shell exits.  If
+unset, the history is not saved.
+
+<DT><CODE>HISTSIZE</CODE>
+<DD>
+<A NAME="IDX578"></A>
+The maximum size of the history list.
+
+<DT><CODE>HOME</CODE>
+<DD>
+<A NAME="IDX579"></A>
+The default argument for the <CODE>cd</CODE> command.
+
+<DT><CODE>IFS</CODE>
+<DD>
+<A NAME="IDX580"></A>
+Internal field separators, normally space, tab, and newline, that are used to
+separate words which result from command or parameter substitution and words
+read by the <CODE>read</CODE> builtin.  Any characters from the set space, tab and 
+newline that appear in the <CODE>IFS</CODE> are called <STRONG>IFS white space</STRONG>.  One 
+or more IFS white space characters or one non-IFS white space character 
+together with any adjacent IFS white space character delimit a field.  If an 
+IFS white space character appears twice consecutively in the <CODE>IFS</CODE>, this 
+character is treated as if it were not an IFS white space character.
+
+<DT><CODE>KEYTIMEOUT</CODE>
+<DD>
+<A NAME="IDX581"></A>
+The time the shell waits, in hundredths of seconds, for another key to
+be pressed when reading bound multi-character sequences.
+
+<DT><CODE>LANG</CODE>
+<DD>
+<A NAME="IDX582"></A>
+This variable determines the locale category for any category not
+specifically selected via a variable starting with <CODE>LC_</CODE>.
+
+<DT><CODE>LC_ALL</CODE>
+<DD>
+<A NAME="IDX583"></A>
+This variable overrides the value of the <CODE>LANG</CODE> variable and the
+value of any of the other variables starting with <CODE>LC_</CODE>.
+
+<DT><CODE>LC_COLLATE</CODE>
+<DD>
+<A NAME="IDX584"></A>
+This variable determines the locale category for character collation
+information within ranges in glob brackets and for sorting.
+
+<DT><CODE>LC_CTYPE</CODE>
+<DD>
+<A NAME="IDX585"></A>
+This variable determines the locale category for character handling
+functions.
+
+<DT><CODE>LC_MESSAGES</CODE>
+<DD>
+<A NAME="IDX586"></A>
+This variable determines the language in which messages should be
+written.  Note that zsh does not use message catalogs.
+
+<DT><CODE>LC_TIME</CODE>
+<DD>
+<A NAME="IDX587"></A>
+This variable determines the locale category for date and time
+formatting in promt escape sequences.
+
+<DT><CODE>LINES</CODE>
+<DD>
+<A NAME="IDX588"></A>
+The number of lines for this terminal session.  Used for printing select
+lists and for the line editor.
+
+<DT><CODE>LISTMAX</CODE>
+<DD>
+<A NAME="IDX589"></A>
+In the line editor, the number of filenames to list without asking
+first.  If set to zero, the shell asks only if the listing would scroll
+off the screen.
+
+<DT><CODE>LOGCHECK</CODE>
+<DD>
+<A NAME="IDX590"></A>
+The interval in seconds between checks for login/logout activity using
+the <CODE>watch</CODE> parameter.
+
+<DT><CODE>MAIL</CODE>
+<DD>
+<A NAME="IDX591"></A>
+If this parameter is set and <CODE>mailpath</CODE> is not set, the shell looks
+for mail in the specified file.
+
+<DT><CODE>MAILCHECK</CODE>
+<DD>
+<A NAME="IDX592"></A>
+The interval in seconds between checks for new mail.
+
+<DT><CODE>mailpath (MAILPATH)</CODE>
+<DD>
+<A NAME="IDX593"></A>
+<A NAME="IDX594"></A>
+An array (colon-separated list) of filenames to check for new mail.  Each 
+filename can be followed by a <CODE>?</CODE> and a message that will be 
+printed.  The message will undergo parameter expansion, command substitution 
+and arithmetic substitution with the variable <CODE>$_</CODE> defined as the name 
+of the file that has changed.  The default message is <SAMP>`You have
+new mail'</SAMP>.  If an element is a directory instead of a file the shell will 
+recursively check every file in every subdirectory of the element.
+
+<DT><CODE>manpath (MANPATH)</CODE>
+<DD>
+<A NAME="IDX595"></A>
+<A NAME="IDX596"></A>
+An array (colon-separated list) whose value is not used by the shell.
+The <CODE>manpath</CODE> array can be useful, however, since setting it also
+sets <CODE>MANPATH</CODE>, and vice versa.
+
+<DT><CODE>NULLCMD</CODE>
+<DD>
+<A NAME="IDX597"></A>
+<A NAME="IDX598"></A>
+<A NAME="IDX599"></A>
+<A NAME="IDX600"></A>
+The command name to assume if a redirection is specified with no
+command.  Defaults to <CODE>cat</CODE>.  For sh/ksh-like behaviour, change this
+to <CODE>:</CODE>.  For csh-like behaviour, unset this parameter; the shell will
+print an error message if null commands are entered.
+
+<DT><CODE>path (PATH)</CODE>
+<DD>
+<A NAME="IDX601"></A>
+<A NAME="IDX602"></A>
+An array (colon-separated list) of directories to search for commands.
+When this parameter is set, each directory is scanned and all files
+found are put in a hash table.
+
+<DT><CODE>POSTEDIT</CODE>
+<DD>
+<A NAME="IDX603"></A>
+This string is output whenever the line editor exits.  It usually
+contains termcap strings to reset the terminal.
+
+<DT><CODE>PS1</CODE>
+<DD>
+<A NAME="IDX604"></A>
+The primary prompt string, printed before a command is read; the default
+is <SAMP>`%m%# '</SAMP>.  If the escape sequence takes an optional integer, it
+should appear between the <CODE>%</CODE> and the next character of the
+sequence.  The following escape sequences are recognized:
+
+<DL COMPACT>
+
+<DT><CODE>%%</CODE>
+<DD>
+A <CODE>%</CODE>.
+
+<DT><CODE>%)</CODE>
+<DD>
+A <CODE>)</CODE>.
+
+<DT><CODE>%d</CODE>
+<DD>
+<DT><CODE>%/</CODE>
+<DD>
+Present working directory (<CODE>$PWD</CODE>).
+
+<DT><CODE>%~</CODE>
+<DD>
+<CODE>$PWD</CODE>.  If it has a named directory as its prefix, that part is
+replaced by a <CODE>~</CODE> followed by the name of the directory.  If it
+starts with <CODE>$HOME</CODE>, that part is replaced by a <CODE>~</CODE>.
+
+<DT><CODE>%c</CODE>
+<DD>
+<DT><CODE>%.</CODE>
+<DD>
+<DT><CODE>%C</CODE>
+<DD>
+Trailing component of <CODE>$PWD</CODE>.  An integer may follow the <CODE>%</CODE>
+to get more than one component.  Unless <CODE>%C</CODE> is used, tilde
+expansion is performed first.
+
+<DT><CODE>!</CODE>
+<DD>
+<DT><CODE>%h</CODE>
+<DD>
+<DT><CODE>%!</CODE>
+<DD>
+Current history event number.
+
+<DT><CODE>%M</CODE>
+<DD>
+The full machine hostname.
+
+<DT><CODE>%m</CODE>
+<DD>
+The hostname up to the first <SAMP>`.'</SAMP>.  An integer may follow the <CODE>%</CODE> to
+specify how many components of the hostname are desired.
+
+<DT><CODE>%S (%s)</CODE>
+<DD>
+Start (stop) standout mode.
+
+<DT><CODE>%U (%u)</CODE>
+<DD>
+Start (stop) underline mode.
+
+<DT><CODE>%B (%b)</CODE>
+<DD>
+Start (stop) boldface mode.
+
+<DT><CODE>%t</CODE>
+<DD>
+<DT><CODE>%@</CODE>
+<DD>
+Current time of day, in 12-hour, am/pm format.
+
+<DT><CODE>%T</CODE>
+<DD>
+Current time of day, in 24-hour format.
+
+<DT><CODE>%*</CODE>
+<DD>
+Current time of day in 24-hour format, with seconds.
+
+<DT><CODE>%n</CODE>
+<DD>
+<CODE>$USERNAME</CODE>.
+
+<DT><CODE>%w</CODE>
+<DD>
+The date in day-dd format.
+
+<DT><CODE>%W</CODE>
+<DD>
+The date in mm/dd/yy format.
+
+<DT><CODE>%D</CODE>
+<DD>
+The date in yy-mm-dd format.
+
+<DT><CODE>%D{<VAR>string</VAR>}</CODE>
+<DD>
+<VAR>string</VAR> is formatted using the <CODE>strftime</CODE> function.  See
+<CODE>strftime(3)</CODE> for more details, if your system has it.
+
+<DT><CODE>%l</CODE>
+<DD>
+The line (tty) the user is logged in on.
+
+<DT><CODE>%?</CODE>
+<DD>
+The return code of the last command executed just before the
+prompt. 
+
+<DT><CODE>%_</CODE>
+<DD>
+The status of the parser, i.e. the shell constructs (like <CODE>if</CODE> and
+<CODE>for</CODE>) that have been started on the command line.  If given an
+integer number, that many strings will be printed; zero or no integer
+means print as many as there are.
+
+<DT><CODE>%E</CODE>
+<DD>
+Clears to end of line.
+
+<DT><CODE>%#</CODE>
+<DD>
+A <CODE>#</CODE> if the shell is running as root, a <CODE>%</CODE> if not.
+Equivalent to <CODE>%(#.#.%%)</CODE>
+
+<DT><CODE>%v</CODE>
+<DD>
+The value of the first element of the <CODE>psvar</CODE> array parameter.
+Following the <CODE>%</CODE> with an integer gives that element of the
+array.
+
+<DT><CODE>%{...%}</CODE>
+<DD>
+Include a string as a literal escape sequence.  The string within the
+braces should not change the cursor position.
+
+<DT><CODE>%(x.<VAR>true-text</VAR>.<VAR>false-text</VAR>)</CODE>
+<DD>
+Specifies a ternary expression.  The character following the <CODE>x</CODE> is
+arbitrary; the same character is used to separate the text for the true
+result from that for the false result.  The separator may not appear in the
+<CODE>true-text</CODE>, except as part of a <CODE>%</CODE> sequence.  A <CODE>)</CODE> may
+appear in the <CODE>false-text</CODE> as a <CODE>%)</CODE>.  <CODE>true-text</CODE> and
+<CODE>false-text</CODE> may both contain contain arbitrarily-nested escape
+sequences, including further ternary expressions.  The left parenthesis
+may be preceded or followed by a positive integer <CODE>n</CODE>, which defaults
+to zero.  The test character <CODE>x</CODE> may be any of the following:
+
+<DL COMPACT>
+
+<DT><CODE>c</CODE>
+<DD>
+<DT><CODE>.</CODE>
+<DD>
+<DT><CODE>~</CODE>
+<DD>
+True if the current path, with prefix replacement, has at least <VAR>n</VAR>
+elements.
+<DT><CODE>/</CODE>
+<DD>
+<DT><CODE>C</CODE>
+<DD>
+True if the current absolute path has at least <VAR>n</VAR> elements.
+<DT><CODE>t</CODE>
+<DD>
+True if the time in minutes is equal to <VAR>n</VAR>.
+<DT><CODE>T</CODE>
+<DD>
+True if the time in hours is equal to <VAR>n</VAR>.
+<DT><CODE>d</CODE>
+<DD>
+True if the day of the month is equal to <VAR>n</VAR>.
+<DT><CODE>D</CODE>
+<DD>
+True if the month is equal to <VAR>n</VAR> (January = 0).
+<DT><CODE>w</CODE>
+<DD>
+True if the day of the week is equal to <VAR>n</VAR> (Sunday = 0).
+<DT><CODE>?</CODE>
+<DD>
+True if the exit status of the last command was <VAR>n</VAR>.
+<DT><CODE>#</CODE>
+<DD>
+True if the effective uid of the current process is <VAR>n</VAR>.
+<DT><CODE>g</CODE>
+<DD>
+True if the effective gid of the current process is <VAR>n</VAR>.
+<DT><CODE>L</CODE>
+<DD>
+True if the <CODE>SHLVL</CODE> parameter is at least <VAR>n</VAR>.
+<DT><CODE>S</CODE>
+<DD>
+True if the <CODE>SECONDS</CODE> parameter is at least <VAR>n</VAR>.
+<DT><CODE>v</CODE>
+<DD>
+True if the array <CODE>psvar</CODE> has at least <VAR>n</VAR> elements.
+<DT><CODE>_</CODE>
+<DD>
+True if at least <VAR>n</VAR> shell constructs were started.
+<DT><CODE>%&#60;<VAR>string</VAR>&#60;</CODE>
+<DD>
+<DT><CODE>%&#62;<VAR>string</VAR>&#62;</CODE>
+<DD>
+<DT><CODE>%[<VAR>x</VAR><VAR>string</VAR>]</CODE>
+<DD>
+Specifies truncation behaviour.  The third form is equivalent to 
+<CODE>%<VAR>x</VAR><VAR>string</VAR><VAR>x</VAR></CODE>, i.e. <CODE><VAR>x</VAR></CODE> may be <CODE>&#60;</CODE>
+or <CODE>&#62;</CODE>.  The numeric argument, which in the third form may appear 
+immediately after the <CODE>[</CODE>, specifies the maximum permitted length of 
+the various strings that can be displayed in the prompt.  If this integer is
+zero, or missing, truncation is disabled.  Truncation is initially 
+disabled.  The forms with <CODE>&#60;</CODE> truncate at the left of the string, and the
+forms with <CODE>&#62;</CODE> truncate at the right of the string.  For example, if the
+current directory is <TT>`/home/pike'</TT>, the prompt <CODE>%8&#60;..&#60;%/</CODE> will expand
+to <TT>`..e/pike'</TT>.  The <CODE>string</CODE> will be displayed in place of the 
+truncated portion of any string.  In this string, the terminating character
+(<CODE>&#60;</CODE>, <CODE>&#62;</CODE> or <CODE>]</CODE>), or in fact any character, may be quoted by
+a preceding <CODE>\</CODE>.  <CODE>%</CODE> sequences are not treated specially.  If the 
+<CODE>string</CODE> is longer than the specified truncation length, it will appear
+in full, completely replacing the truncated string.
+</DL>
+</DL>
+
+<DT><CODE>PS2</CODE>
+<DD>
+<A NAME="IDX605"></A>
+The secondary prompt, printed when the shell needs more information to
+complete a command.  Recognizes the same escape sequences as
+<CODE>$PS1</CODE>.  The default is <SAMP>`%_&#62; '</SAMP>.
+
+<DT><CODE>PS3</CODE>
+<DD>
+<A NAME="IDX606"></A>
+Selection prompt used within a <CODE>select</CODE> loop.  Recognizes the same
+escape sequences as <CODE>PS1</CODE>.  The default is <SAMP>`?# '</SAMP>.
+
+<DT><CODE>PS4</CODE>
+<DD>
+<A NAME="IDX607"></A>
+The execution trace prompt.  Default is <SAMP>`+ '</SAMP>.
+
+<DT><CODE>PROMPT</CODE>
+<DD>
+<DT><CODE>PROMPT2</CODE>
+<DD>
+<DT><CODE>PROMPT3</CODE>
+<DD>
+<DT><CODE>PROMPT4</CODE>
+<DD>
+<A NAME="IDX608"></A>
+<A NAME="IDX609"></A>
+<A NAME="IDX610"></A>
+<A NAME="IDX611"></A>
+Same as <CODE>PS1</CODE>, <CODE>PS2</CODE>, <CODE>PS3</CODE>, and <CODE>PS4</CODE>,
+respectively.  These parameters do not have any special meaning in sh/ksh
+compatibility mode.
+
+<DT><CODE>psvar (PSVAR)</CODE>
+<DD>
+<A NAME="IDX612"></A>
+<A NAME="IDX613"></A>
+An array (colon-separated list) whose first nine values can be used in
+<CODE>PROMPT</CODE> strings.  Setting <CODE>psvar</CODE> also sets <CODE>PSVAR</CODE>, and
+vice versa.
+
+<DT><CODE>prompt</CODE>
+<DD>
+<A NAME="IDX614"></A>
+Same as <CODE>PS1</CODE>.  It has no special meaning in sh/ksh compatibility
+mode.
+
+<DT><CODE>READNULLCMD</CODE>
+<DD>
+<A NAME="IDX615"></A>
+The command name to assume if a single input redirection is specified
+with no command.  Defaults to <CODE>more</CODE>.
+
+<DT><CODE>REPORTTIME</CODE>
+<DD>
+<A NAME="IDX616"></A>
+If nonzero, commands whose combined user and system execution times
+(measured in seconds) are greater than this value have timing statistics
+printed for them.
+
+<DT><CODE>RPROMPT</CODE>
+<DD>
+<DT><CODE>RPS1</CODE>
+<DD>
+<A NAME="IDX617"></A>
+<A NAME="IDX618"></A>
+This prompt is displayed on the right-hand side of the screen when the
+primary prompt is being displayed on the left.  This does not work if
+the <CODE>SINGLELINEZLE</CODE> option is set.  Recognizes the same escape
+sequences as <CODE>PROMPT</CODE>.
+
+<DT><CODE>SAVEHIST</CODE>
+<DD>
+<A NAME="IDX619"></A>
+The maximum number of history events to save in the history file.
+
+<DT><CODE>SPROMPT</CODE>
+<DD>
+<A NAME="IDX620"></A>
+The prompt used for spelling correction.  The sequence <CODE>%R</CODE> expands
+to the string which presumably needs spelling correction, and <CODE>%r</CODE>
+expands to the proposed correction.  All other <CODE>PROMPT</CODE> escapes are
+also allowed.
+
+<DT><CODE>STTY</CODE>
+<DD>
+<A NAME="IDX621"></A>
+If this parameter is set in a command's environment, the shell runs the
+<CODE>stty</CODE> command with the value of this parameter as arguments in
+order to set up the terminal before executing the command.  The modes
+apply only to the command, and are reset when it finishes or is
+suspended.  If the command is suspended and continued later with the
+<CODE>fg</CODE> or <CODE>wait</CODE> builtins it will see the modes specified by
+<CODE>STTY</CODE>, as if it were not suspended.  This (intentionally) does not 
+apply if the command is continued via <CODE>kill -CONT</CODE>.  <CODE>STTY</CODE> is
+ignored if the command is run in the background, or if it is in the
+environment of the shell but not explicitly assigned to in the input
+line.  This avoids running <CODE>stty</CODE> at every external command by
+accidentally exporting it.  Also note that <CODE>STTY</CODE> should not be
+used for window size specifications; these will not be local to the
+command.
+  
+<DT><CODE>TIMEFMT</CODE>
+<DD>
+<A NAME="IDX622"></A>
+The format of process time reports with the <CODE>time</CODE> keyword.  The
+default is <SAMP>`%E real  %U user  %S system  %P %J'</SAMP>.  Recognizes the
+following escape sequences:
+
+<DL COMPACT>
+
+<DT><CODE>%</CODE>
+<DD>
+A <CODE>%</CODE>.
+
+<DT><CODE>%U</CODE>
+<DD>
+CPU seconds spent in user mode.
+
+<DT><CODE>%S</CODE>
+<DD>
+CPU seconds spent in kernel mode.
+
+<DT><CODE>%E</CODE>
+<DD>
+Elapsed time in seconds.
+
+<DT><CODE>%P</CODE>
+<DD>
+The CPU percentage, computed as (%U+%S)/%E.
+
+<DT><CODE>%J</CODE>
+<DD>
+The name of this job.
+</DL>
+
+A star may be inserted between the percent sign and flags printing time.  This
+cause the time to be printed in <CODE>hh:mm:ss.ttt</CODE> format (hours and minutes
+are only printed if they are not zero).
+
+<DT><CODE>TMOUT</CODE>
+<DD>
+<A NAME="IDX623"></A>
+If this parameter is nonzero, the shell will receive an <CODE>ALRM</CODE> signal
+if a command is not entered within the specified number of seconds after
+issuing a prompt.  If there is a trap on <CODE>SIGALRM</CODE>, it will be executed
+and a new alarm is scheduled using the value of the <CODE>TMOUT</CODE> parameter
+after executing the trap.  If no trap is set, and the idle time of the 
+terminal is not less than the value of the <CODE>TMOUT</CODE> parameter, zsh 
+terminates.  Otherwise a new alarm is scheduled to <CODE>TMOUT</CODE> seconds after
+the last keypress.
+
+<DT><CODE>TMPPREFIX</CODE>
+<DD>
+<A NAME="IDX624"></A>
+A pathname prefix which the shell will use for all temporary files.
+Note that this should include an initial part for the file name as well
+as any directory names.  The default is <TT>`/tmp/zsh'</TT>.
+
+<DT><CODE>watch (WATCH)</CODE>
+<DD>
+<A NAME="IDX625"></A>
+<A NAME="IDX626"></A>
+An array (colon-separated list) of login/logout events to report.  If it
+contains the single word <SAMP>`all'</SAMP>, then all login/logout events are
+reported.  If it contains the single word <SAMP>`notme'</SAMP>, then all
+login/logout events are reported except for those originating from
+<CODE>$USERNAME</CODE>.  An entry in this list may consist of a username, an
+<CODE>@</CODE> followed by a remote hostname, and a <CODE>%</CODE> followed by a
+line (tty).  Any or all of these components may be present in an entry;
+if a login/logout event matches all of them, it is reported.
+
+<DT><CODE>WATCHFMT</CODE>
+<DD>
+<A NAME="IDX627"></A>
+The format of login/logout reports if the <CODE>watch</CODE> parameter is set.
+Default is <SAMP>`%n has %a %l from %m'</SAMP>.  Recognizes the following escape
+sequences:
+
+<DL COMPACT>
+
+<DT><CODE>%n</CODE>
+<DD>
+The name of the user that logged in/out.
+
+<DT><CODE>%a</CODE>
+<DD>
+The observed action, i.e. <SAMP>`logged on'</SAMP> or <SAMP>`logged off'</SAMP>.
+
+<DT><CODE>%l</CODE>
+<DD>
+The line (tty) the user is logged in on.
+
+<DT><CODE>%M</CODE>
+<DD>
+The full hostname of the remote host.
+
+<DT><CODE>%m</CODE>
+<DD>
+The hostname up to the first <SAMP>`.'</SAMP>.  If only the IP address is
+available or the utmp field contains the name of an X-windows display,
+the whole name is printed.
+
+NOTE: The <CODE>%m</CODE> and <CODE>%M</CODE> escapes will work only if there is a
+host name field in the <CODE>utmp</CODE> on your machine.  Otherwise they are
+treated as ordinary strings.
+
+<DT><CODE>%S (%s)</CODE>
+<DD>
+Start (stop) standout mode.
+
+<DT><CODE>%U (%u)</CODE>
+<DD>
+Start (stop) underline mode.
+
+<DT><CODE>%B (%b)</CODE>
+<DD>
+Start (stop) boldface mode.
+
+<DT><CODE>%t</CODE>
+<DD>
+<DT><CODE>%@</CODE>
+<DD>
+The time, in 12-hour, am/pm format.
+
+<DT><CODE>%T</CODE>
+<DD>
+The time, in 24-hour format.
+
+<DT><CODE>%w</CODE>
+<DD>
+The date in day-dd format.
+
+<DT><CODE>%W</CODE>
+<DD>
+The date in mm/dd/yy format.
+
+<DT><CODE>%D</CODE>
+<DD>
+The date in yy-mm-dd format.
+
+<DT><CODE>%(x:<VAR>true-text</VAR>:<VAR>false-text</VAR>)</CODE>
+<DD>
+Specifies a ternary expression.  The character following the <CODE>x</CODE> is
+arbitrary; the same character is used to separate the text for the true
+result from that for the false result.  Both the separator and the right
+parenthesis may be escaped with a backslash.  Ternary expressions may be
+nested.
+
+The test character <CODE>x</CODE> may be any one of <CODE>l</CODE>, <CODE>n</CODE>,
+<CODE>m</CODE>, or <CODE>M</CODE>, which indicate a true result if the corresponding
+escape sequence would return a non-empty value; or it may be <CODE>a</CODE>,
+which indicates a true result if the watched user has logged in, or
+false if he has logged out.  Other characters evaluate to neither true
+nor false; the entire expression is omitted in this case.
+
+If the result is true, then the <VAR>true-text</VAR> is formatted according
+to the result above and printed, and the <VAR>false-text</VAR> is skipped.
+If false, the <VAR>true-text</VAR> is skipped, and the <VAR>false-text</VAR> is
+formatted and printed.  Either or both of the branches may be empty, but
+both separators must always be present.
+</DL>
+
+<DT><CODE>WORDCHARS</CODE>
+<DD>
+<A NAME="IDX628"></A>
+A list of non-alphanumeric characters considered part of a word by the
+line editor.
+
+<DT><CODE>ZDOTDIR</CODE>
+<DD>
+<A NAME="IDX629"></A>
+The directory to search for shell startup files (<TT>`.zshrc'</TT>, etc), if
+not <CODE>$HOME</CODE>.
+</DL>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_14.html">previous</A>, <A HREF="zsh_16.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

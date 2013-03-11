@@ -1,0 +1,1234 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Options</TITLE>
+<link href="zsh_17.html" rel=Next>
+<link href="zsh_15.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_15.html">previous</A>, <A HREF="zsh_17.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC57" HREF="zsh_toc.html#TOC57">Options</A></H1>
+<P>
+<A NAME="IDX630"></A>
+
+</P>
+
+
+
+<H2><A NAME="SEC58" HREF="zsh_toc.html#TOC58">Specifying Options</A></H2>
+<P>
+<A NAME="IDX631"></A>
+
+</P>
+<P>
+Options are primarily referred to by name.  These names are case insensitive 
+and underscores are ignored.  For example, <CODE>allexport</CODE> is equivalent to 
+<CODE>A__lleXP_ort</CODE>.
+
+</P>
+<P>
+The sense of an option name may be inverted by preceding it with <CODE>no</CODE>, 
+so <CODE>setopt No_Beep</CODE> is equivalent to <CODE>unsetopt beep</CODE>.  This
+inversion can only be done once, so <CODE>nonobeep</CODE> is <EM>not</EM> a synonym
+for <CODE>beep</CODE>.  Similarly, <CODE>tify</CODE> is <EM>not</EM> a synonym for 
+<CODE>nonotify</CODE> (the inversion of <CODE>notify</CODE>).
+
+</P>
+<P>
+Some options also have one or more single letter names.  There are two sets 
+of single letter options: one used by default, and another when the shell is 
+emulating <CODE>sh</CODE> or <CODE>ksh</CODE>.  The single letter options can be used on 
+the shell command line, or with the <CODE>set</CODE>, <CODE>setopt</CODE> and 
+<CODE>unsetopt</CODE> builtins, as normal Unix options preceded by <CODE>-</CODE>.
+
+</P>
+<P>
+The  sense of the single letter options may be inverted by using <CODE>+</CODE> 
+instead of <CODE>-</CODE>.  Some of the single letter option names refer to an 
+option being off, in which case the inversion of that name refers to the 
+option being on.  For example, <CODE>+n</CODE> is the short name of <CODE>exec</CODE>, 
+and <CODE>-n</CODE> is the short name of its inversion, <CODE>noexec</CODE>.
+
+</P>
+
+
+
+<H2><A NAME="SEC59" HREF="zsh_toc.html#TOC59">Description of Options</A></H2>
+<P>
+<A NAME="IDX632"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>ALL_EXPORT (-a, ksh: -a)</CODE>
+<DD>
+<A NAME="IDX633"></A>
+<A NAME="IDX634"></A>
+All parameters subsequently defined are automatically exported.
+
+<DT><CODE>ALWAYS_LAST_PROMPT</CODE>
+<DD>
+<A NAME="IDX635"></A>
+<A NAME="IDX636"></A>
+If unset, key functions that list completions try to return to the last
+prompt if given a numeric argument.  If set, these functions try to
+return to the last prompt if given no numeric argument.
+
+<DT><CODE>ALWAYS_TO_END</CODE>
+<DD>
+<A NAME="IDX637"></A>
+If a completion with the cursor in the word was started and it results
+in only one match, the cursor is placed at the end of the word.
+
+<DT><CODE>APPEND_HISTORY</CODE>
+<DD>
+<A NAME="IDX638"></A>
+If this is set, zsh sessions will append their history list to the
+history file, rather than overwrite it.  Thus, multiple parallel zsh
+sessions will all have their history lists added to the history file, in
+the order they are killed.  See section <A HREF="zsh_17.html#SEC64">Shell Builtin Commands</A>, for the
+<CODE>fc</CODE> command.
+
+<DT><CODE>AUTO_CD (-J)</CODE>
+<DD>
+<A NAME="IDX639"></A>
+<A NAME="IDX640"></A>
+If a command is not in the hash table, and there exists an executable
+directory by that name, perform the <CODE>cd</CODE> command to that directory.
+
+<DT><CODE>AUTO_LIST (-9)</CODE>
+<DD>
+<A NAME="IDX641"></A>
+<A NAME="IDX642"></A>
+Automatically list choices on an ambiguous completion.
+
+<DT><CODE>AUTO_MENU</CODE>
+<DD>
+<A NAME="IDX643"></A>
+<A NAME="IDX644"></A>
+Automatically use menu completion after the second consecutive request
+for completion, for example by pressing the <KBD>TAB</KBD> key repeatedly.
+This option is overridden by <CODE>MENU_COMPLETE</CODE>.
+
+<DT><CODE>AUTO_NAME_DIRS</CODE>
+<DD>
+<A NAME="IDX645"></A>
+<A NAME="IDX646"></A>
+Any parameter that is set to the absolute name of a directory
+immediately becomes a name for that directory in the usual form
+<CODE>~param</CODE>.  If this option is not set, the parameter must be used in
+that form for it to become a name (a command-line completion is
+sufficient for this).
+
+<DT><CODE>AUTO_PARAM_KEYS</CODE>
+<DD>
+<A NAME="IDX647"></A>
+If a parameter name was completed and the next character typed is one of
+those that have to come directly after the name (like <CODE>}</CODE>,
+<CODE>:</CODE>, etc.), they are placed there automatically.
+
+<DT><CODE>AUTO_PARAM_SLASH</CODE>
+<DD>
+<A NAME="IDX648"></A>
+If a parameter is completed whose content is the name of a directory, then 
+add a trailing slash.
+
+<DT><CODE>AUTO_PUSHD (-N)</CODE>
+<DD>
+<A NAME="IDX649"></A>
+<A NAME="IDX650"></A>
+<A NAME="IDX651"></A>
+Make <CODE>cd</CODE> push the old directory onto the directory stack.
+
+<DT><CODE>AUTO_REMOVE_SLASH</CODE>
+<DD>
+<A NAME="IDX652"></A>
+<A NAME="IDX653"></A>
+When the last character resulting from a completion is a slash and the next
+character typed is a word delimiter, remove the slash.
+
+<DT><CODE>AUTO_RESUME (-W)</CODE>
+<DD>
+<A NAME="IDX654"></A>
+<A NAME="IDX655"></A>
+<A NAME="IDX656"></A>
+Treat single word simple commands without redirection as candidates for
+resumption of an existing job.
+
+<DT><CODE>BAD_PATTERN (+2)</CODE>
+<DD>
+<A NAME="IDX657"></A>
+<A NAME="IDX658"></A>
+<A NAME="IDX659"></A>
+If a pattern for filename generation is badly formed, print an error. 
+If this option is unset, the pattern will be left unchanged.
+
+<DT><CODE>BANG_HIST (+K)</CODE>
+<DD>
+<A NAME="IDX660"></A>
+<A NAME="IDX661"></A>
+<A NAME="IDX662"></A>
+Perform textual history substitution, treating the character <CODE>!</CODE> 
+specially.
+
+<DT><CODE>BEEP (+B)</CODE>
+<DD>
+<A NAME="IDX663"></A>
+<A NAME="IDX664"></A>
+<A NAME="IDX665"></A>
+Beep.
+
+<DT><CODE>BG_NICE (-6)</CODE>
+<DD>
+<A NAME="IDX666"></A>
+<A NAME="IDX667"></A>
+<A NAME="IDX668"></A>
+Run all background jobs at a lower priority.  This option is set by
+default.
+
+<DT><CODE>BRACE_CCL</CODE>
+<DD>
+<A NAME="IDX669"></A>
+<A NAME="IDX670"></A>
+<A NAME="IDX671"></A>
+Expand expressions in braces which would not otherwise undergo brace 
+expansion to a lexically ordered list of all the characters.
+See section <A HREF="zsh_6.html#SEC31">Brace Expansion</A>.
+
+<DT><CODE>BSD_ECHO</CODE>
+<DD>
+<A NAME="IDX672"></A>
+<A NAME="IDX673"></A>
+Make the echo builtin compatible with the BSD <CODE>echo(1)</CODE> command.  This 
+disables backslashed escape sequences in echo strings unless the <SAMP>`-e'</SAMP> 
+option is specified.
+
+<DT><CODE>CDABLE_VARS (-T)</CODE>
+<DD>
+<A NAME="IDX674"></A>
+<A NAME="IDX675"></A>
+If the argument to a <CODE>cd</CODE> command (or an implied <CODE>cd</CODE> with the
+<CODE>AUTO_CD</CODE> option set) is not a directory, and does not begin with a
+slash, try to expand the expression as if it were preceded by a
+<CODE>~</CODE> (see section <A HREF="zsh_6.html#SEC26">Filename Expansion</A>). 
+
+<DT><CODE>CHASE_LINKS (-w)</CODE>
+<DD>
+<A NAME="IDX676"></A>
+<A NAME="IDX677"></A>
+<A NAME="IDX678"></A>
+Resolve symbolic links to their true values.
+
+<DT><CODE>CLOBBER (+C, ksh: +C)</CODE>
+<DD>
+<A NAME="IDX679"></A>
+<A NAME="IDX680"></A>
+<A NAME="IDX681"></A>
+Allows <CODE>&#62;</CODE> redirection to truncate existing files, and <CODE>&#62;&#62;</CODE> to 
+create files.  Otherwise <CODE>&#62;!</CODE> must be used to truncate a file, and 
+<CODE>&#62;&#62;!</CODE> to create a file.
+
+<DT><CODE>COMPLETE_ALIASES</CODE>
+<DD>
+<A NAME="IDX682"></A>
+<A NAME="IDX683"></A>
+If set, aliases on the command line are not internally substituted
+before completion is attempted.
+
+<DT><CODE>COMPLETE_IN_WORD</CODE>
+<DD>
+<A NAME="IDX684"></A>
+If unset, the cursor is moved to the end of the word if completion is
+started.  Otherwise it stays where it is and completion is done from
+both ends.
+
+<DT><CODE>CORRECT (-0)</CODE>
+<DD>
+<A NAME="IDX685"></A>
+<A NAME="IDX686"></A>
+<A NAME="IDX687"></A>
+Try to correct the spelling of commands.
+
+<DT><CODE>CORRECT_ALL (-O)</CODE>
+<DD>
+<A NAME="IDX688"></A>
+Try to correct the spelling of all arguments in a line.
+
+<DT><CODE>CSH_JUNKIE_HISTORY</CODE>
+<DD>
+<A NAME="IDX689"></A>
+<A NAME="IDX690"></A>
+A history reference without an event specifier will always refer to the
+previous command.
+
+<DT><CODE>CSH_JUNKIE_LOOPS</CODE>
+<DD>
+<A NAME="IDX691"></A>
+<A NAME="IDX692"></A>
+<A NAME="IDX693"></A>
+Allow loop bodies to take the form <SAMP>`<VAR>list</VAR>; end'</SAMP> instead of
+<SAMP>`do <VAR>list</VAR>; done'</SAMP>.
+
+<DT><CODE>CSH_JUNKIE_QUOTES</CODE>
+<DD>
+<A NAME="IDX694"></A>
+<A NAME="IDX695"></A>
+<A NAME="IDX696"></A>
+Complain if a quoted expression runs off the end of a line; prevent
+quoted expressions from containing un-escaped newlines.
+
+<DT><CODE>CSH_NULL_GLOB</CODE>
+<DD>
+<A NAME="IDX697"></A>
+<A NAME="IDX698"></A>
+<A NAME="IDX699"></A>
+<A NAME="IDX700"></A>
+If a pattern for filename generation has no matches, delete the pattern
+from the argument list; do not report an error unless all the patterns
+in a command have no matches.  Overrides <CODE>NULL_GLOB</CODE>.
+
+<DT><CODE>EQUALS</CODE>
+<DD>
+<A NAME="IDX701"></A>
+<A NAME="IDX702"></A>
+Perform <CODE>=</CODE> filename substitution.
+
+<DT><CODE>ERR_EXIT (-e, ksh: -e)</CODE>
+<DD>
+<A NAME="IDX703"></A>
+<A NAME="IDX704"></A>
+If a command has a non-zero exit status, execute the <CODE>ZERR</CODE> trap, 
+if set, and exit.  This is disabled while running initialization 
+scripts.
+
+<DT><CODE>EXEC (+n, ksh: +n)</CODE>
+<DD>
+<A NAME="IDX705"></A>
+<A NAME="IDX706"></A>
+Do execute commands.  Without this option, commands are read and checked for 
+syntax errors, but not executed.
+
+<DT><CODE>EXTENDED_GLOB</CODE>
+<DD>
+<A NAME="IDX707"></A>
+<A NAME="IDX708"></A>
+Treat the <CODE>#</CODE>, <CODE>~</CODE> and <CODE>^</CODE> characters as part of patterns 
+for filename generation, etc.  (An initial unquoted <CODE>~</CODE> always 
+produces named directory expansion (see section <A HREF="zsh_6.html#SEC26">Filename Expansion</A>).)
+
+<DT><CODE>EXTENDED_HISTORY</CODE>
+<DD>
+<A NAME="IDX709"></A>
+<A NAME="IDX710"></A>
+Save beginning and ending timestamps to the history file.  The format of
+these timestamps is <CODE>:<VAR>&#60;beginning time&#62;</VAR>:<VAR>&#60;ending
+time&#62;</CODE>:<VAR>&#60;command&#62;</VAR></VAR>.
+
+<DT><CODE>FLOW_CONTROL</CODE>
+<DD>
+<A NAME="IDX711"></A>
+<A NAME="IDX712"></A>
+If this option is unset, output flow control via start/stop characters 
+(usually assigned to <KBD>^S</KBD>/<KBD>^Q</KBD>) is disabled in the shell's editor.
+
+<DT><CODE>FUNCTION_ARGZERO</CODE>
+<DD>
+<A NAME="IDX713"></A>
+<A NAME="IDX714"></A>
+When executing a shell function or sourcing a script, set <CODE>$0</CODE> 
+temporarily to the name of the function/script.
+
+<DT><CODE>GLOB (+F, ksh: +f)</CODE>
+<DD>
+<A NAME="IDX715"></A>
+<A NAME="IDX716"></A>
+<A NAME="IDX717"></A>
+Perform filename generation.
+
+<DT><CODE>GLOB_ASSIGN</CODE>
+<DD>
+<A NAME="IDX718"></A>
+If this option is set, filename generation (globbing) is
+performed on the right hand side of scalar parameter assignments of
+the form <CODE><VAR>name</VAR>=<VAR>pattern</VAR></CODE> (e.g. `<CODE>param=*</CODE>').  If
+the result has more than one word the parameter will become an array
+with those words as arguments. This option is provided for backwards
+compatibility only: globbing is always performed on the right hand side
+of array assignments of the form `<CODE><VAR>name</VAR>=( <VAR>value</VAR> )</CODE>'
+(e.g. `<CODE>param=(*)</CODE>') and this form is recommended for clarity;
+with this option set, it is not possible to predict whether the result
+will be an array or a scalar.
+
+<DT><CODE>GLOB_COMPLETE</CODE>
+<DD>
+<A NAME="IDX719"></A>
+When the current word has a glob pattern, do not insert all the words
+resulting from the expansion but generate matches as for completion and
+cycle through them like <CODE>MENU_COMPLETE</CODE>. The matches are generated
+as if a `<CODE>*</CODE>' was added to the end of the word, or inserted at the
+cursor when <CODE>COMPLETE_IN_WORD</CODE> is set.  This actually uses pattern
+matching, not globbing, so it works not only for files but for any
+completion, such as options, user names, etc.
+
+<DT><CODE>GLOB_DOTS (-4)</CODE>
+<DD>
+<A NAME="IDX720"></A>
+<A NAME="IDX721"></A>
+Do not require a leading <CODE>.</CODE> in a filename to be matched
+explicitly.
+
+<DT><CODE>GLOB_SUBST</CODE>
+<DD>
+<A NAME="IDX722"></A>
+Treat any characters resulting from parameter substitution as being
+eligible for file expansion and filename generation, and any characters
+resulting from command substitution as being eligible for filename
+generation.
+
+<DT><CODE>HASH_CMDS</CODE>
+<DD>
+<A NAME="IDX723"></A>
+<A NAME="IDX724"></A>
+<A NAME="IDX725"></A>
+Place the location of each command in the hash table the first time it
+is executed.  If this option is unset, no path hashing will be done at
+all.
+
+<DT><CODE>HASH_DIRS</CODE>
+<DD>
+<A NAME="IDX726"></A>
+<A NAME="IDX727"></A>
+<A NAME="IDX728"></A>
+Whenever a command is executed, hash the directory containing it, as
+well as all directories that occur earlier in the path.  Has no effect
+if <CODE>HASH_CMDS</CODE> is unset.
+
+<DT><CODE>HASH_LIST_ALL</CODE>
+<DD>
+<A NAME="IDX729"></A>
+Whenever a command completion is attempted, make sure the entire command
+path is hashed first.  This makes the first completion slower.
+
+<DT><CODE>HIST_ALLOW_CLOBBER</CODE>
+<DD>
+<A NAME="IDX730"></A>
+Add <CODE>|</CODE> to output redirections in the history.  This allows history 
+references to clobber files even when <CODE>CLOBBER</CODE> is unset.
+
+<DT><CODE>HIST_BEEP</CODE>
+<DD>
+<A NAME="IDX731"></A>
+<A NAME="IDX732"></A>
+<A NAME="IDX733"></A>
+Beep when an attempt is made to access a history entry which isn't there.
+
+<DT><CODE>HIST_IGNORE_DUPS (-h)</CODE>
+<DD>
+<A NAME="IDX734"></A>
+<A NAME="IDX735"></A>
+Do not enter command lines into the history list if they are duplicates
+of the previous event.
+
+<DT><CODE>HIST_IGNORE_SPACE (-g)</CODE>
+<DD>
+<A NAME="IDX736"></A>
+<A NAME="IDX737"></A>
+Do not enter command lines into the history list if they begin with a
+blank.
+
+<DT><CODE>HIST_NO_STORE</CODE>
+<DD>
+<A NAME="IDX738"></A>
+Remove the <CODE>history</CODE> (<CODE>fc -l</CODE>) command from the history
+when invoked.
+
+<DT><CODE>HIST_REDUCE_BLANKS</CODE>
+<DD>
+<A NAME="IDX739"></A>
+Remove superfluous whitespace from each command line
+being added to the history list.
+
+<DT><CODE>HIST_VERIFY</CODE>
+<DD>
+<A NAME="IDX740"></A>
+<A NAME="IDX741"></A>
+Whenever the user enters a line with history substitution, don't execute
+the line directly; instead, perform history substitution and reload the
+line into the editing buffer.
+
+<DT><CODE>HUP</CODE>
+<DD>
+<A NAME="IDX742"></A>
+<A NAME="IDX743"></A>
+Send the <CODE>HUP</CODE> signal to running jobs when the shell exits.
+
+<DT><CODE>IGNORE_BRACES (-I)</CODE>
+<DD>
+<A NAME="IDX744"></A>
+<A NAME="IDX745"></A>
+<A NAME="IDX746"></A>
+<A NAME="IDX747"></A>
+Do not perform brace expansion.
+
+<DT><CODE>IGNORE_EOF (-7)</CODE>
+<DD>
+<A NAME="IDX748"></A>
+<A NAME="IDX749"></A>
+Do not exit on end-of-file.  Require the use of <CODE>exit</CODE> or
+<CODE>logout</CODE> instead.
+
+<DT><CODE>INTERACTIVE (-i, ksh: -i)</CODE>
+<DD>
+<A NAME="IDX750"></A>
+This is an interactive shell.  This option is set upon initialisation if 
+the standard input is a tty and commands are being read from standard 
+input.  (See the discussion of <CODE>SHIN_STDIN</CODE>.)  This heuristic may be 
+overridden by specifying a state for this option on the command line.  The 
+value of this option cannot be changed anywhere other than the command line.
+
+<DT><CODE>INTERACTIVE_COMMENTS (-k)</CODE>
+<DD>
+<A NAME="IDX751"></A>
+<A NAME="IDX752"></A>
+Allow comments even in interactive shells.
+
+<DT><CODE>KSH_ARRAYS</CODE>
+<DD>
+<A NAME="IDX753"></A>
+<A NAME="IDX754"></A>
+<A NAME="IDX755"></A>
+Emulate ksh array handling as closely as possible.  If this option is set, 
+array elements are numbered from zero, an array parameter without subscript 
+refers to the first element instead of the whole array, and braces are 
+required to delimit a subscript ( <CODE>${path[2]}</CODE> rather than just
+<CODE>$path[2]</CODE> ).
+
+<DT><CODE>KSH_OPTION_PRINT</CODE>
+<DD>
+<A NAME="IDX756"></A>
+<A NAME="IDX757"></A>
+<A NAME="IDX758"></A>
+Alters the way options settings are printed.
+
+<DT><CODE>LIST_AMBIGUOUS</CODE>
+<DD>
+<A NAME="IDX759"></A>
+<A NAME="IDX760"></A>
+<A NAME="IDX761"></A>
+If this option is set completions are shown only if the completions
+don't have an unambiguous prefix or suffix that could be inserted in the
+command line.
+
+<DT><CODE>LIST_BEEP</CODE>
+<DD>
+<A NAME="IDX762"></A>
+<A NAME="IDX763"></A>
+<A NAME="IDX764"></A>
+Beep on an ambiguous completion.
+
+<DT><CODE>LIST_TYPES (-X)</CODE>
+<DD>
+<A NAME="IDX765"></A>
+<A NAME="IDX766"></A>
+<A NAME="IDX767"></A>
+When listing files that are possible completions, show the type of each
+file with a trailing identifying mark.
+
+<DT><CODE>LOCAL_OPTIONS</CODE>
+<DD>
+<A NAME="IDX768"></A>
+If this option is set at the point of return from a shell function, all the
+options (including this one) which were in force upon entry to the function
+are restored.  Otherwise, only this option and the <CODE>XTRACE</CODE> and 
+<CODE>PRINT_EXIT_VALUE</CODE> options are restored.  Hence if this is explicitly 
+unset by a shell function the other options in force at the point of return 
+will remain so.
+
+<DT><CODE>LOGIN (-l, ksh: -l)</CODE>
+<DD>
+<A NAME="IDX769"></A>
+This is a login shell.
+
+<DT><CODE>LONG_LIST_JOBS (-R)</CODE>
+<DD>
+<A NAME="IDX770"></A>
+<A NAME="IDX771"></A>
+<A NAME="IDX772"></A>
+List jobs in the long format by default.
+
+<DT><CODE>MAGIC_EQUAL_SUBST</CODE>
+<DD>
+<A NAME="IDX773"></A>
+All unquoted arguments of the form
+<CODE><VAR>identifier</VAR>=<VAR>expression</VAR></CODE> appearing after the command
+name have file expansion (that is, where <VAR>expression</VAR> has a leading
+`<CODE>~</CODE>' or `<CODE>=</CODE>') performed on <VAR>expression</VAR> as if it were a
+parameter assignment.  The argument is not otherwise treated specially:
+in other words, it is subsequently treated as a single word, not as an
+assignment.
+
+<DT><CODE>MAIL_WARNING (-U)</CODE>
+<DD>
+<A NAME="IDX774"></A>
+<A NAME="IDX775"></A>
+Print a warning message if a mail file has been accessed since the shell
+last checked.
+
+<DT><CODE>MARK_DIRS (-8, ksh: -X)</CODE>
+<DD>
+<A NAME="IDX776"></A>
+<A NAME="IDX777"></A>
+<A NAME="IDX778"></A>
+Append a trailing <CODE>/</CODE> to all directory names resulting from filename
+generation (globbing).
+
+<DT><CODE>MENU_COMPLETE (-Y)</CODE>
+<DD>
+<A NAME="IDX779"></A>
+<A NAME="IDX780"></A>
+On an ambiguous completion, instead of listing possibilities or beeping,
+insert the first match immediately.  Then when completion is requested
+again, remove the first match and insert the second match, etc.  When
+there are no more matches, go back to the first one again.
+<CODE>reverse-menu-complete</CODE> may be used to loop through the list in the
+other direction.  This option overrides <CODE>AUTO_MENU</CODE>.
+
+<DT><CODE>MONITOR (-m, ksh: -m)</CODE>
+<DD>
+<A NAME="IDX781"></A>
+<A NAME="IDX782"></A>
+Allow job control.  Set by default in interactive shells.
+
+<DT><CODE>MULTIOS</CODE>
+<DD>
+<A NAME="IDX783"></A>
+Perform implicit <CODE>tee</CODE>s or <CODE>cat</CODE>s when multiple redirections 
+are attempted. See section <A HREF="zsh_7.html#SEC37">Redirection</A>.
+
+<DT><CODE>NOMATCH (-3)</CODE>
+<DD>
+<A NAME="IDX784"></A>
+<A NAME="IDX785"></A>
+If a pattern for filename generation has no matches, print an error, instead 
+of leaving it unchanged in the argument list.  This also applies to file 
+expansion of an initial <CODE>~</CODE> or <CODE>=</CODE>.
+
+<DT><CODE>NOTIFY (-5, ksh: -b)</CODE>
+<DD>
+<A NAME="IDX786"></A>
+<A NAME="IDX787"></A>
+<A NAME="IDX788"></A>
+Report the status of background jobs immediately, rather than waiting
+until just before printing a prompt.
+
+<DT><CODE>NULL_GLOB (-G)</CODE>
+<DD>
+<A NAME="IDX789"></A>
+<A NAME="IDX790"></A>
+If a pattern for filename generation has no matches, delete the pattern
+from the argument list instead of reporting an error.  Overrides
+<CODE>NOMATCH</CODE>.
+
+<DT><CODE>NUMERIC_GLOB_SORT</CODE>
+<DD>
+<A NAME="IDX791"></A>
+<A NAME="IDX792"></A>
+If numeric filenames are matched by a filename generation pattern, sort
+the filenames numerically rather than lexicographically.
+
+<DT><CODE>OVER_STRIKE</CODE>
+<DD>
+<A NAME="IDX793"></A>
+<A NAME="IDX794"></A>
+<A NAME="IDX795"></A>
+Start up the line editor in overstrike mode.
+
+<DT><CODE>PATH_DIRS (-Q)</CODE>
+<DD>
+<A NAME="IDX796"></A>
+<A NAME="IDX797"></A>
+Perform a path search even on command names with slashes in them.
+Thus if
+
+<PRE>
+<SAMP>`/usr/local/bin'</SAMP>
+</PRE>
+
+is in the user's path, and he types <SAMP>`X11/xinit'</SAMP>, the command
+
+<PRE>
+<SAMP>`/usr/local/bin/X11/xinit'</SAMP>
+</PRE>
+
+will be executed (assuming it exists).
+This applies to the <CODE>.</CODE> builtin as well as to command execution.
+Commands explicitly beginning with
+<SAMP>`./'</SAMP> or <SAMP>`../'</SAMP> are not subject to path search.
+
+<DT><CODE>POSIX_BUILTINS</CODE>
+<DD>
+<A NAME="IDX798"></A>
+When this option is set the <CODE>command</CODE> builtin can be used to execute
+shell builtin commands.  Parameter assignments specified before shell
+functions and special builtins are kept after the command completes unless
+the special builtin is prefixed with the <CODE>command</CODE> builtin.  Special
+builtins are <CODE>.</CODE>, <CODE>:</CODE>, <CODE>break</CODE>, <CODE>continue</CODE>,
+<CODE>declare</CODE>, <CODE>eval</CODE>, <CODE>exit</CODE>, <CODE>export</CODE>, <CODE>integer</CODE>,
+<CODE>local</CODE>, <CODE>readonly</CODE>, <CODE>return</CODE>, <CODE>set</CODE>, <CODE>shift</CODE>,
+<CODE>source</CODE>, <CODE>times</CODE>, <CODE>trap</CODE> and <CODE>unset</CODE>.
+
+<DT><CODE>PRINT_EIGHT_BIT</CODE>
+<DD>
+<A NAME="IDX799"></A>
+<A NAME="IDX800"></A>
+Print eight bit characters literally in completion lists, etc.
+This option is not necessary if your system correctly returns the
+printability of eight bit characters (see <CODE>ctype(3)</CODE>).
+
+<DT><CODE>PRINT_EXIT_VALUE (-1)</CODE>
+<DD>
+<A NAME="IDX801"></A>
+<A NAME="IDX802"></A>
+Print the exit value of programs with non-zero exit status.
+
+<DT><CODE>PRIVILEGED (-p, ksh: -p)</CODE>
+<DD>
+<A NAME="IDX803"></A>
+<A NAME="IDX804"></A>
+<A NAME="IDX805"></A>
+Turn on privileged mode.  This is enabled automatically on startup if the 
+effective user (group) id is not equal to the real user (group) id.  Turning
+this option off causes the effective user and group ids to be set to the 
+real user and group ids.  This option disables sourcing user startup 
+files.  If zsh is invoked as sh or ksh with this option set, 
+<TT>`/etc/suid_profile'</TT> is sourced (after <TT>`/etc/profile'</TT> on 
+interactive shells).  Sourcing <TT>`~/.profile'</TT> is disabled and the 
+contents of the <CODE>ENV</CODE> variable is ignored.  This option cannot be 
+changed using the <SAMP>`-m'</SAMP> option of <CODE>setopt</CODE> and <CODE>unsetopt</CODE> 
+and changing it inside a function always changes it globally regardless of 
+the <CODE>LOCAL_OPTIONS</CODE> option.
+
+<DT><CODE>PROMPT_CR (+V)</CODE>
+<DD>
+<A NAME="IDX806"></A>
+<A NAME="IDX807"></A>
+Print a carriage return just before printing a prompt in the line editor.
+
+<DT><CODE>PROMPT_SUBST</CODE>
+<DD>
+<A NAME="IDX808"></A>
+If set, <STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG> and 
+<STRONG>arithmetic expansion</STRONG> is performed in prompts.
+
+<DT><CODE>PUSHD_IGNORE_DUPS</CODE>
+<DD>
+<A NAME="IDX809"></A>
+<A NAME="IDX810"></A>
+Don't push multiple copies of the same directory onto the directory
+stack.
+
+<DT><CODE>PUSHD_MINUS</CODE>
+<DD>
+<A NAME="IDX811"></A>
+<A NAME="IDX812"></A>
+See section <A HREF="zsh_17.html#SEC64">Shell Builtin Commands</A>, for the <CODE>popd</CODE> command.
+
+<DT><CODE>PUSHD_SILENT (-E)</CODE>
+<DD>
+<A NAME="IDX813"></A>
+<A NAME="IDX814"></A>
+Do not print the directory stack after <CODE>pushd</CODE> or <CODE>popd</CODE>.
+
+<DT><CODE>PUSHD_TO_HOME (-D)</CODE>
+<DD>
+<A NAME="IDX815"></A>
+<A NAME="IDX816"></A>
+Have <CODE>pushd</CODE> with no arguments act like <CODE>pushd $HOME</CODE>.
+
+<DT><CODE>RC_EXPAND_PARAM (-P)</CODE>
+<DD>
+<A NAME="IDX817"></A>
+Array expansions of the form <CODE>foo${xx}bar</CODE>, where the parameter
+<CODE>xx</CODE> is set to <CODE>(a b c)</CODE>, are substituted with 
+<CODE>fooabar foobbar foocbar</CODE> instead of the default 
+<CODE>fooa b cbar</CODE>.
+
+<DT><CODE>RC_QUOTES</CODE>
+<DD>
+<A NAME="IDX818"></A>
+<A NAME="IDX819"></A>
+<A NAME="IDX820"></A>
+Allow the character sequence <TT>''</TT> to signify a single quote within
+singly quoted strings.
+
+<DT><CODE>RCS (+f)</CODE>
+<DD>
+<A NAME="IDX821"></A>
+<A NAME="IDX822"></A>
+After <TT>`/etc/zshenv'</TT> is sourced on startup, source the <TT>`/etc/zshrc'</TT>, 
+<TT>`.zshrc'</TT>,  <TT>`/etc/zlogin'</TT>, <TT>`.zlogin'</TT>, and <TT>`.zlogout'</TT> files,
+as described in section <A HREF="zsh_4.html#SEC14">Startup/Shutdown Files</A>.  If this option is unset, only 
+the <TT>`/etc/zshenv'</TT> file is sourced.
+
+<DT><CODE>REC_EXACT (-S)</CODE>
+<DD>
+<A NAME="IDX823"></A>
+<A NAME="IDX824"></A>
+In completion, recognize exact matches even if they are ambiguous.
+
+<DT><CODE>RM_STAR_SILENT (-H)</CODE>
+<DD>
+<A NAME="IDX825"></A>
+<A NAME="IDX826"></A>
+<A NAME="IDX827"></A>
+Do not query the user before executing <CODE>rm *</CODE> or <CODE>rm path/*</CODE>.
+
+<DT><CODE>SH_FILE_EXPANSION</CODE>
+<DD>
+<A NAME="IDX828"></A>
+<A NAME="IDX829"></A>
+<A NAME="IDX830"></A>
+Perform filename expansion (e.g., <CODE>~</CODE> expansion) before parameter 
+expansion, command substitution, arithmetic expansion and brace expansion.
+If this option is unset, it is performed after brace expansion, so things
+like <CODE>~$USERNAME</CODE> and <CODE>~{pfalstad,rc}</CODE> will work.
+
+<DT><CODE>SH_GLOB</CODE>
+<DD>
+<A NAME="IDX831"></A>
+<A NAME="IDX832"></A>
+<A NAME="IDX833"></A>
+Disables the special meaning of <CODE>(</CODE>, <CODE>|</CODE>, <CODE>)</CODE> and <CODE>&#60;</CODE> for 
+globbing the result of parameter and command substitutions, and in some other
+places where the shell accepts patterns.  This option is set if <CODE>zsh</CODE> is
+invoked as <CODE>sh</CODE> or <CODE>ksh</CODE>.
+
+<DT><CODE>SHIN_STDIN (-s, ksh: -s)</CODE>
+<DD>
+<A NAME="IDX834"></A>
+Commands are being read from the standard input.  Commands are read from 
+standard input if no command is specified with <SAMP>`-c'</SAMP> and no file of 
+commands is specified.  If <CODE>SHIN_STDIN</CODE> is set explicitly on the command
+line, any argument that would otherwise have been taken as a file to run will
+instead be treated as a normal positional parameter.  Note that setting or 
+un-setting this option on the command line does not necessarily affect the 
+state the option will have while the shell is running; that is purely an
+indicator of whether or not commands are actually being read from standard 
+input.  The value of this option cannot be changed anywhere other than the 
+command line.
+
+<DT><CODE>SH_OPTION_LETTERS</CODE>
+<DD>
+<A NAME="IDX835"></A>
+<A NAME="IDX836"></A>
+<A NAME="IDX837"></A>
+If this option is set the shell tries to interpret single letter options 
+(which are used with <CODE>set</CODE> and <CODE>setopt</CODE>) like <CODE>ksh</CODE> does.
+This also affects the value of the <CODE>-</CODE> special parameter.
+
+<DT><CODE>SHORT_LOOPS</CODE>
+<DD>
+<A NAME="IDX838"></A>
+Allow the short forms of <CODE>for</CODE>, <CODE>select</CODE>, <CODE>if</CODE>, and 
+<CODE>function</CODE> constructs.
+
+<DT><CODE>SH_WORD_SPLIT (-y)</CODE>
+<DD>
+<A NAME="IDX839"></A>
+<A NAME="IDX840"></A>
+<A NAME="IDX841"></A>
+See section <A HREF="zsh_6.html#SEC28">Parameter Expansion</A>.
+
+<DT><CODE>SINGLE_COMMAND (-t, ksh: -t)</CODE>
+<DD>
+<A NAME="IDX842"></A>
+<A NAME="IDX843"></A>
+<A NAME="IDX844"></A>
+If the shell is reading from standard input, it exits after a single command 
+has been executed.  This also makes the shell non-interactive, unless the 
+<CODE>INTERACTIVE</CODE> option is explicitly set on the command line.  The
+value of this option cannot be changed anywhere other than the command line.
+
+<A NAME="IDX845"></A>
+<A NAME="IDX846"></A>
+<DT><CODE>SINGLE_LINE_ZLE (-M)</CODE>
+<DD>
+Use single-line command line editing instead of multi-line.
+
+<DT><CODE>SUN_KEYBOARD_HACK (-L)</CODE>
+<DD>
+<A NAME="IDX847"></A>
+<A NAME="IDX848"></A>
+<A NAME="IDX849"></A>
+If a line ends with a back-quote, and there are an odd number of
+back-quotes on the line, ignore the trailing back-quote.  This is useful
+on some keyboards where the return key is too small, and the back-quote
+key lies annoyingly close to it.
+
+<DT><CODE>UNSET (+u, ksh: +u)</CODE>
+<DD>
+<A NAME="IDX850"></A>
+<A NAME="IDX851"></A>
+<A NAME="IDX852"></A>
+Treat unset parameters as if they were empty when substituting.  Otherwise 
+they are treated as an error.
+
+<DT><CODE>VERBOSE (-v, ksh: -v)</CODE>
+<DD>
+<A NAME="IDX853"></A>
+<A NAME="IDX854"></A>
+Print shell input lines as they are read.
+
+<DT><CODE>XTRACE (-x, ksh: -x)</CODE>
+<DD>
+<A NAME="IDX855"></A>
+<A NAME="IDX856"></A>
+Print commands and their arguments as they are executed.
+
+<DT><CODE>ZLE (-Z)</CODE>
+<DD>
+<A NAME="IDX857"></A>
+<A NAME="IDX858"></A>
+<A NAME="IDX859"></A>
+Use the zsh line editor.
+</DL>
+
+
+
+<H2><A NAME="SEC60" HREF="zsh_toc.html#TOC60">Single Letter Options</A></H2>
+<P>
+<A NAME="IDX860"></A>
+
+</P>
+
+
+
+<H3><A NAME="SEC61" HREF="zsh_toc.html#TOC61">Default Set</A></H3>
+
+<DL COMPACT>
+
+<DT><CODE>-0</CODE>
+<DD>
+<CODE>CORRECT</CODE>
+
+<DT><CODE>-1</CODE>
+<DD>
+<CODE>PRINT_EXIT_VALUE</CODE>
+
+<DT><CODE>+2</CODE>
+<DD>
+<CODE>BAD_PATTERN</CODE>
+
+<DT><CODE>+3</CODE>
+<DD>
+<CODE>NOMATCH</CODE>
+
+<DT><CODE>-4</CODE>
+<DD>
+<CODE>GLOB_DOTS</CODE>
+
+<DT><CODE>-5</CODE>
+<DD>
+<CODE>NOTIFY</CODE>
+
+<DT><CODE>-6</CODE>
+<DD>
+<CODE>BG_NICE</CODE>
+
+<DT><CODE>-7</CODE>
+<DD>
+<CODE>IGNORE_EOF</CODE>
+
+<DT><CODE>-8</CODE>
+<DD>
+<CODE>MARK_DIRS</CODE>
+
+<DT><CODE>-9</CODE>
+<DD>
+<CODE>AUTO_LIST</CODE>
+
+<DT><CODE>+B</CODE>
+<DD>
+<CODE>BEEP</CODE>
+       
+<DT><CODE>+C</CODE>
+<DD>
+<CODE>CLOBBER</CODE>
+
+<DT><CODE>-D</CODE>
+<DD>
+<CODE>PUSHD_TO_HOME</CODE>
+       
+<DT><CODE>-E</CODE>
+<DD>
+<CODE>PUSHD_SILENT</CODE>
+       
+<DT><CODE>+F</CODE>
+<DD>
+<CODE>GLOB</CODE>
+       
+<DT><CODE>-G</CODE>
+<DD>
+<CODE>NULL_GLOB</CODE>
+       
+<DT><CODE>-H</CODE>
+<DD>
+<CODE>RM_STAR_SILENT</CODE>
+       
+<DT><CODE>-I</CODE>
+<DD>
+<CODE>IGNORE_BRACES</CODE>
+       
+<DT><CODE>-J</CODE>
+<DD>
+<CODE>AUTO_CD</CODE>
+       
+<DT><CODE>+K</CODE>
+<DD>
+<CODE>BANG_HIST</CODE>
+       
+<DT><CODE>-L</CODE>
+<DD>
+<CODE>SUN_KEYBOARD_HACK</CODE>
+
+<DT><CODE>-M</CODE>
+<DD>
+<CODE>SINGLE_LINE_ZLE</CODE>
+     
+<DT><CODE>-N</CODE>
+<DD>
+<CODE>AUTO_PUSHD</CODE>
+
+<DT><CODE>-O</CODE>
+<DD>
+<CODE>CORRECT_ALL</CODE>
+
+<DT><CODE>-P</CODE>
+<DD>
+<CODE>RC_EXPAND_PARAM</CODE>
+     
+<DT><CODE>-Q</CODE>
+<DD>
+<CODE>PATH_DIRS</CODE>
+     
+<DT><CODE>-R</CODE>
+<DD>
+<CODE>LONG_LIST_JOBS</CODE>
+     
+<DT><CODE>-S</CODE>
+<DD>
+<CODE>REC_EXACT</CODE>
+     
+<DT><CODE>-T</CODE>
+<DD>
+<CODE>CDABLE_VARS</CODE>
+     
+<DT><CODE>-U</CODE>
+<DD>
+<CODE>MAIL_WARNING</CODE>
+     
+<DT><CODE>+V</CODE>
+<DD>
+<CODE>PROMPT_CR</CODE>
+     
+<DT><CODE>-W</CODE>
+<DD>
+<CODE>AUTO_RESUME</CODE>
+     
+<DT><CODE>-X</CODE>
+<DD>
+<CODE>LIST_TYPES</CODE>
+     
+<DT><CODE>-Y</CODE>
+<DD>
+<CODE>MENU_COMPLETE</CODE>
+     
+<DT><CODE>-Z</CODE>
+<DD>
+<CODE>ZLE</CODE>
+     
+<DT><CODE>-a</CODE>
+<DD>
+<CODE>ALL_EXPORT</CODE>
+
+<DT><CODE>-e</CODE>
+<DD>
+<CODE>ERR_EXIT</CODE>
+      
+<DT><CODE>+f</CODE>
+<DD>
+<CODE>RCS</CODE>
+     
+<DT><CODE>-g</CODE>
+<DD>
+<CODE>HIST_IGNORE_SPACE</CODE>
+     
+<DT><CODE>-h</CODE>
+<DD>
+<CODE>HIST_IGNORE_DUPS</CODE>
+     
+<DT><CODE>-i</CODE>
+<DD>
+<CODE>INTERACTIVE</CODE>
+     
+<DT><CODE>-k</CODE>
+<DD>
+<CODE>INTERACTIVE_COMMENTS</CODE>
+     
+<DT><CODE>-l</CODE>
+<DD>
+<CODE>LOGIN</CODE>
+     
+<DT><CODE>-m</CODE>
+<DD>
+<CODE>MONITOR</CODE>
+     
+<DT><CODE>+n</CODE>
+<DD>
+<CODE>EXEC</CODE>
+     
+<DT><CODE>-p</CODE>
+<DD>
+<CODE>PRIVILEGED</CODE>
+     
+<DT><CODE>-s</CODE>
+<DD>
+<CODE>SHIN_STDIN</CODE>
+     
+<DT><CODE>-t</CODE>
+<DD>
+<CODE>SINGLE_COMMAND</CODE>
+     
+<DT><CODE>+u</CODE>
+<DD>
+<CODE>UNSET</CODE>
+     
+<DT><CODE>-v</CODE>
+<DD>
+<CODE>VERBOSE</CODE>
+     
+<DT><CODE>-w</CODE>
+<DD>
+<CODE>CHASE_LINKS</CODE>
+     
+<DT><CODE>-x</CODE>
+<DD>
+<CODE>XTRACE</CODE>
+     
+<DT><CODE>-y</CODE>
+<DD>
+<CODE>SH_WORD_SPLIT</CODE>
+</DL>
+
+
+
+<H3><A NAME="SEC62" HREF="zsh_toc.html#TOC62">sh/ksh Emulation Set</A></H3>
+
+<DL COMPACT>
+
+<DT><CODE>+C</CODE>
+<DD>
+<CODE>CLOBBER</CODE>
+     
+<DT><CODE>-X</CODE>
+<DD>
+<CODE>MARK_DIRS</CODE>
+     
+<DT><CODE>-a</CODE>
+<DD>
+<CODE>ALL_EXPORT</CODE>
+     
+<DT><CODE>-b</CODE>
+<DD>
+<CODE>NOTIFY</CODE>
+     
+<DT><CODE>-e</CODE>
+<DD>
+<CODE>ERR_EXIT</CODE>
+     
+<DT><CODE>+f</CODE>
+<DD>
+<CODE>GLOB</CODE>
+     
+<DT><CODE>-i</CODE>
+<DD>
+<CODE>INTERACTIVE</CODE>
+     
+<DT><CODE>-l</CODE>
+<DD>
+<CODE>LOGIN</CODE>
+     
+<DT><CODE>-m</CODE>
+<DD>
+<CODE>MONITOR</CODE>
+     
+<DT><CODE>+n</CODE>
+<DD>
+<CODE>EXEC</CODE>
+     
+<DT><CODE>-p</CODE>
+<DD>
+<CODE>PRIVILEGED</CODE>
+     
+<DT><CODE>-s</CODE>
+<DD>
+<CODE>SHIN_STDIN</CODE>
+     
+<DT><CODE>-t</CODE>
+<DD>
+<CODE>SINGLE_COMMAND</CODE>
+     
+<DT><CODE>+u</CODE>
+<DD>
+<CODE>UNSET</CODE>
+     
+<DT><CODE>-v</CODE>
+<DD>
+<CODE>VERBOSE</CODE>
+     
+<DT><CODE>-x</CODE>
+<DD>
+<CODE>XTRACE</CODE>
+</DL>
+
+
+
+<H3><A NAME="SEC63" HREF="zsh_toc.html#TOC63">Also Note</A></H3>
+
+<DL COMPACT>
+
+<DT><CODE>-A</CODE>
+<DD>
+Used by set for setting arrays
+
+<DT><CODE>-c</CODE>
+<DD>
+Used on the command line to specify a single command
+
+<DT><CODE>-m</CODE>
+<DD>
+Used by setopt for pattern-matching option setting
+
+<DT><CODE>-o</CODE>
+<DD>
+Used in all places to allow use of long option names
+</DL>
+<P>
+       
+Note that the use of <SAMP>`-m'</SAMP> in <CODE>setopt</CODE> and <CODE>unsetopt</CODE>, allowing
+the specification of option names by glob patterns, clashes with the use of 
+<SAMP>`-m'</SAMP> for setting the <CODE>MONITOR</CODE> option.
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_15.html">previous</A>, <A HREF="zsh_17.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

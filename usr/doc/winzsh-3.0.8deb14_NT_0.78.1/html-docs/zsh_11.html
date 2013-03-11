@@ -1,0 +1,146 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Arithmetic Evaluation</TITLE>
+<link href="zsh_12.html" rel=Next>
+<link href="zsh_10.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_10.html">previous</A>, <A HREF="zsh_12.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC41" HREF="zsh_toc.html#TOC41">Arithmetic Evaluation</A></H1>
+<P>
+<A NAME="IDX159"></A>
+<A NAME="IDX160"></A>
+
+</P>
+<P>
+An ability to perform integer arithmetic is provided with the builtin
+<CODE>let</CODE>.  Evaluations are performed using <EM>long</EM> arithmetic.  A
+leading <CODE>0x</CODE> or <CODE>0X</CODE> denotes hexadecimal.  Otherwise, numbers are
+of the form <CODE>[<VAR>base</VAR>#]<VAR>n</VAR></CODE> where <VAR>base</VAR> is a decimal number 
+between two and thirty-six representing the arithmetic base and <VAR>n</VAR> is a 
+number in that base (for example, <CODE>16#ff</CODE> is 255 in hexadecimal).  If 
+<VAR>base</VAR> is omitted then base 10 is used.  For backwards compatibility 
+the form <CODE>[16]ff</CODE> is also accepted.
+
+</P>
+<P>
+An arithmetic expression uses nearly the same syntax, precedence, and
+<A NAME="IDX161"></A>
+<A NAME="IDX162"></A>
+associativity of expressions in C.  The following operators are
+supported (listed in decreasing order of precedence):
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>+ - ! ~ ++ --</CODE>
+<DD>
+Unary plus/minus, logical NOT, complement, {pre,post}{in,de}crement
+
+<DT><CODE>&#60;&#60; &#62;&#62;</CODE>
+<DD>
+Bitwise shift left, right.
+
+<DT><CODE>&#38;</CODE>
+<DD>
+Bitwise AND
+
+<DT><CODE>^</CODE>
+<DD>
+Bitwise XOR
+
+<DT><CODE>|</CODE>
+<DD>
+Bitwise OR
+
+<DT><CODE>**</CODE>
+<DD>
+Exponentiation
+
+<DT><CODE>* / %</CODE>
+<DD>
+Multiplication, division, modulus (remainder)
+
+<DT><CODE>+ -</CODE>
+<DD>
+Addition, subtraction
+
+<DT><CODE>&#60; &#62; &#60;= &#62;=</CODE>
+<DD>
+Comparison
+
+<DT><CODE>== !=</CODE>
+<DD>
+Equality and inequality
+
+<DT><CODE>&#38;&#38;</CODE>
+<DD>
+Logical AND
+
+<DT><CODE>|| ^^</CODE>
+<DD>
+Logical OR, XOR
+
+<DT><CODE>? :</CODE>
+<DD>
+Ternary operator
+
+<DT><CODE>= += -= *= /= %= &#38;= ^= |= &#60;&#60;= &#62;&#62;= &#38;&#38;= ||= ^^= **=</CODE>
+<DD>
+Assignment
+
+<DT><CODE>,</CODE>
+<DD>
+Comma operator
+</DL>
+
+<P>
+The operators <CODE>&#38;&#38;</CODE>, <CODE>||</CODE>, <CODE>&#38;&#38;=</CODE>, and <CODE>||=</CODE> are
+short-circuiting, and only one of the latter two expressions in a
+ternary operator is evaluated.  Note the precedence of the bitwise AND,
+OR, and XOR operators.
+
+</P>
+<P>
+An expression of the form <CODE>#\x</CODE> where <CODE>x</CODE> is any character
+gives the ASCII value of this character.  An expression of the form
+<CODE>#foo</CODE> gives the ASCII value of the first character of the value of
+the parameter <CODE>foo</CODE>.
+
+</P>
+<P>
+Named parameters and subscripted arrays can be referenced by name within an 
+arithmetic expression without using the parameter substitution syntax.
+
+</P>
+<P>
+An internal integer representation of a named parameter can be specified
+with the <CODE>integer</CODE> builtin.  Arithmetic evaluation is performed on
+<A NAME="IDX163"></A>
+<A NAME="IDX164"></A>
+<A NAME="IDX165"></A>
+the value of each assignment to a named parameter declared integer in
+this manner.
+
+</P>
+<P>
+Since many of the arithmetic operators require quoting, an alternative
+form of the <CODE>let</CODE> command is provided.  For any command which
+<A NAME="IDX166"></A>
+begins with a <CODE>((</CODE>, all the characters until a matching <CODE>))</CODE>
+are treated as a quoted expression.  More precisely, <CODE>(( ... ))</CODE> is
+equivalent to <CODE>let "..."</CODE>.
+
+</P>
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_10.html">previous</A>, <A HREF="zsh_12.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

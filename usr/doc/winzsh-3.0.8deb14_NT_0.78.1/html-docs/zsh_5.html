@@ -1,0 +1,399 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Shell Grammar</TITLE>
+<link href="zsh_6.html" rel=Next>
+<link href="zsh_4.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_4.html">previous</A>, <A HREF="zsh_6.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC16" HREF="zsh_toc.html#TOC16">Shell Grammar</A></H1>
+<P>
+<A NAME="IDX16"></A>
+<A NAME="IDX17"></A>
+
+</P>
+
+
+
+<H2><A NAME="SEC17" HREF="zsh_toc.html#TOC17">Simple Commands</A></H2>
+<P>
+<A NAME="IDX18"></A>
+<A NAME="IDX19"></A>
+
+</P>
+<P>
+A <STRONG>simple command</STRONG> is a sequence of optional parameter assignments
+followed by blank-separated words, with optional redirections
+interspersed.  The first word is the command to be executed, and the
+remaining words, if any, are arguments to the command.  If a command
+name is given, the parameter assignments modify the environment of the
+command when it is executed.  The value of a simple command is its exit
+status, or 128 plus the signal number if terminated by a signal.
+
+</P>
+<P>
+A <STRONG>pipeline</STRONG> is a sequence of one or more commands separated by
+<A NAME="IDX20"></A>
+<CODE>|</CODE> or <CODE>|&#38;</CODE>.  <CODE>|&#38;</CODE> is shorthand for <CODE>2&#62;&#38;1 |</CODE>.  The
+standard output of each command is connected to the standard input of
+the next command in the pipeline.
+If a pipeline is preceded by <CODE>coproc</CODE>, it is executed as a
+<A NAME="IDX21"></A>
+coprocess; a two-way pipe is established between it and the parent
+<A NAME="IDX22"></A>
+shell.  The shell can read from or write to the 
+coprocess by means of the <CODE>&#62;&#38;p</CODE> and <CODE>&#60;&#38;p</CODE> redirection operators.  
+The value of a pipeline is the value of the last command.  If a pipeline 
+is not preceded by <CODE>!</CODE>, the value of that pipeline is the logical 
+<CODE>NOT</CODE> of the value of the last command.
+
+</P>
+<P>
+A <STRONG>sublist</STRONG> is a sequence of one or more pipelines separated by
+<A NAME="IDX23"></A>
+<CODE>&#38;&#38;</CODE> or <CODE>||</CODE>.  If two pipelines are separated by <CODE>&#38;&#38;</CODE>,
+the second pipeline is executed only if the first is successful (returns
+a zero value).  If two pipelines are separated by <CODE>||</CODE>, the second
+is executed only if the first is unsuccessful (returns a nonzero
+value).  Both operators have equal precedence and are left 
+associative.
+
+</P>
+<P>
+A <STRONG>list</STRONG> is a sequence of zero or more sublists separated by, and
+<A NAME="IDX24"></A>
+optionally terminated by, <CODE>;</CODE>, <CODE>&#38;</CODE>, <CODE>&#38;|</CODE>, <CODE>&#38;!</CODE>, 
+or a newline.  Normally the shell waits for each list to finish before 
+executing the next one.  If a list is terminated by a <CODE>&#38;</CODE>, <CODE>&#38;|</CODE>, 
+or <CODE>&#38;!</CODE>, the shell executes it in the background, and does not wait 
+for it to finish.
+
+</P>
+
+
+<H2><A NAME="SEC18" HREF="zsh_toc.html#TOC18">Precommand Modifiers</A></H2>
+<P>
+<A NAME="IDX25"></A>
+<A NAME="IDX26"></A>
+
+</P>
+<P>
+A simple command may be preceded by a <STRONG>precommand</STRONG> modifier which will 
+alter how the command is interpreted.  These modifiers are shell builtin 
+commands with the exception of <CODE>nocorrect</CODE> which is a reserved word.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>-</CODE>
+<DD>
+The command is executed with a <CODE>-</CODE> prepended to its <CODE>argv[0]</CODE> 
+string.
+<DT><CODE>noglob</CODE>
+<DD>
+Filename generation (globbing) is not performed on any of the words.
+<DT><CODE>nocorrect</CODE>
+<DD>
+Spelling correction is not done on any of the words.
+<DT><CODE>exec</CODE>
+<DD>
+The command is executed in the parent shell without forking.
+<DT><CODE>command</CODE>
+<DD>
+The command word is taken to be the name of an external command, rather than 
+a shell function or builtin.
+</DL>
+
+
+
+<H2><A NAME="SEC19" HREF="zsh_toc.html#TOC19">Complex Commands</A></H2>
+<P>
+<A NAME="IDX27"></A>
+<A NAME="IDX28"></A>
+
+</P>
+<P>
+A <STRONG>complex command</STRONG> in zsh is one of the following:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>if <VAR>list</VAR> then <VAR>list</VAR> [ elif <VAR>list</VAR> then <VAR>list</VAR> ] ... [ else <VAR>list</VAR> ] fi</CODE>
+<DD>
+<A NAME="IDX29"></A>
+<A NAME="IDX30"></A>
+The <CODE>if <VAR>list</VAR></CODE> is executed, and, if it returns a zero exit
+status, the <CODE>then <VAR>list</VAR></CODE> is executed.  Otherwise, the
+<CODE>elif <VAR>list</VAR></CODE> is executed and, if its value is zero, the
+<CODE>then <VAR>list</VAR></CODE> is executed.  If each <CODE>elif <VAR>list</VAR></CODE>
+returns nonzero, the <CODE>else <VAR>list</VAR></CODE> is executed.
+
+<DT><CODE>for <VAR>name</VAR> [ in <VAR>word</VAR> ... <VAR>term</VAR> ] do <VAR>list</VAR> done</CODE>
+<DD>
+<A NAME="IDX31"></A>
+<A NAME="IDX32"></A>
+<A NAME="IDX33"></A>
+Where <VAR>term</VAR> is one or more newline or <CODE>;</CODE>.  Expand the list of  
+<VAR>word</VAR>s, and set the parameter <VAR>name</VAR> to each of them in turn, 
+executing <VAR>list</VAR> each time.  If the <CODE>in <VAR>word</VAR></CODE> is omitted, use
+the positional parameters instead of the <VAR>words</VAR>.
+
+<DT><CODE>while <VAR>list</VAR> do <VAR>list</VAR> done</CODE>
+<DD>
+<A NAME="IDX34"></A>
+<A NAME="IDX35"></A>
+<A NAME="IDX36"></A>
+Execute the <CODE>do <VAR>list</VAR></CODE> as long as the <CODE>while <VAR>list</VAR></CODE> 
+returns a zero exit status.
+
+<DT><CODE>until <VAR>list</VAR> do <VAR>list</VAR> done</CODE>
+<DD>
+<A NAME="IDX37"></A>
+<A NAME="IDX38"></A>
+<A NAME="IDX39"></A>
+Execute the <CODE>do <VAR>list</VAR></CODE> as long as <CODE>until <VAR>list</VAR></CODE> returns a
+nonzero exit status.
+
+<DT><CODE>repeat <VAR>word</VAR> do <VAR>list</VAR> done</CODE>
+<DD>
+<A NAME="IDX40"></A>
+<A NAME="IDX41"></A>
+<A NAME="IDX42"></A>
+<VAR>word</VAR> is expanded and treated as an arithmetic expression, which
+must evaluate to a number <VAR>n</VAR>.  <VAR>list</VAR> is then executed <VAR>n</VAR>
+times.
+
+<DT><CODE>case <VAR>word</VAR> in [ [(] <VAR>pattern</VAR> [ | <VAR>pattern</VAR> ] ... ) <VAR>list</VAR> ;; ] ... esac</CODE>
+<DD>
+<A NAME="IDX43"></A>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+Execute the <VAR>list</VAR> associated with the first <VAR>pattern</VAR> that
+matches <VAR>word</VAR>, if any.  The form of the patterns is the same as
+that used for filename generation.  See section <A HREF="zsh_6.html#SEC32">Filename Generation</A>.
+
+<DT><CODE>select <VAR>name</VAR> [ in <VAR>word</VAR> ... <VAR>term</VAR> ] do <VAR>list</VAR> done</CODE>
+<DD>
+<A NAME="IDX46"></A>
+<A NAME="IDX47"></A>
+<A NAME="IDX48"></A>
+Where <VAR>term</VAR> is one ore more newline or <CODE>;</CODE>.
+Print the set of <VAR>word</VAR>s, each preceded by a number.  If the
+<CODE>in <VAR>word</VAR></CODE> is omitted, use the positional parameters.  The
+<CODE>PROMPT3</CODE> prompt is printed and a line is read from standard input.
+If this line consists of the number of one of the listed <VAR>word</VAR>s,
+then the parameter <VAR>name</VAR> is set to the <VAR>word</VAR> corresponding to
+this number.  If this line is empty, the selection list is printed
+again.  Otherwise, the value of the parameter <VAR>name</VAR> is set to null.
+The contents of the line read from standard input is saved in the
+parameter <CODE>REPLY</CODE>.  <VAR>list</VAR> is executed for each selection until
+a break or end-of-file is encountered.
+
+<DT><CODE>( <VAR>list</VAR> )</CODE>
+<DD>
+<A NAME="IDX49"></A>
+Execute <VAR>list</VAR> in a subshell.  Traps set by the <CODE>trap</CODE> builtin
+are reset to their default values while executing <CODE>list</CODE>.
+
+<DT><CODE>{ <VAR>list</VAR> }</CODE>
+<DD>
+Execute <VAR>list</VAR>.
+
+<DT><CODE>function <VAR>word</VAR> ... [ () ] [ <VAR>term</VAR> ] { <VAR>list</VAR> }</CODE>
+<DD>
+<DT><CODE><VAR>word</VAR> ... () [ <VAR>term</VAR> ] { <VAR>list</VAR> }</CODE>
+<DD>
+<DT><CODE><VAR>word</VAR> ... () [ <VAR>term</VAR> ] <VAR>command</VAR></CODE>
+<DD>
+Where <VAR>term</VAR> is one or more newline or <CODE>;</CODE>.
+Define a function which is referenced by any one of <VAR>word</VAR>.
+Normally, only one <VAR>word</VAR> is provided; multiple <VAR>word</VAR>s are
+usually only useful for setting traps.  The body of the function is the
+<VAR>list</VAR> between the <CODE>{</CODE> and <CODE>}</CODE>.
+
+If the option <CODE>SH_GLOB</CODE> is set for compatibility with other shells, then
+whitespace may appear between between the left and right parentheses when
+there is a single <VAR>word</VAR>; otherwise, the parentheses will be treated as
+forming a globbing pattern in that case.
+See section <A HREF="zsh_9.html#SEC39">Functions</A>.
+
+<DT><CODE>time [ <VAR>pipeline</VAR> ]</CODE>
+<DD>
+<A NAME="IDX50"></A>
+The <VAR>pipeline</VAR> is executed, and timing statistics are reported on
+the standard error in the form specified by the <CODE>TIMEFMT</CODE>
+parameter.  If <VAR>pipeline</VAR> is omitted, print statistics about the
+shell process and its children.
+
+<DT><CODE>[[ <VAR>exp</VAR> ]]</CODE>
+<DD>
+<A NAME="IDX51"></A>
+Evaluates the conditional expression <VAR>exp</VAR> and return a zero exit
+status if it is true.  See section <A HREF="zsh_12.html#SEC42">Conditional Expressions</A>, for a description
+of <VAR>exp</VAR>.
+</DL>
+
+
+
+<H2><A NAME="SEC20" HREF="zsh_toc.html#TOC20">Alternate Forms For Complex Commands</A></H2>
+<P>
+<A NAME="IDX52"></A>
+<A NAME="IDX53"></A>
+
+</P>
+<P>
+Many of zsh's complex commands have alternate forms.  These particular
+versions of complex commands should be considered deprecated and may be 
+removed in the future.  The versions in the previous section should be 
+preferred instead. The short versions below only work if
+<CODE><VAR>sublist</VAR></CODE> is of the form <CODE>{ <VAR>list</VAR> }</CODE> or if the 
+<CODE>NO_SHORT_LOOPS</CODE> option is not set.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>if <VAR>list</VAR> { <VAR>list</VAR> } [ elif <VAR>list</VAR> { <VAR>list</VAR> } ] ... [ else { <VAR>list</VAR> } ]</CODE>
+<DD>
+An alternate form of <CODE>if</CODE>.  
+
+<DT><CODE>if <VAR>list</VAR> <VAR>sublist</VAR></CODE>
+<DD>
+A short form of previous one.
+
+<DT><CODE>for <VAR>name</VAR> ( <VAR>word</VAR> ... ) <VAR>sublist</VAR></CODE>
+<DD>
+A short form of <CODE>for</CODE>.
+
+<DT><CODE>for <VAR>name</VAR> [ in <VAR>word</VAR> ... <VAR>term</VAR> ] <VAR>sublist</VAR></CODE>
+<DD>
+Where <VAR>term</VAR> is one or more newline or <CODE>;</CODE>.  Another short form of 
+<CODE>for</CODE>.
+
+<DT><CODE>foreach <VAR>name</VAR> ( <VAR>word</VAR> ... ) <VAR>list</VAR> end</CODE>
+<DD>
+Another form of <CODE>for</CODE>.
+
+<DT><CODE>while <VAR>list</VAR> { <VAR>list</VAR> }</CODE>
+<DD>
+An alternative form of <CODE>while</CODE>. 
+
+<DT><CODE>until <VAR>list</VAR> { <VAR>list</VAR> }</CODE>
+<DD>
+An alternative form of <CODE>until</CODE>.
+
+<DT><CODE>repeat <VAR>word</VAR> <VAR>sublist</VAR></CODE>
+<DD>
+This is a short form of <CODE>repeat</CODE>.
+
+<DT><CODE>case <VAR>word</VAR> { [ [(] <VAR>pattern</VAR> [ | <VAR>pattern</VAR> ] ... ) <VAR>list</VAR> ;; ] ... }</CODE>
+<DD>
+An alternative form of <CODE>case</CODE>.
+
+<DT><CODE>select <VAR>name</VAR> [ in <VAR>word</VAR> <VAR>term</VAR> ] <VAR>sublist</VAR></CODE>
+<DD>
+Where <VAR>term</VAR> is one or more newline or <CODE>;</CODE>.  A short form of
+<CODE>select</CODE>.
+</DL>
+
+
+
+<H2><A NAME="SEC21" HREF="zsh_toc.html#TOC21">Reserved Words</A></H2>
+<P>
+<A NAME="IDX54"></A>
+
+</P>
+<P>
+The following words are recognized as <STRONG>reserved words</STRONG> when used as the
+first word of a command unless quoted or disabled using <CODE>disable -r</CODE>:
+<A NAME="IDX55"></A>
+
+</P>
+<P>
+<CODE>do</CODE> <CODE>done</CODE> <CODE>esac</CODE> <CODE>then</CODE> <CODE>elif</CODE> <CODE>else</CODE>
+<CODE>fi</CODE> <CODE>for</CODE> <CODE>case</CODE> <CODE>if</CODE> <CODE>while</CODE> <CODE>function</CODE>
+<CODE>repeat</CODE> <CODE>time</CODE> <CODE>until</CODE> <CODE>select</CODE> <CODE>coproc</CODE> 
+<CODE>nocorrect</CODE> <CODE>foreach</CODE> <CODE>end</CODE> <CODE>!</CODE> <CODE>[[</CODE> <CODE>{</CODE> 
+<CODE>}</CODE>
+
+</P>
+<P>
+Additionally <CODE>}</CODE> is recognized in any position if the
+<CODE>IGNORE_BRACES</CODE> option is not set.
+
+</P>
+
+
+<H2><A NAME="SEC22" HREF="zsh_toc.html#TOC22">Comments</A></H2>
+<P>
+<A NAME="IDX56"></A>
+
+</P>
+<P>
+In non-interactive shells, or in interactive shells with the
+<CODE>INTERACTIVE_COMMENTS</CODE> option set, a word beginning with the third
+<A NAME="IDX57"></A>
+character of the <CODE>histchars</CODE> parameter (<CODE>#</CODE> by default) causes
+<A NAME="IDX58"></A>
+that word and all the following characters up to a newline to be
+ignored.
+
+</P>
+
+
+<H2><A NAME="SEC23" HREF="zsh_toc.html#TOC23">Aliasing</A></H2>
+<P>
+<A NAME="IDX59"></A>
+
+</P>
+<P>
+Every token in the shell input is checked to see if there is an alias
+defined for it.  If so, it is replaced by the text of the alias if it is
+in command position (if it could be the first word of a simple command),
+or if the alias is global.  If the text ends with a space, the next word
+in the shell input is treated as though it were in command position for
+purposes of alias expansion.  An alias is defined using the <CODE>alias</CODE>
+<A NAME="IDX60"></A>
+<A NAME="IDX61"></A>
+builtin; global aliases may be defined using the <SAMP>`-g'</SAMP> option to
+that builtin.
+
+</P>
+<P>
+Alias substitution is done on the shell input before any other
+substitution except history substitution.  Therefore, if an alias is
+defined for the word <SAMP>`foo'</SAMP>, alias substitution may be avoided by
+quoting part of the word, e.g. <SAMP>`\foo'</SAMP>.  But there is nothing 
+to prevent an alias being defined for <SAMP>`\foo'</SAMP> as well.
+
+</P>
+
+
+<H2><A NAME="SEC24" HREF="zsh_toc.html#TOC24">Quoting</A></H2>
+<P>
+<A NAME="IDX62"></A>
+
+</P>
+<P>
+A character may be <STRONG>quoted</STRONG> (that is, made to stand for itself) by
+preceding it with a <CODE>\</CODE>.  <CODE>\</CODE> followed by a newline is
+ignored.  All characters enclosed between a pair of single quotes
+(<TT>''</TT>) are quoted, except the first character of <CODE>histchars</CODE>
+(<CODE>!</CODE> by default).  A single quote cannot appear within single
+quotes.  Inside double quotes (<CODE>""</CODE>), parameter and command
+substitution occurs, and <CODE>\</CODE> quotes the characters <CODE>\</CODE>,
+<CODE>`</CODE>, <CODE>"</CODE>, and <CODE>$</CODE>. 
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_4.html">previous</A>, <A HREF="zsh_6.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

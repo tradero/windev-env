@@ -1,0 +1,86 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - The Z Shell Guide</TITLE>
+<link href="zsh_2.html" rel=Next>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the first, previous, <A HREF="zsh_2.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC1" HREF="zsh_toc.html#TOC1">The Z Shell Guide</A></H1>
+
+<P>
+This document has been produced from the texinfo file <TT>`zsh.texi'</TT>, 
+included in the <TT>`Doc'</TT> sub-directory of the Zsh distribution.
+
+</P>
+
+
+<H2><A NAME="SEC2" HREF="zsh_toc.html#TOC2">Origins</A></H2>
+
+<P>
+The texinfo guide was originally put together by Jonathan Hardwick,
+<CODE>jch@cs.cmu.edu</CODE>, who converted the <TT>`zsh.1'</TT> file distributed
+with zsh v2.5.0.  After a period of neglect it was updated by Clive Messer,
+<CODE>clive@epos.demon.co.uk</CODE> to reflect the many changes made to both the
+shell, the original <TT>`zsh.1'</TT>, (which due to its size and ever
+increasing number of options has since been split into several man-pages:
+<TT>`zsh.1'</TT>, <TT>`zshall.1'</TT>, <TT>`zshbuiltins.1'</TT>, <TT>`zshcompctl.1'</TT>,
+<TT>`zshcompctl.1'</TT>, <TT>`zshexpn.1'</TT>, <TT>`zshmisc.1'</TT>, <TT>`zshoptions.1'</TT>,
+<TT>`zshparam.1'</TT>, <TT>`zshzle.1'</TT>), and also now includes other useful
+information from the <CODE>META-FAQ</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC3" HREF="zsh_toc.html#TOC3">Producing documentation from zsh.texi.</A></H2>
+
+<P>
+Whilst this guide for the most part duplicates the man-pages,
+(suitably marked-up into texinfo), and is not intended to replace them, it 
+does offer several advantages over them, not least that the texinfo source 
+may be converted into several formats, e.g.,
+
+</P>
+<DL COMPACT>
+
+<DT>The Info guide.
+<DD>
+The Info format allows searching for topics, commands, functions, etc.
+from the many Indices. The command <CODE>makeinfo zsh.texi</CODE> is used to
+produce the Info documentation.
+
+<DT>The printed guide.
+<DD>
+The command <CODE>texi2dvi zsh.texi</CODE> will output <TT>`zsh.dvi'</TT> which can 
+then be processed with <CODE>dvips</CODE> and optionally <CODE>gs</CODE> (Ghostscript) to 
+produce a nicely formatted printed guide.
+
+<DT>The html guide.
+<DD>
+An HTML version of this guide is available at the Zsh web site via
+<CODE>http://sunsite.auc.dk/zsh/Doc/index.html</CODE>.  Note that the on-line
+guide may describe a different (usually more recent) version of Zsh.
+(The HTML version is produced with <CITE>texi2html</CITE>, which may be obtained
+from <CODE>http://wwwcn.cern.ch/dci/texi2html/</CODE>. The command is
+`<CODE>texi2html -split_chapter -expandinfo zsh.texi</CODE>'.)
+
+</DL>
+
+<P>
+For those who do not have the necessary tools to process texinfo,  
+precompiled documentation, (PostScript, dvi, info and html formats),
+is available from the zsh archive site or its mirrors in the file, 
+<TT>`zsh-doc.tar.gz'</TT>. (See section <A HREF="zsh_2.html#SEC6">Availability</A>, for a list of sites.)
+
+</P>
+<P><HR><P>
+<p>Go to the first, previous, <A HREF="zsh_2.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

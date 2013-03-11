@@ -1,0 +1,105 @@
+This is zsh.info, produced by makeinfo version 4.0 from ./zsh.texi.
+
+This is a texinfo version of the man page for the Z Shell, originally by
+Paul Falstad.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided also
+that the entire resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+
+Indirect:
+zsh.info-1: 730
+zsh.info-2: 49787
+zsh.info-3: 95982
+zsh.info-4: 133334
+zsh.info-5: 154916
+zsh.info-6: 203525
+zsh.info-7: 252970
+
+Tag Table:
+(Indirect)
+Node: Top730
+Node: The Z Shell Guide2628
+Node: Introduction4969
+Node: Author5587
+Node: Availability6054
+Node: Undocumented Features7826
+Node: Mailing Lists8102
+Node: Further Information9567
+Node: The Zsh FAQ9757
+Node: The Zsh Web Page10236
+Node: See Also10592
+Node: Invocation10998
+Node: Startup/Shutdown Files11520
+Node: Shell Grammar12556
+Node: Simple Commands & Pipelines12872
+Node: Precommand Modifiers14859
+Node: Complex Commands15692
+Node: Alternate Forms For Complex Commands19279
+Node: Reserved Words20644
+Node: Comments21203
+Node: Aliasing21585
+Node: Quoting22515
+Node: Expansion23050
+Node: Filename Expansion24467
+Node: Process Substitution27491
+Node: Parameter Expansion29060
+Node: Command Substitution37672
+Node: Arithmetic Expansion38329
+Node: Brace Expansion38735
+Node: Filename Generation39830
+Node: History Expansion47798
+Node: Event Designators48870
+Node: Word Designators49787
+Node: Modifiers50873
+Node: Redirection54907
+Node: Command Execution60427
+Node: Functions61449
+Node: Jobs & Signals63399
+Node: Arithmetic Evaluation66661
+Node: Conditional Expressions69154
+Node: Compatibility72910
+Node: Zsh Line Editor74441
+Node: Movement75877
+Node: History Control79372
+Node: Modifying Text86203
+Node: Arguments93896
+Node: Completion94347
+Node: Miscellaneous95982
+Node: Parameters102691
+Node: Array Parameters103500
+Node: Positional Parameters106814
+Node: Parameters Set By The Shell107299
+Node: Parameters Used By The Shell112196
+Node: Options131878
+Node: Specifying Options132077
+Node: Description of Options133334
+Node: Single Letter Options152658
+Node: Shell Builtin Commands154916
+Node: Programmable Completion198689
+Node: Command Flags199726
+Node: Options Flags202844
+Node: Simple Flags203525
+Node: Flags with arguments205241
+Node: Control Flags208278
+Node: Alternative Completion211501
+Node: Extended Completion212064
+Node: Example215485
+Node: Concept Index216099
+Node: Variables Index236063
+Node: Options Index244049
+Node: Functions Index252970
+Node: Editor Functions Index260113
+Node: Keystroke Index269099
+
+End Tag Table

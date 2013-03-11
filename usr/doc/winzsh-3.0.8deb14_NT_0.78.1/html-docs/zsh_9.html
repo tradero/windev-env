@@ -1,0 +1,100 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Functions</TITLE>
+<link href="zsh_10.html" rel=Next>
+<link href="zsh_8.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_8.html">previous</A>, <A HREF="zsh_10.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC39" HREF="zsh_toc.html#TOC39">Functions</A></H1>
+<P>
+<A NAME="IDX127"></A>
+
+</P>
+<P>
+<A NAME="IDX128"></A>
+Shell functions are defined with the <CODE>function</CODE> reserved word or the
+special syntax `<VAR>funcname</VAR> <CODE>()</CODE>'.
+Shell functions are read in and stored internally.  Alias names are
+resolved when the function is read.  Functions are executed like
+commands with the arguments passed as positional parameters.
+
+</P>
+<P>
+Functions execute in the same process as the caller and share all files
+and the present working directory with the caller.  A trap on
+<CODE>EXIT</CODE> set inside a function is executed after the function
+completes in the environment of the caller.
+
+</P>
+<P>
+The <CODE>return</CODE> builtin is used to return from function calls.
+<A NAME="IDX129"></A>
+
+</P>
+<P>
+Function identifiers can be listed with the <CODE>functions</CODE> builtin.
+<A NAME="IDX130"></A>
+<A NAME="IDX131"></A>
+Functions can be undefined with the <CODE>unfunction</CODE> builtin.
+
+</P>
+<P>
+The following functions, if defined, have special meaning to the shell:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>chpwd</CODE>
+<DD>
+Executed whenever the current working directory is changed.
+<A NAME="IDX132"></A>
+
+<DT><CODE>precmd</CODE>
+<DD>
+Executed before each prompt.
+<A NAME="IDX133"></A>
+
+<DT><CODE>preexec</CODE>
+<DD>
+Executed just after a command has been read and is about to be
+executed.  If the history mechanism is active, the string to be
+executed is passed as an argument.
+<A NAME="IDX134"></A>
+
+<DT><CODE>periodic</CODE>
+<DD>
+If the parameter <CODE>PERIOD</CODE> is set, this function is executed every
+<A NAME="IDX135"></A>
+<A NAME="IDX136"></A>
+<CODE>PERIOD</CODE> seconds, just before a prompt.
+
+<A NAME="IDX137"></A>
+<A NAME="IDX138"></A>
+<DT><CODE>TRAP<VAR>xxx</VAR></CODE>
+<DD>
+If defined and non-null, this function will be executed whenever the
+shell catches a signal <CODE>SIG<VAR>xxx</VAR></CODE>, where <VAR>xxx</VAR> is a signal
+name as specified for the <CODE>kill</CODE> builtin (see section <A HREF="zsh_17.html#SEC64">Shell Builtin Commands</A>).  In addition, <CODE>TRAPZERR</CODE> is executed whenever a command
+<A NAME="IDX139"></A>
+has a non-zero exit status, <CODE>TRAPDEBUG</CODE> is executed after each
+<A NAME="IDX140"></A>
+command, and <CODE>TRAPEXIT</CODE> is executed when the shell exits, or when
+<A NAME="IDX141"></A>
+the current function exits if defined inside a function.  If a function
+of this form is defined and null, the shell and processes spawned by it
+will ignore <CODE>SIG<VAR>xxx</VAR></CODE>.
+</DL>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_8.html">previous</A>, <A HREF="zsh_10.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

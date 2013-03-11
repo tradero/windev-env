@@ -1,0 +1,1370 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Shell Builtin Commands</TITLE>
+<link href="zsh_18.html" rel=Next>
+<link href="zsh_16.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_16.html">previous</A>, <A HREF="zsh_18.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC64" HREF="zsh_toc.html#TOC64">Shell Builtin Commands</A></H1>
+<P>
+<A NAME="IDX861"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>- simple command</CODE>
+<DD>
+<A NAME="IDX862"></A>
+See section <A HREF="zsh_5.html#SEC18">Precommand Modifiers</A>.
+
+<DT><CODE>. <VAR>file</VAR> [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX863"></A>
+Read and execute commands from <VAR>file</VAR> and execute them in the 
+current shell environment.  If <VAR>file</VAR> does not contain a slash, or if
+<CODE>PATH_DIRS</CODE> is set, the shell looks in the components of
+<CODE>path</CODE> to find the directory containing <VAR>file</VAR>.  Files in the
+current directory are not read unless <SAMP>`.'</SAMP> appears somewhere in
+<CODE>path</CODE>.  If any arguments <VAR>arg</VAR> are given, they become the
+positional parameters; the old positional parameters are restored when
+the <VAR>file</VAR> is done executing.  The exit status is the exit status of
+the last command executed.
+
+<DT><CODE>: [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX864"></A>
+<A NAME="IDX865"></A>
+This command only expands parameters.  A zero exit code is returned.
+
+<DT><CODE>alias [ -grmL ] [ <VAR>name</VAR>[=<VAR>value</VAR>] ] ...</CODE>
+<DD>
+<A NAME="IDX866"></A>
+<A NAME="IDX867"></A>
+For each
+<VAR>name</VAR> with a corresponding <VAR>value</VAR>, define an alias with that
+value.  A trailing space in <VAR>value</VAR> causes the next word to be
+checked for alias substitution.  If the <SAMP>`-g'</SAMP> flag is present, define
+a global alias; global aliases are expanded even if they do not occur in
+command position.  For each <VAR>name</VAR> with no <VAR>value</VAR>, print the
+value of <VAR>name</VAR>, if any.  With no arguments, print all currently defined
+aliases.  If the <SAMP>`-m'</SAMP> flag is given the arguments are taken as patterns 
+(they should be quoted to preserve them from being interpreted as glob 
+patterns) and the aliases matching these patterns are printed.  When printing
+aliases and the <SAMP>`-g'</SAMP> or <SAMP>`-r'</SAMP> flags are present, then restrict the 
+printing to global or regular aliases, respectively.  If the <SAMP>`-L'</SAMP> flag 
+is present, then print each alias in a manner suitable for putting in a 
+startup script.  The exit status is nonzero if a <VAR>name</VAR> (with no 
+<VAR>value</VAR>) is given for which no alias has been defined.
+
+<DT><CODE>autoload [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX868"></A>
+<A NAME="IDX869"></A>
+<A NAME="IDX870"></A>
+For each of the <VAR>name</VAR>s (which are names of functions), create a
+function marked undefined.  The <CODE>fpath</CODE> variable will be searched
+to find the actual function definition when the function is first 
+referenced.  The definition is contained in a file of the same name as 
+the function.  If the file found contains a standard definition for the
+function, that is stored as the function; otherwise, the contents of the 
+entire file are stored as the function.  The latter format allows functions
+to be used directly as scripts.
+
+<DT><CODE>bg [ <VAR>job</VAR> ... ]</CODE>
+<DD>
+<DT><CODE><VAR>job</VAR> ... &#38;</CODE>
+<DD>
+<A NAME="IDX871"></A>
+Put each specified <VAR>job</VAR> in the background, or the current job if
+none is specified. See section <A HREF="zsh_10.html#SEC40">Jobs &#38; Signals</A>.
+
+<DT><CODE>bindkey -mevd</CODE>
+<DD>
+<DT><CODE>bindkey -r <VAR>in-string</VAR> ...</CODE>
+<DD>
+<DT><CODE>bindkey [ -a ] <VAR>in-string</VAR> [ <VAR>command</VAR> ] ...</CODE>
+<DD>
+<DT><CODE>bindkey -s [ -a ] <VAR>in-string</VAR> <VAR>out-string</VAR> ...</CODE>
+<DD>
+<A NAME="IDX872"></A>
+<A NAME="IDX873"></A>
+<A NAME="IDX874"></A>
+The <SAMP>`-e'</SAMP> and <SAMP>`-v'</SAMP> options put the keymaps in emacs mode and vi
+mode respectively; they cannot be used simultaneously.  The <SAMP>`-d'</SAMP>
+option resets all bindings to the compiled-in settings.  If not used
+with options <SAMP>`-e'</SAMP> or <SAMP>`-v'</SAMP>, the maps will be left in emacs
+mode, or in vi mode if the <CODE>VISUAL</CODE> or <CODE>EDITOR</CODE> variables
+contain the string <SAMP>`vi'</SAMP>.  Metafied characters are bound to
+self-insert by default.  The <SAMP>`-m'</SAMP> option loads the compiled-in
+bindings of these characters for the mode determined by the preceding
+options, or the current mode if used alone.  Any previous binding done
+by the user will be preserved.  If the <SAMP>`-r'</SAMP> option is given, remove
+any binding for each <VAR>in-string</VAR>.  If the <SAMP>`-s'</SAMP> option is not
+specified, bind each <VAR>in-string</VAR> to a specified <VAR>command</VAR>.  If
+no <VAR>command</VAR> is specified, print the binding of <VAR>in-string</VAR> if
+it is bound, or return a nonzero exit code if it is not bound.  If the
+<SAMP>`-s'</SAMP> option is specified, bind each <VAR>in-string</VAR> to each
+specified <VAR>out-string</VAR>.  When <VAR>in-string</VAR> is typed,
+<VAR>out-string</VAR> will be pushed back and treated as input to the line
+editor.  The process is recursive, but to avoid infinite loops the shell
+will report an error if more than 20 consecutive replacements happen.
+If the <SAMP>`-a'</SAMP> option is specified, bind the <VAR>in-string</VAR>s in the
+alternative keymap instead of the standard one.  The alternative keymap
+is used in vi command mode.
+
+It's possible for an <VAR>in-string</VAR> to be bound to something and also
+be the beginning of a longer bound string.  In this case the shell will
+wait a certain time to see if more characters are typed, and if not it
+will execute the binding.  This timeout is defined by the
+<CODE>KEYTIMEOUT</CODE> parameter; the default is 0.4 seconds.  No timeout is
+done if the prefix string is not bound.
+
+For either <VAR>in-string</VAR> or <VAR>out-string</VAR>, control characters may
+be specified in the form <CODE>^X</CODE>, and the backslash may be used to
+introduce one of the following escape sequences:
+
+<DL COMPACT>
+
+<DT><CODE>\a</CODE>
+<DD>
+Bell character
+<DT><CODE>\n</CODE>
+<DD>
+Linefeed (newline)
+<DT><CODE>\b</CODE>
+<DD>
+Backspace
+<DT><CODE>\t</CODE>
+<DD>
+Horizontal tab
+<DT><CODE>\v</CODE>
+<DD>
+Vertical tab
+<DT><CODE>\f</CODE>
+<DD>
+Form feed
+<DT><CODE>\r</CODE>
+<DD>
+Carriage return
+<DT><CODE>\e</CODE>
+<DD>
+<DT><CODE>\E</CODE>
+<DD>
+Escape
+<DT><CODE>\<VAR>NNN</VAR></CODE>
+<DD>
+Character code in octal
+<DT><CODE>\x<VAR>NN</VAR></CODE>
+<DD>
+Character code in hexadecimal
+<DT><CODE>\M-<VAR>xxx</VAR></CODE>
+<DD>
+Character or escape sequence with meta bit set.  The <CODE>-</CODE> after the
+<CODE>M</CODE> is optional.
+<DT><CODE>\C-X</CODE>
+<DD>
+Control character.  The <SAMP>`-'</SAMP> after the <CODE>M</CODE> is optional.
+</DL>
+
+In all other cases, <CODE>\</CODE> escapes the following character.  Delete is
+written as <CODE>^?</CODE>.  Note that <CODE>\M^?</CODE> and <CODE>^\M?</CODE> are not the
+same.
+
+Multi-character <VAR>in-strings</VAR> cannot contain the null character
+(<CODE>^@</CODE> or <CODE>^ </CODE>).  If they appear in a bindkey command, they
+will be silently translated to <CODE>\M-^@</CODE>.  This restriction does not
+apply to <VAR>out-strings</VAR>, single-character <VAR>in-strings</VAR> and the
+first character of a multi-char <VAR>in-string</VAR>.
+
+<DT><CODE>break [ <VAR>n</VAR> ]</CODE>
+<DD>
+<A NAME="IDX875"></A>
+<A NAME="IDX876"></A>
+<A NAME="IDX877"></A>
+Exit from an enclosing <CODE>for</CODE>, <CODE>while</CODE>, <CODE>until</CODE>,
+<CODE>select</CODE>, or <CODE>repeat</CODE> loop.  If <VAR>n</VAR> is specified, then
+break <VAR>n</VAR> levels instead of just one.
+
+<DT><CODE>builtin <VAR>name</VAR> [ <VAR>args</VAR> ] ...</CODE>
+<DD>
+<A NAME="IDX878"></A>
+Executes the builtin <VAR>name</VAR>, with the given <VAR>args</VAR>.
+
+<DT><CODE>bye</CODE>
+<DD>
+<A NAME="IDX879"></A>
+Same as <CODE>exit</CODE>.
+
+<DT><CODE>cd [ <VAR>arg</VAR> ]</CODE>
+<DD>
+<DT><CODE>cd <VAR>old</VAR> <VAR>new</VAR></CODE>
+<DD>
+<DT><CODE>cd [+-]n</CODE>
+<DD>
+<A NAME="IDX880"></A>
+<A NAME="IDX881"></A>
+Change the current directory.  In the first form, change the current
+directory to <VAR>arg</VAR>, or to the value of <CODE>HOME</CODE> if <VAR>arg</VAR> is
+not specified.  If <VAR>arg</VAR> is <CODE>-</CODE>, change to the value of
+<CODE>OLDPWD</CODE>, the previous directory.  If a directory named <VAR>arg</VAR>
+is not found in the current directory and <VAR>arg</VAR> does not begin with
+a slash, search each component of the shell parameter <CODE>cdpath</CODE>.  If
+the option <CODE>CDABLEVARS</CODE> is set, and a parameter named <VAR>arg</VAR>
+exists whose value begins with a slash, treat its value as the
+directory.
+
+The second form of <CODE>cd</CODE> substitutes the string <VAR>new</VAR> for the
+string <VAR>old</VAR> in the name of the current directory, and tries to
+change to this new directory.
+
+The third form of <CODE>cd</CODE> extracts an entry from the directory stack, 
+and changes to that directory.  An argument of the form <CODE>+<VAR>n</VAR></CODE> 
+identifies a stack entry by counting from the left of the list shown by the
+<CODE>dirs</CODE> command, starting with zero.  An argument of the form 
+<CODE>-<VAR>n</VAR></CODE> counts from the right.  If the <CODE>PUSHD_MINUS</CODE> option 
+is set, the meanings of <CODE>+</CODE> and <CODE>-</CODE> in this context are swapped.
+
+<DT><CODE>chdir</CODE>
+<DD>
+<A NAME="IDX882"></A>
+Same as <CODE>cd</CODE>.
+
+<DT><CODE>command simple command</CODE>
+<DD>
+<A NAME="IDX883"></A>
+See section <A HREF="zsh_5.html#SEC18">Precommand Modifiers</A>.
+
+<DT><CODE>compctl</CODE>
+<DD>
+See section <A HREF="zsh_18.html#SEC65">Programmable Completion</A>.
+
+<DT><CODE>continue [ <VAR>num</VAR> ]</CODE>
+<DD>
+<A NAME="IDX884"></A>
+<A NAME="IDX885"></A>
+<A NAME="IDX886"></A>
+Resume the next iteration of the enclosing <CODE>for</CODE>, <CODE>while</CODE>,
+<CODE>until</CODE>, <CODE>select</CODE>, or <CODE>repeat</CODE> loop.  If <VAR>n</VAR> is
+specified, break out of <VAR>n</VAR>-1 loops and resume at the <VAR>n</VAR>'th
+enclosing loop.
+
+<DT><CODE>declare [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX887"></A>
+Same as <CODE>typeset</CODE>.
+
+<DT><CODE>dirs [ -v ] [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX888"></A>
+<A NAME="IDX889"></A>
+With no arguments, print the contents of the directory stack.  If the
+<SAMP>`-v'</SAMP> option is given, number the directories in the stack when
+printing.  Directories are added to this stack with the <CODE>pushd</CODE>
+command, and removed with the <CODE>cd</CODE> or <CODE>popd</CODE> commands.  If
+arguments are specified, load them onto the directory stack, replacing
+anything that was there, and push the current directory onto the
+stack.
+
+<DT><CODE>disable [ -afmr ] <VAR>arg</VAR> ...</CODE>
+<DD>
+<A NAME="IDX890"></A>
+<A NAME="IDX891"></A>
+<A NAME="IDX892"></A>
+Disable the hash table element named <VAR>arg</VAR> temporarily.  The default is
+to disable builtin commands.  
+This allows you to use an external command with the same name as a builtin
+command.  The <SAMP>`-a'</SAMP> option causes <CODE>disable</CODE> to act on aliases.  The
+<SAMP>`-f'</SAMP> option causes <CODE>disable</CODE> to act on shell functions.  The
+<SAMP>`-r'</SAMP> option causes <CODE>disable</CODE> to act on reserved words.  Without
+arguments all disabled hash table elements from the corresponding hash table
+are printed.  With the <SAMP>`-m'</SAMP> flag the arguments are taken as patterns 
+(which should be quoted to preserve them from being taken as glob patterns)
+and all hash table elements from the corresponding hash table matching these 
+patterns are disabled.  Disabled objects can be enabled with the 
+<CODE>enable</CODE> command.
+
+<DT><CODE>disown [ <VAR>job</VAR> ... ]</CODE>
+<DD>
+<DT><CODE>job ... &#38;|</CODE>
+<DD>
+<DT><CODE>job ... &#38;!</CODE>
+<DD>
+<A NAME="IDX893"></A>
+<A NAME="IDX894"></A>
+Remove the specified jobs from the job table; the shell will no longer
+report their status, and will not complain if you try to exit an
+interactive shell with them running or stopped.  If no <CODE>job</CODE> is
+specified use the current <CODE>job</CODE>.
+
+<DT><CODE>echo [ -neE ] [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX895"></A>
+Write each <VAR>arg</VAR> on the standard output, with a space separating
+each one.  If the <SAMP>`-n'</SAMP> flag is not present, print a newline at the
+end.  <CODE>echo</CODE> recognizes the following escape sequences:
+
+<DL COMPACT>
+
+<DT><CODE>\a</CODE>
+<DD>
+Bell
+<DT><CODE>\b</CODE>
+<DD>
+Backspace
+<DT><CODE>\c</CODE>
+<DD>
+Don't print an ending newline
+<DT><CODE>\e</CODE>
+<DD>
+Escape
+<DT><CODE>\f</CODE>
+<DD>
+Form feed
+<DT><CODE>\n</CODE>
+<DD>
+Newline
+<DT><CODE>\r</CODE>
+<DD>
+Carriage return
+<DT><CODE>\t</CODE>
+<DD>
+Horizontal tab
+<DT><CODE>\v</CODE>
+<DD>
+Vertical tab
+<DT><CODE>\\</CODE>
+<DD>
+Backslash
+<DT><CODE>\0NNN</CODE>
+<DD>
+Character code in octal, with a maximum of three digits after the zero.
+A non-octal digit terminates the number.
+<DT><CODE>\xNN</CODE>
+<DD>
+Character code in hexadecimal, with a maximum of two digits after the
+<CODE>x</CODE>.  A non-hexadecimal digit terminates the number.
+</DL>
+
+<A NAME="IDX896"></A>
+The <SAMP>`-E'</SAMP> flag or the <CODE>BSD_ECHO</CODE> option can be used to
+disable these escape sequences.  In the later case <SAMP>`-e'</SAMP> flag can be 
+used to enable them.
+
+<DT><CODE>echotc <VAR>cap</VAR> [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX897"></A>
+<A NAME="IDX898"></A>
+Output the termcap string corresponding to the capability <VAR>cap</VAR>,
+with optional arguments.
+
+<DT><CODE>emulate [ -LR ] [ zsh | sh | ksh | csh ]</CODE>
+<DD>
+<A NAME="IDX899"></A>
+<A NAME="IDX900"></A>
+<A NAME="IDX901"></A>
+<A NAME="IDX902"></A>
+<A NAME="IDX903"></A>
+<A NAME="IDX904"></A>
+<A NAME="IDX905"></A>
+Set up zsh options to emulate the specified shell as much as possible.  
+<CODE>csh</CODE> will never be fully emulated.  If the argument is not one of the 
+shells listed above, <CODE>zsh</CODE> will be used as a default.  If the <SAMP>`-R'</SAMP>
+option is given, all options are reset to their default value corresponding 
+to the specified emulation
+mode, except for certain options describing the interactive
+environment; otherwise, only those options likely to cause portability
+problems in scripts and functions are altered.  If the <SAMP>`-L'</SAMP> option
+is given, the option <CODE>LOCAL_OPTIONS</CODE> will be set as well, causing
+the effect of the <CODE>emulate</CODE> command to be local to the immediately
+surrounding shell function, if any; normally this is turned off in all
+emulation modes except <CODE>ksh</CODE>.
+
+<DT><CODE>enable [ -afmr ] <VAR>arg</VAR> ...</CODE>
+<DD>
+<A NAME="IDX906"></A>
+Enable the hash table element named <VAR>arg</VAR>, presumably disabled earlier
+with <CODE>disable</CODE>.  The default is to enable builtin commands.  The 
+<SAMP>`-a'</SAMP> option causes <CODE>enable</CODE> to act on aliases.  The <SAMP>`-f'</SAMP> 
+option causes <CODE>enable</CODE> to act on shell functions.  The <SAMP>`-r'</SAMP> option
+causes <CODE>enable</CODE> to act on reserved words.  Without arguments all enable 
+hash table elements from the corresponding hash table are printed.  With 
+the <SAMP>`-m'</SAMP> flag the arguments are taken as patterns (should be quoted) 
+and all hash table elements from the corresponding hash table matching these
+patterns are enabled.  Enabled objects can be disabled with the <CODE>disable</CODE>
+builtin command.
+
+<DT><CODE>eval [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX907"></A>
+<A NAME="IDX908"></A>
+Read the arguments as input to the shell and execute the resulting
+command(s) in the current shell process.
+
+<DT><CODE>exec simple command</CODE>
+<DD>
+<A NAME="IDX909"></A>
+See section <A HREF="zsh_5.html#SEC18">Precommand Modifiers</A>.
+
+<DT><CODE>exit [ <VAR>n</VAR> ]</CODE>
+<DD>
+<A NAME="IDX910"></A>
+<A NAME="IDX911"></A>
+Exit the shell with the exit code specified by <VAR>n</VAR>; if none is
+specified, use the exit code from the last command executed.  An
+<CODE>EOF</CODE> condition will also cause the shell to exit, unless the
+<CODE>IGNORE_EOF</CODE> option is set.
+
+<DT><CODE>export [ <VAR>name</VAR>[=<VAR>value</VAR>] ... ]</CODE>
+<DD>
+<A NAME="IDX912"></A>
+The specified <VAR>name</VAR>s are marked for automatic export to the
+environment of subsequently executed commands.  <CODE>export</CODE> is equivalent
+to <CODE>typeset -x</CODE>.
+
+<DT><CODE>false</CODE>
+<DD>
+<A NAME="IDX913"></A>
+Do nothing and return an exit code of 1.
+
+<DT><CODE>fc [ -e <VAR>ename</VAR> ] [ -nlrdDfEim ] [ <VAR>old</VAR>=<VAR>new</VAR> ... ] [ <VAR>first</VAR> [ <VAR>last</VAR> ]]</CODE>
+<DD>
+<DT><CODE>fc -ARWI [ <VAR>filename</VAR> ]</CODE>
+<DD>
+<A NAME="IDX914"></A>
+<A NAME="IDX915"></A>
+<A NAME="IDX916"></A>
+Select a range of commands from <VAR>first</VAR> to <VAR>last</VAR> from the
+history list.  The arguments <VAR>first</VAR> and <VAR>last</VAR> may be specified
+as a number or as a string.  A negative number is used as an offset to
+the current history event number.  A string specifies the most recent
+event beginning with the given string.  All substitutions
+<VAR>old</VAR>=<VAR>new</VAR>, if any, are then performed on the commands.  If the
+<SAMP>`-l'</SAMP> flag is given, the resulting commands are listed on standard
+output.  If the <SAMP>`-m'</SAMP> flag is also given the first argument is taken
+as a pattern (which should be quoted), and only the history events
+matching this pattern will be shown.  Otherwise the editor program
+<VAR>ename</VAR> is invoked on a file containing these history events.  If
+<VAR>ename</VAR> is not given, the value of the parameter <CODE>FCEDIT</CODE> is
+used.  If <VAR>ename</VAR> is <CODE>-</CODE>, no editor is invoked.  When editing
+is complete, the edited command(s) is executed.  If <VAR>first</VAR> is not
+specified, it will be set to -1 (the most recent event), or to -16 if
+the <SAMP>`-l'</SAMP> flag is given.  If <VAR>last</VAR> is not specified, it will be
+set to <VAR>first</VAR>, or to -1 if the <SAMP>`-l'</SAMP> flag is given.  The flag
+<SAMP>`-r'</SAMP> reverses the order of the commands and the flag <SAMP>`-n'</SAMP>
+suppresses command numbers when listing.  Also when listing, <SAMP>`-d'</SAMP>
+prints timestamps for each command, <SAMP>`-f'</SAMP> prints full time and date
+stamps. Adding the <SAMP>`-E'</SAMP> flag causes the dates to be printed as 
+(<CODE>dd.mm.yyyy</CODE>), instead of the default, <CODE>mm/dd/yyyy</CODE>.  Adding the
+<SAMP>`-i'</SAMP> flag causes the dates to be printed as <CODE>yyyy-mm-dd</CODE>, in a
+fixed format.  With the <SAMP>`-D'</SAMP> flag, <CODE>fc</CODE> prints elapsed times.
+
+<CODE>fc -R</CODE> reads the history from the given file, <CODE>fc -W</CODE> writes the
+<A NAME="IDX917"></A>
+<A NAME="IDX918"></A>
+history out to the given file, and <CODE>fc -A</CODE> appends the history out to
+the given file. <CODE>fc -AI</CODE> (<CODE>WI</CODE>) appends (writes) only those events
+that are new since the last incremental append (write) to the history 
+file.  In any case the file will have no more than <CODE>SAVEHIST</CODE> entries. 
+
+<DT><CODE>fg [ <VAR>job</VAR> ... ]</CODE>
+<DD>
+<DT><CODE><VAR>job</VAR> ...</CODE>
+<DD>
+<A NAME="IDX919"></A>
+Bring the specified <VAR>job</VAR>s to the foreground.  If no <VAR>job</VAR> is
+specified, use the current job.
+
+<DT><CODE>functions [ +-tum ] [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX920"></A>
+Equivalent to <CODE>typeset -f</CODE>.
+
+<DT><CODE>getln <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX921"></A>
+<A NAME="IDX922"></A>
+<A NAME="IDX923"></A>
+Read the top value from the buffer stack and put it in the shell
+parameter <VAR>name</VAR>.  Equivalent to <CODE>read -zr</CODE>.  The flags
+<SAMP>`-c'</SAMP>, <SAMP>`-l'</SAMP>, <SAMP>`-A'</SAMP>, <SAMP>`-e'</SAMP>, <SAMP>`-E'</SAMP>, and <SAMP>`-n'</SAMP> are
+also supported.
+
+<DT><CODE>getopts <VAR>optstring</VAR> <VAR>name</VAR> [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX924"></A>
+<A NAME="IDX925"></A>
+Checks <VAR>arg</VAR> for legal options.  If <VAR>arg</VAR> is omitted, use the
+positional parameters.  A valid option argument begins with a <CODE>+</CODE>
+or a <CODE>-</CODE>.  An argument not beginning with a <CODE>+</CODE> or a <CODE>-</CODE>,
+or the argument <CODE>--</CODE>, ends the options.  <VAR>optstring</VAR> contains
+the letters that <CODE>getopts</CODE> recognizes.  If a letter is followed by
+a <CODE>:</CODE>, that option is expected to have an argument.  The options
+can be separated from the argument by blanks.
+
+Each time it is invoked, <CODE>getopts</CODE> places the option letter it
+finds in the shell parameter <VAR>name</VAR>, prepended with a <CODE>+</CODE> when
+<VAR>arg</VAR> begins with a <CODE>+</CODE>.  The index of the next <VAR>arg</VAR> is
+stored in <CODE>OPTIND</CODE>.  The option argument, if any, is stored in
+<A NAME="IDX926"></A>
+<CODE>OPTARG</CODE>.
+<A NAME="IDX927"></A>
+
+A leading <CODE>:</CODE> in <VAR>optstring</VAR> causes <CODE>getopts</CODE> to store the
+letter of the invalid option in <CODE>OPTARG</CODE>, and to set <VAR>name</VAR> to
+<CODE>?</CODE> for an unknown option and to <CODE>:</CODE> when a required option is
+missing.  Otherwise, <CODE>getopts</CODE> prints an error message.  The exit
+status is nonzero when there are no more options.
+
+<DT><CODE>hash [ -dfmr ] [ <VAR>name</VAR>[=<VAR>value</VAR> ] ] ...</CODE>
+<DD>
+<A NAME="IDX928"></A>
+With no arguments or options, <CODE>hash</CODE> will list the entire command 
+hash table.
+
+The <SAMP>`-m'</SAMP> option causes the arguments to be taken as patterns 
+(they should be quoted) and the elements of the command hash table matching 
+these patterns are printed.
+
+The <SAMP>`-r'</SAMP> option causes the command hash table to be thrown out and 
+restarted.  The <SAMP>`-f'</SAMP> option causes the entire path to be searched, and
+all the commands found are added to the hash table.  These options cannot be 
+used with any arguments.
+
+For each <VAR>name</VAR> with a corresponding <VAR>value</VAR>, put <VAR>name</VAR> in the 
+command hash table, associating it with the pathname <VAR>value</VAR>.  Whenever 
+<VAR>name</VAR> is used as a command argument, the shell will try to execute the 
+file given by <VAR>value</VAR>.  For each <VAR>name</VAR> with no corresponding 
+<VAR>value</VAR>, search for <VAR>name</VAR> in the path, and add it to the command 
+hash table, and associating it with the discovered path, if it is found.
+
+Adding the <SAMP>`-d'</SAMP> option causes <CODE>hash</CODE> to act on the named directory 
+table instead of the command hash table.  The remaining discussion of
+<CODE>hash</CODE> will assume that the <SAMP>`-d'</SAMP> is given.
+
+If invoked without any arguments, and without any other options, 
+<CODE>hash -d</CODE> lists the entire named directory table.
+
+The <SAMP>`-m'</SAMP> option causes the arguments to be taken as patterns (they 
+should be quoted) and the elements of the named directory table matching
+these patterns are printed.
+
+The <SAMP>`-r'</SAMP> option causes the named directory table to be thrown out and 
+restarted so that it only contains  <CODE>~</CODE>.  The <SAMP>`-f'</SAMP> option causes 
+all usernames to be added to the named directory table.  These options cannot
+be used with any arguments.
+
+For each <VAR>name</VAR> with a corresponding <VAR>value</VAR>, put <VAR>name</VAR>
+in the named directory table.  The directory name <VAR>name</VAR> is then
+associated with the specified path <VAR>value</VAR>, so that <VAR>value</VAR> may 
+be referred to as <CODE>~<VAR>name</VAR></CODE>.  For each <VAR>name</VAR> with no 
+corresponding <VAR>value</VAR>, search for as a username and as a parameter.  If
+it is found, it is added to the named directory hash table.
+
+<DT><CODE>history [ -nrdDfEim ] [ <VAR>first</VAR> [ <VAR>last</VAR> ]]</CODE>
+<DD>
+<A NAME="IDX929"></A>
+Same as <CODE>fc -l</CODE>.
+
+<DT><CODE>integer [ +-lrtux ] [ <VAR>name</VAR>[=<VAR>value</VAR>] ]</CODE>
+<DD>
+<A NAME="IDX930"></A>
+Same as <CODE>typeset -i</CODE>, except that options irrelevant to integers
+are not permitted.
+
+<DT><CODE>jobs [ -lprs ] [ <VAR>job</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX931"></A>
+Lists information about each given job, or all jobs if <VAR>job</VAR> is
+omitted.  The <SAMP>`-l'</SAMP> flag lists process ids, and the <SAMP>`-p'</SAMP> flag
+lists process groups.  If the <SAMP>`-r'</SAMP> flag is given only running jobs
+will be listed; if the <SAMP>`-s'</SAMP> flag is given only stopped jobs are
+shown.
+
+<DT><CODE>kill [ -s <VAR>signal_name</VAR> ] <VAR>job</VAR> ...</CODE>
+<DD>
+<DT><CODE>kill [ -<VAR>sig</VAR> ] <VAR>job</VAR> ...</CODE>
+<DD>
+<DT><CODE>kill -l [ <VAR>sig</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX932"></A>
+<A NAME="IDX933"></A>
+<A NAME="IDX934"></A>
+Sends either <CODE>SIGTERM</CODE> or the specified signal to the given jobs or
+processes.  Signals are given by number or by names, without the <CODE>SIG</CODE> 
+prefix.  If the signal being sent is not <CODE>KILL</CODE> or <CODE>CONT</CODE>, then the 
+job will be sent a <CODE>CONT</CODE> signal if it is stopped.  The argument 
+<VAR>job</VAR> can be the process id of a job not in the job list.  In the third 
+form, <CODE>kill -l</CODE>, if <VAR>sig</VAR> is not specified the signal names are 
+listed.  Otherwise, for each <VAR>sig</VAR> that is a name, the corresponding 
+signal number is listed.  For each <VAR>sig</VAR> that is a signal number or a 
+number representing the exit status of a process which was terminated or 
+stopped by a signal the name of the signal is printed.
+
+<DT><CODE>let <VAR>arg</VAR> ...</CODE>
+<DD>
+<A NAME="IDX935"></A>
+Evaluate each <VAR>arg</VAR> as an arithmetic expression.
+See section <A HREF="zsh_11.html#SEC41">Arithmetic Evaluation</A>, for a description of arithmetic
+expressions.  The exit status is 0 if the value of the last expression
+is nonzero, and 1 otherwise.
+
+<DT><CODE>limit [ -hs ] [ <VAR>resource</VAR> [ <VAR>limit</VAR> ] ] ...</CODE>
+<DD>
+<A NAME="IDX936"></A>
+<A NAME="IDX937"></A>
+<A NAME="IDX938"></A>
+Set or display resource limits.  Unless the <SAMP>`-s'</SAMP> flag is given the limit 
+applies only the children of the shell.  If <SAMP>`-s'</SAMP> is given without other 
+arguments, the resource limits of the current shell is set to the previously 
+set resource limits of the children.  If <VAR>limit</VAR> is not specified, print 
+the current limit placed on <VAR>resource</VAR>; otherwise set the limit to the 
+specified value.  If the <SAMP>`-h'</SAMP> flag is given, use hard limits instead of 
+soft limits.  If no <VAR>resource</VAR> is given, print all limits.<BR>
+<VAR>resource</VAR> is one of:
+
+<DL COMPACT>
+
+<DT><CODE>cputime</CODE>
+<DD>
+Maximum CPU seconds per process.
+<DT><CODE>filesize</CODE>
+<DD>
+Largest single file allowed.
+<DT><CODE>datasize</CODE>
+<DD>
+Maximum data size (including stack) for each process.
+<DT><CODE>stacksize</CODE>
+<DD>
+Maximum stack size for each process.
+<DT><CODE>coredumpsize</CODE>
+<DD>
+Maximum size of a core dump.
+<DT><CODE>resident</CODE>
+<DD>
+<DT><CODE>memoryuse</CODE>
+<DD>
+Maximum resident set size.
+<DT><CODE>memorylocked</CODE>
+<DD>
+Maximum amount of memory locked in RAM.
+<DT><CODE>descriptors</CODE>
+<DD>
+Maximum value for a file descriptor.
+<DT><CODE>openfiles</CODE>
+<DD>
+Maximum number of open files.
+<DT><CODE>vmemorysize</CODE>
+<DD>
+Maximum amount of virtual memory.
+</DL>
+
+Which of these resource limits are available depends on the system.
+<VAR>limit</VAR> is a number, with an optional scaling factor, as
+follows:
+
+<DL COMPACT>
+
+<DT><CODE><VAR>n</VAR>h</CODE>
+<DD>
+Hours.
+<DT><CODE><VAR>n</VAR>k</CODE>
+<DD>
+Kilobytes.  This is the default for all but cputime.
+<DT><CODE><VAR>n</VAR>m</CODE>
+<DD>
+Megabytes or minutes.
+<DT><CODE><VAR>mm</VAR>:<VAR>ss</VAR></CODE>
+<DD>
+Minutes and seconds.
+</DL>
+
+<DT><CODE>local [ +-LRZilrtu [<VAR>n</VAR>]] [ <VAR>name</VAR>[=<VAR>value</VAR>] ]</CODE>
+<DD>
+<A NAME="IDX939"></A>
+Same as <CODE>typeset</CODE>, except that the options <SAMP>`-x'</SAMP> and <SAMP>`-f'</SAMP>
+are not permitted.
+
+<DT><CODE>log</CODE>
+<DD>
+<A NAME="IDX940"></A>
+<A NAME="IDX941"></A>
+<A NAME="IDX942"></A>
+<A NAME="IDX943"></A>
+List all users currently logged in who are affected by the current
+setting of the <CODE>watch</CODE> parameter.
+
+<DT><CODE>logout</CODE>
+<DD>
+<A NAME="IDX944"></A>
+Exit the shell, if this is a login shell.
+
+<DT><CODE>noglob simple command</CODE>
+<DD>
+<A NAME="IDX945"></A>
+See section <A HREF="zsh_5.html#SEC18">Precommand Modifiers</A>.
+
+<DT><CODE>popd [ +-<VAR>n</VAR> ]</CODE>
+<DD>
+<A NAME="IDX946"></A>
+<A NAME="IDX947"></A>
+Removes a entry from the directory stack and, performs a <CODE>cd</CODE> to the 
+new top directory.  With no argument, the current top entry is removed.  An
+argument of the form <CODE>+<VAR>n</VAR></CODE> identifies a stack entry by counting 
+from the left of the list shown by the <CODE>dirs</CODE> command, starting with
+zero.  An argument of the form <SAMP>`-n'</SAMP> counts from the right.  If the
+<CODE>PUSHD_MINUS</CODE> option is set, the meanings of <CODE>+</CODE> and <CODE>-</CODE>
+in this context are swapped.
+
+<DT><CODE>print [ -nrslzpNDPoOicm ] [ -u<VAR>n</VAR> ] [ -R [ -en ]] [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX948"></A>
+With no flags or with flag <CODE>-</CODE>, the arguments are printed on the
+standard output as described by <CODE>echo</CODE>, with the following
+differences: the escape sequence <CODE>\M-x</CODE> metafies the character
+<CODE>x</CODE> (sets the highest bit), <CODE>\C-x</CODE> produces a control
+character (<CODE>\C-@</CODE> and <CODE>\C-?</CODE> give the characters NULL and
+delete) and <CODE>\E</CODE> is a synonym for <CODE>\e</CODE>.  Finally, if not in an
+escape sequence, <CODE>\</CODE> escapes the following character and is not
+printed.
+
+<DL COMPACT>
+
+<DT><CODE>-r</CODE>
+<DD>
+Ignore the escape conventions of <CODE>echo</CODE>.
+<DT><CODE>-R</CODE>
+<DD>
+Emulate the BSD <CODE>echo</CODE> command which does not process escape sequences 
+unless the <SAMP>`-e'</SAMP> flag is given.  The <SAMP>`-n'</SAMP> flag suppresses the 
+trailing newline.  Only the <SAMP>`-e'</SAMP> and <SAMP>`-n'</SAMP> flags are recognized 
+after <SAMP>`-R'</SAMP>, all other arguments and options are printed.
+<DT><CODE>-m</CODE>
+<DD>
+Take the fist argument as a pattern (should be  quoted) and remove it from 
+the argument list together with subsequent arguments that do not match this 
+pattern.
+<DT><CODE>-s</CODE>
+<DD>
+Place the results in the history list instead of on the standard
+output.
+<DT><CODE>-n</CODE>
+<DD>
+Do not add a newline to the output.
+<DT><CODE>-l</CODE>
+<DD>
+Print the arguments separated by newlines instead of spaces.
+<DT><CODE>-N</CODE>
+<DD>
+Print the arguments separated and terminated by nulls.
+<DT><CODE>-o</CODE>
+<DD>
+Print the arguments sorted in ascending order.
+<DT><CODE>-O</CODE>
+<DD>
+Print the arguments sorted in descending order.
+<DT><CODE>-i</CODE>
+<DD>
+If given together with <SAMP>`-o'</SAMP> or <SAMP>`-O'</SAMP>, makes the sort be
+case-insensitive.
+<DT><CODE>-c</CODE>
+<DD>
+Print the arguments in columns.
+<DT><CODE>-u<VAR>n</VAR></CODE>
+<DD>
+Print the arguments to file descriptor <VAR>n</VAR>.
+<DT><CODE>-p</CODE>
+<DD>
+Print the arguments to the input of the coprocess.
+<DT><CODE>-z</CODE>
+<DD>
+Push the arguments onto the editing buffer stack, separated by spaces;
+no escape sequences are recognized.
+<DT><CODE>-D</CODE>
+<DD>
+Treat the arguments as directory names, replacing prefixes with <CODE>~</CODE>
+expressions, as appropriate.
+<DT><CODE>-P</CODE>
+<DD>
+Recognize the same escape sequences as in the <CODE>PROMPT</CODE>
+parameter.
+</DL>
+
+<DT><CODE>pushd [ <VAR>arg</VAR> ]</CODE>
+<DD>
+<DT><CODE>pushd <VAR>old</VAR> <VAR>new</VAR></CODE>
+<DD>
+<DT><CODE>pushd +-<VAR>n</VAR></CODE>
+<DD>
+<A NAME="IDX949"></A>
+<A NAME="IDX950"></A>
+<A NAME="IDX951"></A>
+<A NAME="IDX952"></A>
+<A NAME="IDX953"></A>
+Change the current directory, and push the old current directory onto
+the directory stack.  In the first form, change the current directory to
+<VAR>arg</VAR>.  If <VAR>arg</VAR> is not specified, change to the second
+directory on the stack (that is, exchange the top two entries), or
+change to the value of <CODE>HOME</CODE> if the <CODE>PUSHD_TO_HOME</CODE> option is
+set or if there is only one entry on the stack.  If <VAR>arg</VAR> is
+<CODE>-</CODE>, change to the value of <CODE>OLDPWD</CODE>, the previous directory.
+If a directory named <VAR>arg</VAR> is not found in the current directory and
+<VAR>arg</VAR> does not contain a slash, search each component of the shell
+parameter <CODE>cdpath</CODE>.  If the option <CODE>CDABLEVARS</CODE> is set, and a
+parameter named <VAR>arg</VAR> exists whose value begins with a slash, treat
+its value as the directory.  If the option <CODE>PUSHD_SILENT</CODE> is not
+set, the directory stack will be printed after a <CODE>pushd</CODE> is
+performed.
+
+The second form of <CODE>pushd</CODE> substitutes the string <VAR>new</VAR> for the
+string <VAR>old</VAR> in the name of the current directory, and tries to
+change to this new directory.
+
+The third form of <CODE>pushd</CODE> changes directory by rotating the directory 
+list.  An argument of the form <CODE>+n</CODE> identifies a stack entry by counting
+from the left of the list shown by the <CODE>dirs</CODE> command, starting with 
+zero.  An argument of the form <CODE>-n</CODE> counts from the right.  If the 
+<CODE>PUSHD_MINUS</CODE> option is set, the meanings of <CODE>+</CODE> and <CODE>-</CODE> in 
+this context are swapped.
+
+<DT><CODE>pushln</CODE>
+<DD>
+<A NAME="IDX954"></A>
+Equivalent to <CODE>print -nz</CODE>.
+
+<DT><CODE>pwd [ -r ]</CODE>
+<DD>
+<A NAME="IDX955"></A>
+<A NAME="IDX956"></A>
+Print the absolute pathname of the current working directory.  If the 
+<SAMP>`-r'</SAMP> flag is specified or the <CODE>CHASE_LINKS</CODE> option is set, the 
+printed path will not contain symbolic links.
+
+<DT><CODE>r</CODE>
+<DD>
+<A NAME="IDX957"></A>
+Equivalent to <CODE>fc -e -</CODE>.
+
+<DT><CODE>read [ -rzpqAclneE ] [ -k [<VAR>num</VAR>] ] [ -u<VAR>n</VAR> ] [ <VAR>name</VAR>?<VAR>prompt</VAR> ] [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX958"></A>
+<A NAME="IDX959"></A>
+Read one line and break it into fields using the characters in
+<CODE>IFS</CODE> as separators.  
+
+<DL COMPACT>
+
+<DT><CODE>-r</CODE>
+<DD>
+Raw mode: a <CODE>\</CODE> at the end of a line does not signify line continuation.
+
+<DT><CODE>-q</CODE>
+<DD>
+Read only one character from the terminal and set <VAR>name</VAR> to <SAMP>`y'</SAMP> if
+this character was <SAMP>`y'</SAMP> or <SAMP>`Y'</SAMP> and to <SAMP>`n'</SAMP> otherwise.  With this
+flag set the return value is zero only if the character was <SAMP>`y'</SAMP> or 
+<SAMP>`Y'</SAMP>.
+
+<DT><CODE>-k [ <VAR>num</VAR> ]</CODE>
+<DD>
+Read only one (or <VAR>num</VAR>) characters from the terminal.
+
+<DT><CODE>-z</CODE>
+<DD>
+Read from the editor buffer stack.  The first field is assigned to the first 
+<VAR>name</VAR>, the second field to the second <VAR>name</VAR>,  etc., with leftover 
+fields assigned to the last <VAR>name</VAR>.
+
+<DT><CODE>-e</CODE>
+<DD>
+<DT><CODE>-E</CODE>
+<DD>
+The words read are printed after the whole line is read.  If the <SAMP>`-e'</SAMP> 
+flag is set, the words are not assigned to the parameters.
+
+<DT><CODE>-A</CODE>
+<DD>
+The first <VAR>name</VAR> is taken as the name of an array and all words are 
+assigned to it.
+
+<DT><CODE>-c</CODE>
+<DD>
+<DT><CODE>-l</CODE>
+<DD>
+These flags are allowed only if called inside a function used for completion 
+(specified with the <SAMP>`-K'</SAMP> flag to <CODE>compctl</CODE>).  If the <SAMP>`-c'</SAMP> flag 
+is given, the words of  the  current command  are  read. If the <SAMP>`-l'</SAMP> flag
+is given, the whole line is assigned as a scalar.  If <CODE>name</CODE> is omitted 
+then <CODE>REPLY</CODE> is used for scalars and <CODE>reply</CODE> for arrays.
+
+<DT><CODE>-n</CODE>
+<DD>
+Together with either of the previous flags, this option gives the number of 
+the word the cursor is on or the index of the character the cursor is on 
+respectively. 
+
+<DT><CODE>-u<VAR>n</VAR></CODE>
+<DD>
+Input is read from file descriptor <VAR>n</VAR>.
+
+<DT><CODE>-p</CODE>
+<DD>
+Input is read from the coprocess.
+</DL>
+
+If the first argument contains a <CODE>?</CODE>, the remainder of this word is 
+used as a <CODE>prompt</CODE> on standard error when the shell is interactive.  The
+exit status is <CODE>0</CODE> unless an end-of-file is encountered.
+
+<DT><CODE>readonly [ <VAR>name</VAR>[=<VAR>value</VAR>]] ...</CODE>
+<DD>
+<A NAME="IDX960"></A>
+<A NAME="IDX961"></A>
+The given <VAR>names</VAR> are marked readonly; these names cannot be changed
+by subsequent assignment.
+
+<DT><CODE>rehash [ -df ]</CODE>
+<DD>
+<A NAME="IDX962"></A>
+Throw out the command hash table and start over.  If the <SAMP>`-f'</SAMP>
+option is set, rescan the command path immediately, instead of
+rebuilding the hash table incrementally.
+
+The <SAMP>`-d'</SAMP> option causes <CODE>rehash</CODE> to act on the named directory table
+instead of the command hash table.  This reduces the named directory table to
+only the <CODE>~</CODE> entry.  If the <SAMP>`-f'</SAMP> option is also used, the named 
+directory table is rebuilt immediately.
+
+<CODE>rehash</CODE> is equivalent to <CODE>hash -r</CODE>.
+
+<DT><CODE>return [ <VAR>n</VAR> ]</CODE>
+<DD>
+<A NAME="IDX963"></A>
+<A NAME="IDX964"></A>
+Causes a shell function or <CODE>.</CODE> script to return to the invoking
+script with the return status specified by <VAR>n</VAR>.  If <VAR>n</VAR> is
+omitted then the return status is that of the last command
+executed.
+
+If <CODE>return</CODE> was executed from a trap in a <SAMP>`TRAPxxx'</SAMP> function, the 
+effect is different for zero and nonzero return status.  With zero status 
+(or after an implicit return at the end of the trap), the shell will return 
+to whatever it was previously processing;  with a non-zero status, the shell
+will behave as interrupted except that the return status of the trap is 
+retained.  Note that the signal which caused the trap is passed as the first 
+argument, so the statement <SAMP>`return $((128+$1))'</SAMP> will return the same 
+status as if the signal had not been trapped.
+
+<DT><CODE>sched [+]<VAR>hh</VAR>:<VAR>mm</VAR> <VAR>command</VAR> ...</CODE>
+<DD>
+<DT><CODE>sched [ -<VAR>item</VAR> ]</CODE>
+<DD>
+<A NAME="IDX965"></A>
+<A NAME="IDX966"></A>
+<A NAME="IDX967"></A>
+Make an entry in the scheduled list of commands to execute.  The time
+may be specified in either absolute or relative time.  With no
+arguments, prints the list of scheduled commands.  With the argument
+<CODE>-<VAR>item</VAR></CODE>, removes the given item from the list.
+
+<DT><CODE>set [ +-<VAR>options</VAR> ] [ +-o <VAR>option name</VAR> ] ... [ +-A [ <VAR>name</VAR> ] ] [ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX968"></A>
+<A NAME="IDX969"></A>
+<A NAME="IDX970"></A>
+<A NAME="IDX971"></A>
+Set the options for the shell and/or set the positional parameters, or
+declare an array.  If the <SAMP>`-s'</SAMP> option is given it causes the
+specified arguments to be sorted before assigning them to the positional
+parameters (or to the array <VAR>name</VAR> if <SAMP>`-A'</SAMP> is used).  With
+<SAMP>`+s'</SAMP> sort arguments in descending order.  See section <A HREF="zsh_16.html#SEC57">Options</A>, for the
+meaning of the other flags.  Flags may be specified by name using the
+<SAMP>`-o'</SAMP> option.  If the <SAMP>`-A'</SAMP> flag is specified, <VAR>name</VAR> is set
+to an array containing the given <VAR>arg</VAR>s; if <SAMP>`+A'</SAMP> is used and
+<VAR>name</VAR> is an array, the given arguments will replace the initial
+elements of that array; if no <VAR>name</VAR> is specified, all arrays are
+printed.  Otherwise the positional parameters are set.  If no arguments
+are given, then the names and values of all parameters are printed on
+the standard output.  If the only argument is <CODE>+</CODE>, the names of all
+parameters are printed.
+
+<DT><CODE>setopt [ -m ] [ +-<VAR>options</VAR> ] [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX972"></A>
+<A NAME="IDX973"></A>
+Set the options for the shell.  All options specified either with flags
+or by name are set.  If no arguments are supplied, the names of all
+options currently set are printed.  In option names, case is
+insignificant, and all underscore characters are ignored.  If the
+<SAMP>`-m'</SAMP> flag is given the arguments are taken as patterns (which
+should be quoted to preserve them from being interpreted as glob
+patterns), and all options with names matching these patterns are set.
+
+<DT><CODE>shift [ <VAR>n</VAR> ] [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX974"></A>
+<A NAME="IDX975"></A>
+The positional parameters from <CODE>$<VAR>n</VAR>+1</CODE> ... are renamed
+<CODE>$1</CODE>, where <VAR>n</VAR> is an arithmetic expression that defaults to 1.
+If any <VAR>name</VAR>s are given then the arrays with these names are
+shifted, instead of the positional parameters.
+
+<DT><CODE>source</CODE>
+<DD>
+<A NAME="IDX976"></A>
+Same as <SAMP>`.'</SAMP>, except that the current directory is always searched
+and is always searched first, before directories in <CODE>path</CODE>.
+
+<DT><CODE>suspend [ -f ]</CODE>
+<DD>
+<A NAME="IDX977"></A>
+<A NAME="IDX978"></A>
+Suspend the execution of the shell (send it a <CODE>SIGTSTP</CODE>) until it
+receives a <CODE>SIGCONT</CODE>.  If the <SAMP>`-f'</SAMP> option is not given,
+complain if this is a login shell.
+
+<DT><CODE>test <VAR>arg</VAR> ...</CODE>
+<DD>
+<DT><CODE>[ <VAR>arg</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX979"></A>
+Like the system version of <CODE>test</CODE>.  Added for compatibility; use
+conditional expressions instead.
+
+<DT><CODE>times</CODE>
+<DD>
+<A NAME="IDX980"></A>
+<A NAME="IDX981"></A>
+<A NAME="IDX982"></A>
+Print the accumulated user and system times for the shell and for
+processes run from the shell.
+
+<DT><CODE>trap [ <VAR>arg</VAR> ] [ <VAR>sig</VAR> ] ...</CODE>
+<DD>
+<A NAME="IDX983"></A>
+<A NAME="IDX984"></A>
+<A NAME="IDX985"></A>
+<VAR>arg</VAR> is a command to be read and executed when the shell receives
+<VAR>sig</VAR>.  Each <VAR>sig</VAR> can be given as a number or as the name of a
+signal.  If <VAR>arg</VAR> is <CODE>-</CODE>, then all traps <VAR>sig</VAR> are reset to
+their default values.  If <VAR>arg</VAR> is the null string, then this signal
+is ignored by the shell and by the commands it invokes.  If <VAR>sig</VAR> is
+<CODE>ZERR</CODE> then <VAR>arg</VAR> will be executed after each command with a
+nonzero exit status.  If <VAR>sig</VAR> is <CODE>DEBUG</CODE> then <VAR>arg</VAR> will
+be executed after each command. If <VAR>sig</VAR> is <CODE>0</CODE> or <CODE>EXIT</CODE>
+and the <CODE>trap</CODE> statement is executed inside the body of a function,
+then the command <VAR>arg</VAR> is executed after the function completes.  If
+<VAR>sig</VAR> is <CODE>0</CODE> or <CODE>EXIT</CODE> and the <CODE>trap</CODE> statement is
+not executed inside the body of a function, then the command <VAR>arg</VAR>
+is executed when the shell terminates.  The <CODE>trap</CODE> command with no
+arguments prints a list of commands associated with each signal.
+
+Note that traps defined with the <CODE>trap</CODE> builtin are slightly
+different from those defined as `<CODE>TRAP</CODE><VAR>NAL</VAR> () { ... }',
+as the latter have their own function environment (line numbers, local
+variables, etc.) while the former use the environment of the command in
+which they were called.  For example,
+
+<CODE>trap 'print $LINENO' DEBUG</CODE>
+
+will print the line number of command executed after it has run, while
+
+<CODE>TRAPDEBUG() { print $LINENO; }</CODE>
+
+will always print the number zero.
+
+<DT><CODE>true</CODE>
+<DD>
+<A NAME="IDX986"></A>
+Do nothing and return an exit code of 0.
+
+<DT><CODE>ttyctl [ -fu ]</CODE>
+<DD>
+<A NAME="IDX987"></A>
+<A NAME="IDX988"></A>
+The <SAMP>`-f'</SAMP> option freezes the tty, and <SAMP>`-u'</SAMP> un-freezes it.  When
+the tty is frozen, no changes made to the tty settings by external
+programs will be honoured by the shell, except for changes in the size of
+the screen; the shell will simply reset the
+settings to their previous values as soon as each command exits.  Thus,
+<CODE>stty</CODE> and similar programs have no effect when the tty is
+frozen.  Without options it reports whether the terminal is frozen or
+not.
+
+<DT><CODE>type [ -fpam ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX989"></A>
+Same as <CODE>whence -v</CODE>.
+
+<DT><CODE>typeset [ +-LRUZfilrtuxm [<VAR>n</VAR>]] [ <VAR>name</VAR>[=<VAR>value</VAR>]] ...</CODE>
+<DD>
+<A NAME="IDX990"></A>
+<A NAME="IDX991"></A>
+Set attributes and values for shell parameters.  When invoked inside a
+function, a new parameter is created which will be unset when the
+function completes.  The new parameter will not be exported unless
+<CODE>ALL_EXPORT</CODE> is set, in which case the parameter will be exported
+provided no parameter of that name already exists.  The following
+attributes are valid:
+
+<DL COMPACT>
+
+<DT><CODE>-L</CODE>
+<DD>
+Left justify and remove leading blanks from <VAR>value</VAR>.  If <VAR>n</VAR> is
+nonzero, it defines the width of the field; otherwise it is determined
+by the width of the value of the first assignment.  When the parameter
+is printed, it is filled on the right with blanks or truncated if
+necessary to fit the field.  Leading zeros are removed if the <SAMP>`-Z'</SAMP>
+flag is also set.
+
+<DT><CODE>-R</CODE>
+<DD>
+Right justify and fill with leading blanks.  If <VAR>n</VAR> is nonzero it
+defines the width of the field; otherwise it is determined by the width
+of the value of the first assignment.  When the parameter is printed,
+the field is left filled with blanks or truncated from the end.
+
+<DT><CODE>-U</CODE>
+<DD>
+For arrays keep only the first element of each duplications.  It can also be
+set for colon separated special parameters like <CODE>PATH</CODE> or <CODE>FIGNORE</CODE>,
+etc.
+
+<DT><CODE>-Z</CODE>
+<DD>
+Right justify and fill with leading zeros if the first non-blank
+character is a digit and the <SAMP>`-L'</SAMP> flag has not been set.  If
+<VAR>n</VAR> is nonzero it defines the width of the field; otherwise it is
+determined by the width of the value of the first assignment.
+
+<DT><CODE>-f</CODE>
+<DD>
+The names refer to functions rather than parameters.  No assignments can
+be made, and the only other valid flags are <SAMP>`-t'</SAMP> and <SAMP>`-u'</SAMP>.
+The flag <SAMP>`-t'</SAMP> turns on execution tracing for this function.  The
+flag <SAMP>`-u'</SAMP> causes this function to be marked for autoloading.  The
+<CODE>fpath</CODE> parameter will be searched to find the function definition
+when the function is first referenced.; see <CODE>autoload</CODE>.
+
+<DT><CODE>-i</CODE>
+<DD>
+Use an internal integer representation.  If <VAR>n</VAR> is nonzero it
+defines the output arithmetic base, otherwise it is determined by the
+first assignment.
+
+<DT><CODE>-l</CODE>
+<DD>
+Convert to lower case.
+
+<DT><CODE>-r</CODE>
+<DD>
+The given <VAR>name</VAR>s are marked read-only.
+
+<DT><CODE>-t</CODE>
+<DD>
+Tags the named parameters.  Tags have no special meaning to the
+shell.
+
+<DT><CODE>-u</CODE>
+<DD>
+Convert to upper case.
+
+<DT><CODE>-x</CODE>
+<DD>
+Mark for automatic export to the environment of subsequently executed
+commands.
+</DL>
+
+Using <CODE>+</CODE> rather than <CODE>-</CODE> causes these flags to be turned off.
+If no arguments are given but flags are specified, a list of named
+parameters which have these flags set is printed.  Using <CODE>+</CODE>
+instead of <CODE>-</CODE> keeps their values from being printed.  If no
+arguments or options are given, the names and attributes of all
+parameters are printed.  If only the <SAMP>`-m'</SAMP> flag is given the
+arguments are taken as patterns (which should be quoted), and all
+parameters or functions (with the <SAMP>`-f'</SAMP> flag) with matching names
+are printed.
+
+<DT><CODE>ulimit [ -SHacdflmnpstv ] [ <VAR>limit</VAR> ] ...</CODE>
+<DD>
+<A NAME="IDX992"></A>
+<A NAME="IDX993"></A>
+<A NAME="IDX994"></A>
+Set or display resource limits of the shell and the processes started by the 
+shell.  The value of <VAR>limit</VAR> can be a number in the unit specified below
+or the value <CODE>unlimited</CODE>.  If the <SAMP>`-H'</SAMP> flag is given use hard limits
+instead of soft limits.  If the <SAMP>`-S'</SAMP> flag is given together with the
+<SAMP>`-H'</SAMP> flag set both hard and soft limits.  If no options are used, the
+file size limit (<SAMP>`-f'</SAMP>) is assumed.  If <VAR>limit</VAR> is omitted the current
+value of the specified resources are printed.  When more than one resource
+values are printed the limit name and unit is printed before each value.
+
+<DL COMPACT>
+
+<DT><CODE>-a</CODE>
+<DD>
+Lists all of the current resource limits.
+<DT><CODE>-c</CODE>
+<DD>
+Maximum size of core dumps, in 512-byte blocks.
+<DT><CODE>-d</CODE>
+<DD>
+Maximum size of the data segment, in Kbytes.
+<DT><CODE>-f</CODE>
+<DD>
+Maximum size of individual files written, in 512-byte blocks.
+<DT><CODE>-l</CODE>
+<DD>
+Maximum size of locked-in memory, in Kbytes.
+<DT><CODE>-m</CODE>
+<DD>
+Maximum size of physical memory, in Kbytes.
+<DT><CODE>-n</CODE>
+<DD>
+Maximum number of open file descriptors.
+<DT><CODE>-s</CODE>
+<DD>
+Maximum size of stack, in Kbytes.
+<DT><CODE>-t</CODE>
+<DD>
+Maximum number of CPU seconds.
+<DT><CODE>-u</CODE>
+<DD>
+The number of processes available to the user.
+<DT><CODE>-v</CODE>
+<DD>
+Maximum size of virtual memory, in Kbytes.
+</DL>
+
+<DT><CODE>umask [ -S] [ <VAR>mask</VAR> ]</CODE>
+<DD>
+<A NAME="IDX995"></A>
+<A NAME="IDX996"></A>
+The umask is set to <VAR>mask</VAR>.  <VAR>mask</VAR> can be either an octal
+number or a symbolic value as described in <CODE>chmod(1)</CODE>.  If <VAR>mask</VAR> 
+is omitted, the current value is printed.  The <SAMP>`-S'</SAMP> option causes the 
+mask to be printed as a symbolic value.  Otherwise, the mask is printed as an 
+octal number.  Note that in the symbolic form the permissions you specify are
+those which are to be allowed (not denied) to the users specified).
+
+<DT><CODE>unalias [ -m ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX997"></A>
+<A NAME="IDX998"></A>
+The alias definition, if any, for each <VAR>name</VAR> is removed.  With the
+<SAMP>`-m'</SAMP> flag, the arguments are taken as patterns (which should be
+quoted), and all aliases with matching names are removed.  <CODE>unalias</CODE>
+is equivalent to <CODE>unhash -a</CODE>.
+
+<DT><CODE>unfunction [ -m ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX999"></A>
+<A NAME="IDX1000"></A>
+The function definition, if any, for each <VAR>name</VAR> is removed.  With
+the <SAMP>`-m'</SAMP> flag, the arguments are taken as patterns (which should be
+quoted), and all function with matching names are removed.  <CODE>unfunction</CODE>
+is equivalent to <CODE>unhash -f</CODE>.
+
+<DT><CODE>unhash [ -adfm ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX1001"></A>
+Remove the element named <VAR>name</VAR> from an internal hash table.  The default
+is remove elements from the command hash table.  The <SAMP>`-a'</SAMP> option causes 
+<CODE>unhash</CODE> to remove aliases.  The <SAMP>`-f'</SAMP> option causes <CODE>unhash</CODE> 
+to remove shell functions.  The <SAMP>`-d'</SAMP> options causes <CODE>unhash</CODE> to 
+remove named directories.  If the <SAMP>`-m'</SAMP> flag is given the arguments are  
+taken as patterns (should be quoted) and all elements of the corresponding  
+hash table with matching names will be removed.
+
+<DT><CODE>unlimit [ -hs ] <VAR>resource</VAR> ...</CODE>
+<DD>
+<A NAME="IDX1002"></A>
+<A NAME="IDX1003"></A>
+<A NAME="IDX1004"></A>
+The resource limit for each <VAR>resource</VAR> is set to the hard limit.  If the 
+<SAMP>`-h'</SAMP> flag is given and the shell is running as root, the hard resource 
+limit for each <VAR>resource</VAR> is removed.  The resources of the shell process 
+are only changed if the <SAMP>`-s'</SAMP> flag is given.
+
+<DT><CODE>unset [ -fm ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX1005"></A>
+<A NAME="IDX1006"></A>
+Each named parameter is unset.  If the <SAMP>`-m'</SAMP> flag is set, the arguments
+are taken as patterns (which should be quoted), and all parameters with
+matching names are unset.  <CODE>Unset -f</CODE> is equivalent to
+<CODE>unfunction</CODE>.
+
+<DT><CODE>unsetopt [ -m ]  [ +-<VAR>options</VAR> ] [ <VAR>name</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX1007"></A>
+<A NAME="IDX1008"></A>
+Unset the options for the shell.  All options specified either with
+flags or by name are unset.  If the <SAMP>`-m'</SAMP> flag is given, the arguments 
+are taken as patterns (which should be quoted), and all options with
+names matching these patterns are unset.
+
+<DT><CODE>vared [ -c ] [ -h ] [ -p <VAR>prompt</VAR>] [ -r <VAR>rprompt</VAR> ] <VAR>name</VAR></CODE>
+<DD>
+<A NAME="IDX1009"></A>
+<A NAME="IDX1010"></A>
+<A NAME="IDX1011"></A>
+The value of the parameter <VAR>name</VAR> is loaded into the edit buffer,
+and the line editor is invoked.  When the editor exits, <VAR>name</VAR> is
+set to the string value returned by the editor.  If the <SAMP>`-c'</SAMP> flag
+is given, the parameter is created if it doesn't already exist.  If the
+<SAMP>`-p'</SAMP> flag is given, <VAR>prompt</VAR> will be taken as the prompt to
+display at the left and if the <SAMP>`-r'</SAMP> flag is given, the following string
+gives the prompt to display at the right.  If the <SAMP>`-h'</SAMP> flag is 
+specified, the history can be accessed from <CODE>zle</CODE>.
+
+<DT><CODE>wait [ <VAR>job</VAR> ... ]</CODE>
+<DD>
+<A NAME="IDX1012"></A>
+<A NAME="IDX1013"></A>
+<A NAME="IDX1014"></A>
+Wait for the specified jobs or processes.  If <VAR>job</VAR> is not given
+then all currently active child processes are waited for.  Each
+<VAR>job</VAR> can be either a job specification or the process-id of a job
+in the job table.  The exit status from this command is that of the job
+waited for.
+
+<DT><CODE>whence [ -vcfpam ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX1015"></A>
+For each name, indicate how it would be interpreted if used as a command
+name.  The <SAMP>`-v'</SAMP> flag produces a more verbose report.  The <SAMP>`-c'</SAMP> 
+flag prints the results in a csh-like format and takes precedence over
+<SAMP>`-v'</SAMP>.  The <SAMP>`-f'</SAMP> flag causes the contents of a shell function to be
+displayed, which would otherwise not happen unless the <SAMP>`-c'</SAMP> flag were
+used.  The <SAMP>`-p'</SAMP> flag does a path search for <VAR>name</VAR> even if it is 
+an alias, reserved word, shell function or builtin.  The <SAMP>`-a'</SAMP> flag does 
+a search for all occurrences of <VAR>name</VAR> throughout the command path.  With 
+the <SAMP>`-m'</SAMP> flag, the arguments are taken as patterns (which should be 
+quoted), and the information is displayed for each command matching one of 
+these patterns.
+
+<DT><CODE>where</CODE>
+<DD>
+<A NAME="IDX1016"></A>
+Same as <CODE>whence -ca</CODE>.
+
+<DT><CODE>which [ -pam ] <VAR>name</VAR> ...</CODE>
+<DD>
+<A NAME="IDX1017"></A>
+Same as <CODE>whence -c</CODE>.
+</DL>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_16.html">previous</A>, <A HREF="zsh_18.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

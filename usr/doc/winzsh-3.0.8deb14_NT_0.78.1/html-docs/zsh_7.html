@@ -1,0 +1,263 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Redirection</TITLE>
+<link href="zsh_8.html" rel=Next>
+<link href="zsh_6.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_6.html">previous</A>, <A HREF="zsh_8.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC37" HREF="zsh_toc.html#TOC37">Redirection</A></H1>
+<P>
+<A NAME="IDX119"></A>
+
+</P>
+<P>
+Before a command is executed, its input and output may be redirected.
+<A NAME="IDX120"></A>
+<A NAME="IDX121"></A>
+The following may appear anywhere in a simple command or may precede or
+follow a complex command.  Substitution occurs before <VAR>word</VAR> or
+<VAR>digit</VAR> is used except as noted below.  If the result of substitution on 
+<VAR>word</VAR> produces more than one filename, redirection occurs for each 
+separate filename in turn.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>&#60;<VAR>word</VAR></CODE>
+<DD>
+Open file <VAR>word</VAR> as standard input.
+
+<DT><CODE>&#60;&#62;<VAR>word</VAR></CODE>
+<DD>
+Open file <VAR>word</VAR> for reading and writing as standard input.  If the file 
+does not exist then it is created.
+
+<DT><CODE>&#62;<VAR>word</VAR></CODE>
+<DD>
+Open file <VAR>word</VAR> as standard output.  If the file does not exist
+then it is created.  If the file exists, and the <CODE>CLOBBER</CODE>
+<A NAME="IDX122"></A>
+option is unset, this causes an error; otherwise, it is truncated to zero
+length.
+
+<DT><CODE>&#62;|<VAR>word</VAR></CODE>
+<DD>
+<DT><CODE>&#62;!<VAR>word</VAR></CODE>
+<DD>
+Same as <CODE>&#62;</CODE>, except that the file is truncated to zero length if it
+exists, even if <CODE>CLOBBER</CODE> is unset.
+
+<DT><CODE>&#62;&#62;<VAR>word</VAR></CODE>
+<DD>
+Open file <VAR>word</VAR> as standard output.  If the file exists then output
+is appended to it.  If the file does not exist, and the
+<CODE>CLOBBER</CODE> option is unset, this causes an error; otherwise, the
+file is created.
+
+<DT><CODE>&#62;&#62;|<VAR>word</VAR></CODE>
+<DD>
+<DT><CODE>&#62;&#62;!<VAR>word</VAR></CODE>
+<DD>
+Same as <CODE>&#62;&#62;</CODE>, except that the file is created if it does not exist,
+even if <CODE>CLOBBER</CODE> is unset.
+
+<DT><CODE>&#60;&#60;[-]<VAR>word</VAR></CODE>
+<DD>
+The shell input is read up to a line that is the same as <VAR>word</VAR>, or
+to an end-of-file.  No parameter substitution, command substitution or
+filename generation is performed on <VAR>word</VAR>.  The resulting document,
+called a <STRONG>here-document</STRONG>, becomes the standard input.  If any
+character of <VAR>word</VAR> is quoted with single or double quotes or a
+<CODE>\</CODE>, no interpretation is placed upon the characters of the
+document.  Otherwise, parameter and command substitution occurs,
+<CODE>\</CODE> followed by a newline is removed, and <CODE>\</CODE> must be used to
+quote the characters <CODE>\</CODE>, <CODE>$</CODE>, <CODE>`</CODE>, and the first
+character of <VAR>word</VAR>.  If <CODE>&#60;&#60;-</CODE> is used, then all leading tabs
+are stripped from <VAR>word</VAR> and from the document.
+
+<DT><CODE>&#60;&#60;&#60;<VAR>word</VAR></CODE>
+<DD>
+Perform shell expansion on <VAR>word</VAR> and pass the result to 
+standard input.
+
+<DT><CODE>&#60;&#38;<VAR>digit</VAR></CODE>
+<DD>
+The standard input is duplicated from file descriptor <VAR>digit</VAR> (see
+<CODE>dup(2)</CODE>).  Similarly for standard output using
+<CODE>&#62;&#38;<VAR>digit</VAR></CODE>.
+
+<DT><CODE>&#62;&#38;<VAR>word</VAR></CODE>
+<DD>
+Same as <CODE>&#62;<VAR>word</VAR> 2&#62;&#38;1</CODE>.
+
+<DT><CODE>&#62;&#62;&#38;<VAR>word</VAR></CODE>
+<DD>
+Same as <CODE>&#62;&#62;<VAR>word</VAR> 2&#62;&#38;1</CODE>.
+
+<DT><CODE>&#60;&#38;-</CODE>
+<DD>
+Close the standard input.
+
+<DT><CODE>&#62;&#38;-</CODE>
+<DD>
+Close the standard output.
+
+<DT><CODE>&#60;&#38;p</CODE>
+<DD>
+The input from the coprocess is moved to the standard input.
+
+<DT><CODE>&#62;&#38;p</CODE>
+<DD>
+The output to the coprocess is moved to the standard output.
+</DL>
+
+<P>
+If one of the above is preceded by a digit, then the file descriptor
+referred to is that specified by the digit (instead of the default 0 or
+1).  The order in which redirections are specified is significant.  The
+shell evaluates each redirection in terms of the (<VAR>file descriptor</VAR>,
+<VAR>file</VAR>) association at the time of evaluation.  For example:
+
+</P>
+<P>
+<CODE>... 1&#62;<VAR>fname</VAR> 2&#62;&#38;1</CODE>
+
+</P>
+<P>
+first associates file descriptor 1 with file <VAR>fname</VAR>.  It then
+associates file descriptor 2 with the file associated with file
+descriptor 1 (that is, <VAR>fname</VAR>).  If the order of redirections were
+reversed, file descriptor 2 would be associated with the terminal
+(assuming file descriptor 1 had been) and then file descriptor 1 would
+be associated with file <VAR>fname</VAR>.
+
+</P>
+<P>
+If the user tries to open a file descriptor for writing more than once,
+the shell opens the file descriptor as a pipe to a process that copies
+its input to all the specified outputs, similar to <CODE>tee(1)</CODE>, 
+<A NAME="IDX123"></A>
+provided the <CODE>MULTIOS</CODE> option is set.  Thus:
+
+</P>
+<P>
+<CODE>date &#62;foo &#62;bar</CODE>
+
+</P>
+<P>
+writes the date to two files, named <TT>`foo'</TT> and <TT>`bar'</TT>.  Note
+that a pipe is an implicit indirection; thus
+
+</P>
+<P>
+<CODE>date &#62;foo | cat</CODE>
+
+</P>
+<P>
+writes the date to the file <TT>`foo'</TT>, and also pipes it to <CODE>cat</CODE>.
+
+</P>
+<P>
+If the <CODE>MULTIOS</CODE> option is set, the word after a redirection 
+operator is also subjected to filename generation (globbing).  Thus
+
+</P>
+<P>
+<CODE>: &#62; *</CODE>
+
+</P>
+<P>
+will truncate all files in the current directory, assuming there's at least 
+one.  (Without the <CODE>MULTIOS</CODE> option, it would create an empty file called
+<TT>`*'</TT>.)
+
+</P>
+<P>
+If the user tries to open a file descriptor for reading more than once,
+the shell opens the file descriptor as a pipe to a process that copies
+all the specified inputs to its output in the order specified, similar
+to <CODE>cat(1)</CODE>, provided the <CODE>MULTIOS</CODE> option is set.  Thus
+
+</P>
+<P>
+<CODE>sort &#60;foo &#60;fubar</CODE>
+
+</P>
+<P>
+or even
+
+</P>
+<P>
+<CODE>sort &#60;f{oo,ubar}</CODE>
+
+</P>
+<P>
+is equivalent to <SAMP>`cat foo fubar | sort'</SAMP>.  Similarly, you can do
+
+</P>
+<P>
+<CODE>echo exit 0 &#62;&#62; *.sh</CODE>
+
+</P>
+<P>
+Note that a pipe is an implicit indirection; thus
+
+</P>
+<P>
+<CODE>cat bar | sort &#60;foo</CODE>
+
+</P>
+<P>
+is equivalent to <SAMP>`cat bar foo | sort'</SAMP> (note the order of the inputs).
+
+</P>
+<P>
+If the <CODE>MULTIOS</CODE> option is unset, each redirection replaces the previous
+redirection for that file descriptor.  However, all files redirected to are 
+actually opened, so
+
+</P>
+<P>
+<CODE>echo foo &#62; bar &#62; baz</CODE>
+
+</P>
+<P>
+when <CODE>MULTIOS</CODE> is unset will truncate <CODE>bar</CODE>, and write <CODE>foo</CODE>
+into <CODE>baz</CODE>.
+
+</P>
+<P>
+If a simple command consists of one or more redirection operators and
+zero or more parameter assignments, but no command name, the command
+<CODE>cat</CODE> is assumed.  Thus
+
+</P>
+<P>
+<CODE>&#60; file</CODE>
+
+</P>
+<P>
+copies the contents of <CODE>file</CODE> to the standard output.
+
+</P>
+<P>
+If a command is followed by <CODE>&#38;</CODE> and job control is not active, then
+the default standard input for the command is the empty file
+<TT>`/dev/null'</TT>.  Otherwise, the environment for the execution of a
+command contains the file descriptors of the invoking shell as modified
+by input/output specifications.
+
+</P>
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_6.html">previous</A>, <A HREF="zsh_8.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

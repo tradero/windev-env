@@ -1,0 +1,51 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Command Execution</TITLE>
+<link href="zsh_9.html" rel=Next>
+<link href="zsh_7.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_7.html">previous</A>, <A HREF="zsh_9.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC38" HREF="zsh_toc.html#TOC38">Command Execution</A></H1>
+<P>
+<A NAME="IDX124"></A>
+<A NAME="IDX125"></A>
+
+</P>
+<P>
+If a command name contains no slashes, the shell attempts to locate it.
+If there exists a shell function by that name, the function is invoked
+as described below (see section <A HREF="zsh_9.html#SEC39">Functions</A>).  If there exists a shell builtin
+by that name, the builtin is invoked.
+
+</P>
+<P>
+Otherwise, the shell searches each element of <CODE>path</CODE> for a directory
+<A NAME="IDX126"></A>
+containing an executable file by that name.  If the search is
+unsuccessful, the shell prints an error message and returns a nonzero
+exit status.
+
+</P>
+<P>
+If execution fails because the file is not in executable format, and the
+file is not a directory, it is assumed to be a shell script.
+<CODE>/bin/sh</CODE> is spawned to execute it.  If the program is a file
+beginning with <CODE>#!</CODE>, the remainder of the first line specifies an
+interpreter for the program.  The shell will execute the specified
+interpreter on operating systems that do not handle this executable
+format in the kernel.
+
+</P>
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_7.html">previous</A>, <A HREF="zsh_9.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

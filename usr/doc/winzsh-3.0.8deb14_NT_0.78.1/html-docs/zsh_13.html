@@ -1,0 +1,63 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Compatibility</TITLE>
+<link href="zsh_14.html" rel=Next>
+<link href="zsh_12.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_12.html">previous</A>, <A HREF="zsh_14.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC43" HREF="zsh_toc.html#TOC43">Compatibility</A></H1>
+<P>
+<A NAME="IDX169"></A>
+<A NAME="IDX170"></A>
+<A NAME="IDX171"></A>
+
+</P>
+<P>
+<CODE>zsh</CODE> tries to emulate <CODE>sh</CODE> or <CODE>ksh</CODE> when it is invoked
+as <CODE>sh</CODE> or <CODE>ksh</CODE> respectively.  In this mode the following
+parameters are not special: <CODE>ARGC</CODE>, <CODE>argv</CODE>, <CODE>cdpath</CODE>,
+<CODE>fignore</CODE>, <CODE>fpath</CODE>, <CODE>HISTCHARS</CODE>, <CODE>mailpath</CODE>,
+<CODE>MANPATH</CODE>, <CODE>manpath</CODE>, <CODE>path</CODE>, <CODE>prompt</CODE>,
+<CODE>PROMPT</CODE>, <CODE>PROMPT2</CODE>, <CODE>PROMPT3</CODE>, <CODE>PROMPT4</CODE>,
+<CODE>psvar</CODE>, <CODE>status</CODE>, <CODE>watch</CODE>.
+
+</P>
+<P>
+The usual <CODE>zsh</CODE> startup/shutdown scripts are not executed.  Login shells 
+source <TT>`/etc/profile'</TT> followed by <TT>`$HOME/.profile'</TT>.  If the 
+<CODE>ENV</CODE> environment variable is set on invocation, <CODE>$ENV</CODE> is sourced 
+after the profile scripts.  The value of <CODE>ENV</CODE> is subjected to 
+<STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG>, and 
+<STRONG>arithmetic expansion</STRONG> before being interpreted as a pathname.  Note that
+the <CODE>PRIVILEGED</CODE> option also affects the execution of startup files.   
+See section <A HREF="zsh_16.html#SEC57">Options</A>, for more details.
+
+</P>
+<P>
+The following options are set if the shell is invoked as <CODE>sh</CODE> or 
+<CODE>ksh</CODE>:  <CODE>NO_BAD_PATTERN</CODE>, <CODE>NO_BANG_HIST</CODE>, <CODE>NO_BG_NICE</CODE>,
+<CODE>NO_EQUALS</CODE>, <CODE>NO_FUNCTION_ARGZERO</CODE>, <CODE>GLOB_SUBST</CODE>,
+<CODE>NO_HUP</CODE>, <CODE>INTERACTIVE_COMMENTS</CODE>, <CODE>KSH_ARRAYS</CODE>,
+<CODE>NO_MULTIOS</CODE>, <CODE>NO_NOMATCH</CODE>, <CODE>RM_STAR_SILENT</CODE>,
+<CODE>POSIX_BUILTINS</CODE>, <CODE>SH_FILE_EXPANSION</CODE>, <CODE>SH_GLOB</CODE>,
+<CODE>SH_OPTION_LETTERS</CODE>, <CODE>SH_WORD_SPLIT</CODE>.  Additionally the
+<CODE>KSH_OPTION_PRINT</CODE>, <CODE>LOCAL_OPTIONS</CODE>, <CODE>PROMPT_SUBST</CODE> and
+<CODE>SINGLE_LINE_ZLE</CODE> options are set if <CODE>zsh</CODE> is invoked as
+<CODE>ksh</CODE> and the <CODE>IGNORE_BRACES</CODE> and <CODE>BSD_ECHO</CODE> options are
+set if <CODE>zsh</CODE> is invoked as <CODE>sh</CODE>.
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_12.html">previous</A>, <A HREF="zsh_14.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

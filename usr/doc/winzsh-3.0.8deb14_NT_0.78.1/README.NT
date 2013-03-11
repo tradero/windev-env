@@ -1,0 +1,234 @@
+
+
+README
+
+Note: most of the WinZsh-specific information will likely move into a man page
+in the future.
+
+Zsh (non WinZsh-specific) Documentation
+
+The original zsh documentation is included with the WinZsh distribution in the
+following formats: man pages, info, and html. It can be found in the usr/man,
+usr/info, and usr/doc/zsh-$ZSH_VERSION/html-docs directories respectively of
+the binary distribution, or in the Doc directory in the source.
+If you do not have a man page reader, you can use the included man zsh script,
+originally written by Wu Yongwei for MSYS and modified to work in WinZsh. Note:
+this script requires some common Unix tools such as sed, less and groff, you
+can find these at the GnuWin32 project. Please report any bugs you find with it
+to WinZsh, not to MSYS or MinGW. You could also try compiling the MinGW_man
+reader, which is supposedly in development but the latest snapshot is dated
+2006-03-22.
+
+Supported Operating Systems
+
+WinZsh runs on 32 bit Windows NT based systems. It is known to run well on
+Windows 2000 & XP, but is currently somewhat unstable on Vista and Windows 7.
+64 bit versions of Windows are not currently supported.
+
+Compiling the Source
+
+
+  1. Prerequisites:
+
+     o Currently the source is only known to compile with Microsoft Visual C++
+       6.0 (sorry). Note: MSVC9 (the 2008 Express Edition) currently compiles,
+       but throws an exception when running 'ls'.
+     o Sed and awk are needed to generate some headers, ensure that these are
+       in your path so that make can find them. Sed and {g|m|n}awk from the
+       GnuWin32 project work fine.
+
+  2. Download and extract the source.
+  3. Open a cmd.exe prompt.
+  4. Run 'vcvars32.bat' from your Visual C++ installation. This will setup your
+     environment variables so that Windows can find the compiler tools.
+  5. 'cd' into the 'Src' directory.
+  6. Copy the configuration header file and makefile to the appropriate
+     directories by typing 'copy winnt\config.h.winnt ..\config.h' and 'copy
+     winnt\Makefile.msvc Makefile'.
+  7. Compile with 'nmake MSVC={6|9}'.
+  8. To include debugging support, compile with 'nmake MSVC={6|9}
+     DBG=1'instead.
+
+
+Paths
+
+
+* All paths must be '/' (forward slash) separated, not '\' (back slash)
+  separated, the same as in Unix. '\' is the shell escape character, also the
+  same as in Unix.
+* Paths should include a drive letter as well, for example 'C:/bin'. Of course,
+  this also applies to path variables such as HOME or PATH. If you specify a
+  path without a drive letter, e.g., '/', '/bin' etc., WinZsh will interpret
+  this as the root of the current drive, e.g. 'C:/', 'C:/bin' if you happen to
+  be in the C: drive, or 'D:/', 'D:/bin' if you happen to be in the D: drive.
+  This is not recommended, as the results could be unpredictable. To be sure
+  you get the results you expect, always include the drive letter in the path,
+  or use a variable (such as '$ZSHROOT/bin' if ZSHROOT is set).
+* The path separator in WinZsh is ';' (semicolon), since the Unix path
+  separator ':' (colon) is already used in the drive letter. This is the same
+  behavior as in Windows, but obviously differs from Unix. Note: in zsh,
+  special path environment variables such as PATH and MANPATH are arrays if
+  referred to in lowercase. For example, you can specify your PATH as 'path=(C:
+  /bin C:/Program\ Files/gnuwin32/bin $path)' and avoid the whole path
+  separator issue altogether.
+
+
+Known Bugs
+
+
+* zed does not work too well.
+* binding a key to 'xxx-menu-complete' will cause the shell to crash if you
+  type the bound key on an empty line.
+
+
+Basic things to know
+
+
+  1. Drive changes done with 'cd <drive:>' (Or setopt autocd to get DOS-like
+     behavior as a side-effect.)
+  2. .COM files will need to be executed by specifying the extension (edit.com,
+     instead of just edit).
+  3. International keyboards should work if you 'setopt printeightbit'. Note
+     that this will re-init the keymaps, so you may have to redo some bindkey
+     mappings. (NOREBIND now has no effect whatsoever.)
+     Also, if you change the console font (on NT) from the default raster type
+     to anything else, international characters may not be displayed properly.
+     zsh sets the code-page to 1252 (ansi) when it starts. For international
+     versions (far east for example,) this screws up the console. To avoid the
+     problem, set ZSH_DONTSETCP in the system environment, before zsh starts.
+
+
+WinZsh-specific Variables (or custom handling of standard variables)
+
+
+
+  ZSHROOT
+      If the variable ZSHROOT is set, it will be prepended to the program name
+      if the program is not found during the normal search. So, if you type '/
+      bin/zsh' (or have that in a shell script), the shell will try:
+
+        1. /bin/zsh
+        2. /bin/zsh.exe
+        3. $ZSHROOT/bin/zsh
+        4. $ZSHROOT/bin/zsh.exe
+
+      (Note that a script with a line like #!C:/bin/zsh.exe will not be
+      affected by 3 or 4).
+
+  HOME
+      WinZsh sets the HOME directory if it's not already set and ZDOTDIR is not
+      set either. In this case HOME is set to $USERPROFILE.
+      If ZDOTDIR is set and HOME is not set, WinZsh sets home to
+      'youdonthavehomeset'. This is to avoid crashing in places where the shell
+      expects a home directory. Picking a real default would defeat the purpose
+      of not setting home.
+
+
+WinZsh-specific Builtin Commands
+
+
+
+  start
+      Like cmd.exe's start
+
+  title
+      Like cmd.exe's title
+
+  cls
+      Clear entire screen buffer instead of visible window
+
+  ps
+      This will likely be removed in the future, use Windows builtins such as
+      tasklist instead.
+      list processes. with -w, lists window titles as well.
+
+  shutdown
+      This will likely be removed in the future, use Windows builtins such as
+      shutdown instead.
+      shutdown -[r|l|f] now
+      (Even though no time argument is supported, "now" must be specified,
+      EXCEPT with -l .This is to prevent you from accidentally shutting the
+      machine down.) -r reboots, -l logs you off and -f forces apps to
+      terminate.
+      The default action is to shut the machine down.
+
+
+WinZsh-specific Options
+
+
+
+  WINNTIGNORECASE
+      Ignore case in completions
+
+  WINNTLAMEPATHFIX
+      Convert the PATH environment variable back to '\'-delimited instead of '/
+      '-delimited when each child process is forked.
+
+  WINNTNOASSOCIATIONS
+      Do not try applications associated with extensions if exec() fails.
+
+  WINNTCONVERTBACKSLASH
+      Convert backslashes to '/' when comparing named directories etc. May be
+      useful if you derive HOME from '\'-delimited environment variables.
+
+  WINNTWAITFORGUIAPPS
+      When set, makes the shell wait for win32 GUI apps to terminate instead of
+      spawning them asynchronously.
+
+  WINNTNOQUOTEPROTECT
+      Turn off trying to escape quotes (") in a command. While the escaping
+      works with cygnus tools, it does not seem to work with the MKS tools.
+      Whatever side-effects you suffer when you set this option are beyond my
+      means to fix.
+
+
+WinZsh specific handling of Arrow keys, etc. and bindkey
+
+Since windows does not generate codes for the keypad (arrow keys, ins, delete
+etc.,) you will need to use a special options to bindkey to bind these keys,
+namely,
+bindkey -N \\0xx some-funky-function
+where the numeric code is between 0 and 33.
+
+
+  The following shows the default bindings for each key:
+
+      /* F1 */ z_undefinedkey,
+      /* F2 */ z_undefinedkey,
+      /* F3 */ z_undefinedkey,
+      /* F4 */ z_undefinedkey,
+      /* F5 */ z_undefinedkey,
+      /* F6 */ z_undefinedkey,
+      /* F7 */ z_undefinedkey,
+      /* F8 */ z_undefinedkey,
+      /* F9 */ z_undefinedkey,
+      /* F10 */ z_undefinedkey,
+      /* F11 */ z_undefinedkey,
+      /* F12 */ z_undefinedkey,
+      /* F13 */ z_undefinedkey,
+      /* F14 */ z_undefinedkey,
+      /* F15 */ z_undefinedkey,
+      /* F16 */ z_undefinedkey,
+      /* F17 */ z_undefinedkey,
+      /* F18 */ z_undefinedkey,
+      /* F19 */ z_undefinedkey,
+      /* F20 */ z_undefinedkey,
+      /* F21 */ z_undefinedkey,
+      /* F22 */ z_undefinedkey,
+      /* F23 */ z_undefinedkey,
+      /* F24 */ z_undefinedkey,
+      /* Pgup */ z_undefinedkey,
+      /* Pgdn */ z_undefinedkey,
+      /* end */ z_endofddne,
+      /* home */ z_beginningofddne,
+      /* left-arrow*/ z_backwardchar,
+      /* up-arrow */ z_upddneorhistory,
+      /* right-arrow */ z_forwardchar,
+      /* down-arrow */ z_downddneorhistory,
+      /* Ins */ z_overwritemode,
+      /* Del */ z_deletechar,
+
+For example, to bind F-1 to run-help, you would need:
+bindkey -N \\000 run-help
+To bind left-arrow:
+bindkey -N \\034 beginning-of-line (note that \034 is 28 decimal)

@@ -1,0 +1,223 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Conditional Expressions</TITLE>
+<link href="zsh_13.html" rel=Next>
+<link href="zsh_11.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_11.html">previous</A>, <A HREF="zsh_13.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC42" HREF="zsh_toc.html#TOC42">Conditional Expressions</A></H1>
+<P>
+<A NAME="IDX167"></A>
+<A NAME="IDX168"></A>
+
+</P>
+<P>
+A <STRONG>conditional expression</STRONG> is used with the <CODE>[[</CODE> compound
+command to test attributes of files and to compare strings.  Each
+expression can be constructed from one or more of the following unary or
+binary expressions:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>-a <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists.
+
+<DT><CODE>-b <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a block special file.
+
+<DT><CODE>-c <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a character special file.
+
+<DT><CODE>-d <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a directory.
+
+<DT><CODE>-e <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists.
+
+<DT><CODE>-f <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is an ordinary file.
+
+<DT><CODE>-g <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and has its setgid bit set.
+
+<DT><CODE>-h <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a symbolic link.
+
+<DT><CODE>-k <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and has its sticky bit set.
+
+<DT><CODE>-n <VAR>string</VAR></CODE>
+<DD>
+True if length of <VAR>string</VAR> is non-zero.
+
+<DT><CODE>-o <VAR>option</VAR></CODE>
+<DD>
+True if option named <VAR>option</VAR> is on.  <VAR>option</VAR> may be a
+single character, in which case it is a single letter option name.  
+See section <A HREF="zsh_16.html#SEC58">Specifying Options</A>.
+
+<DT><CODE>-p <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a FIFO special file or a pipe.
+
+<DT><CODE>-r <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is readable by the current process.
+
+<DT><CODE>-s <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and has size greater than zero.
+
+<DT><CODE>-t <VAR>fd</VAR></CODE>
+<DD>
+True if file descriptor number <VAR>fd</VAR> is open and associated with a
+terminal device (note: <VAR>fd</VAR> is not optional).
+
+<DT><CODE>-u <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and has its setuid bit set.
+
+<DT><CODE>-w <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is writable by current process.
+
+<DT><CODE>-x <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is executable by current process.  If
+<VAR>file</VAR> exists and is a directory, then the current process has
+permission to search in the directory.
+
+<DT><CODE>-z <VAR>string</VAR></CODE>
+<DD>
+True if length of <VAR>string</VAR> is zero.
+
+<DT><CODE>-L <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a symbolic link.
+
+<DT><CODE>-O <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is owned by the effective user id of this
+process.
+
+<DT><CODE>-G <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and its group matches the effective group id
+of this process.
+
+<DT><CODE>-S <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and is a socket.
+
+<DT><CODE>-N <VAR>file</VAR></CODE>
+<DD>
+True if <VAR>file</VAR> exists and its access time is not newer than its
+modification time.
+
+<DT><CODE><VAR>file1</VAR> -nt <VAR>file2</VAR></CODE>
+<DD>
+True if <VAR>file1</VAR> exists and is newer than <VAR>file2</VAR>.
+
+<DT><CODE><VAR>file1</VAR> -ot <VAR>file2</VAR></CODE>
+<DD>
+True if <VAR>file1</VAR> exists and is older than <VAR>file2</VAR>.
+
+<DT><CODE><VAR>file1</VAR> -ef <VAR>file2</VAR></CODE>
+<DD>
+True if <VAR>file1</VAR> and <VAR>file2</VAR> exist and refer to the same file.
+
+<DT><CODE><VAR>string</VAR> == <VAR>pattern</VAR></CODE>
+<DD>
+<DT><CODE><VAR>string</VAR> = <VAR>pattern</VAR></CODE>
+<DD>
+True if <VAR>string</VAR> matches <VAR>pattern</VAR>.  The first form is the 
+preferred one.  The other form is for backward compatibility and should 
+be considered obsolete.
+
+<DT><CODE><VAR>string</VAR> != <VAR>pattern</VAR></CODE>
+<DD>
+True if <VAR>string</VAR> does not match <VAR>pattern</VAR>.
+
+<DT><CODE><VAR>string1</VAR> &#60; <VAR>string2</VAR></CODE>
+<DD>
+True if <VAR>string1</VAR> comes before <VAR>string2</VAR> based on ASCII value of
+their characters.
+
+<DT><CODE><VAR>string1</VAR> &#62; <VAR>string2</VAR></CODE>
+<DD>
+True if <VAR>string1</VAR> comes after <VAR>string2</VAR> based on ASCII value of
+their characters.
+
+<DT><CODE><VAR>exp1</VAR> -eq <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is equal to <VAR>exp2</VAR>.
+
+<DT><CODE><VAR>exp1</VAR> -ne <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is not equal to <VAR>exp2</VAR>.
+
+<DT><CODE><VAR>exp1</VAR> -lt <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is less than <VAR>exp2</VAR>.
+
+<DT><CODE><VAR>exp1</VAR> -gt <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is greater than <VAR>exp2</VAR>.
+
+<DT><CODE><VAR>exp1</VAR> -le <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is less than or equal to <VAR>exp2</VAR>.
+
+<DT><CODE><VAR>exp1</VAR> -ge <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> is greater than or equal to <VAR>exp2</VAR>.
+
+<DT><CODE>( <VAR>exp</VAR> )</CODE>
+<DD>
+True if <VAR>exp</VAR> is true.
+
+<DT><CODE>! <VAR>exp</VAR></CODE>
+<DD>
+True if <VAR>exp</VAR> is false.
+
+<DT><CODE><VAR>exp1</VAR> &#38;&#38; <VAR>exp2</VAR></CODE>
+<DD>
+True if <VAR>exp1</VAR> and <VAR>exp2</VAR> are both true.
+
+<DT><CODE><VAR>exp1</VAR> || <VAR>exp2</VAR></CODE>
+<DD>
+True if either <VAR>exp1</VAR> or <VAR>exp2</VAR> is true.
+</DL>
+
+<P>
+In each of the above expressions, if <VAR>file</VAR> is of the form
+<SAMP>`/dev/fd/<VAR>n</VAR>'</SAMP>, where <VAR>n</VAR> is an integer, then the test is
+applied to the open file whose descriptor number is <VAR>n</VAR>, even if
+the underlying system does not support the <TT>`/dev/fd'</TT>
+directory.
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_11.html">previous</A>, <A HREF="zsh_13.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

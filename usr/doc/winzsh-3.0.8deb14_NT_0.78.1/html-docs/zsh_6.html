@@ -1,0 +1,1237 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Expansion</TITLE>
+<link href="zsh_7.html" rel=Next>
+<link href="zsh_5.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_5.html">previous</A>, <A HREF="zsh_7.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC25" HREF="zsh_toc.html#TOC25">Expansion</A></H1>
+<P>
+<A NAME="IDX63"></A>
+
+</P>
+<P>
+The types of expansions performed are <STRONG>history expansion</STRONG>, 
+<STRONG>alias expansion</STRONG>, <STRONG>process substitution</STRONG>, 
+<STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG>, 
+<STRONG>arithmetic expansion</STRONG>, <STRONG>brace expansion</STRONG>,
+<STRONG>filename expansion</STRONG>, and <STRONG>filename generation</STRONG>.
+
+</P>
+<P>
+Expansion is done in the above specified order in five steps.  The first is 
+<STRONG>history expansion</STRONG> which is only performed in interactive shells.  The
+next step is <STRONG>alias expansion</STRONG> which is done right before the command 
+line is parsed.  They are followed by <STRONG>process substitution</STRONG>, 
+<STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG>, 
+<STRONG>arithmetic expansion</STRONG>, and <STRONG>brace expansion</STRONG> which are performed in
+one step in left-to-right fashion.  After these expansions, all
+unquoted occurrences of the characters <CODE>\</CODE>, <CODE>'</CODE>, and <CODE>"</CODE> are
+removed and the result is subjected to <STRONG>filename expansion</STRONG>
+followed by <STRONG>filename generation</STRONG>.
+
+</P>
+<P>
+If the <CODE>SH_FILE_EXPANSION</CODE> option is set, the order of expansion is modified
+for compatibility with <CODE>sh</CODE> and <CODE>ksh</CODE>.  <STRONG>Filename expansion</STRONG> is
+performed immediately after <STRONG>alias substitution</STRONG>, preceding the set of 
+five substitutions mentioned above.
+
+</P>
+
+
+
+<H2><A NAME="SEC26" HREF="zsh_toc.html#TOC26">Filename Expansion</A></H2>
+<P>
+<A NAME="IDX64"></A>
+<A NAME="IDX65"></A>
+
+</P>
+<P>
+Each word is checked to see if it begins with an unquoted <CODE>~</CODE>.  If
+it does, then the word up to a <CODE>/</CODE>, or the end of the word if there is
+no <CODE>/</CODE>, is checked to see if it can be substituted in one of the ways
+described here.  If so, then the <CODE>~</CODE> and the checked
+portion are replaced with the appropriate substitute value.
+
+</P>
+<P>
+A <CODE>~</CODE> by itself is replaced by the value of the
+<CODE>HOME</CODE> parameter.  A <CODE>~</CODE> followed by a <CODE>+</CODE> or a <CODE>-</CODE>
+is replaced by the value of <CODE>PWD</CODE> or <CODE>OLDPWD</CODE>,
+respectively.
+
+</P>
+<P>
+<A NAME="IDX66"></A>
+A <CODE>~</CODE> followed by a number is replaced by the directory at that 
+position in the directory stack.  <CODE>~0</CODE> is equivalent to <CODE>~+</CODE>, and 
+<CODE>~1</CODE> is the top of the stack.  <CODE>~+</CODE> followed by a number is replaced
+by the directory at that position in the directory stack.  <CODE>~+0</CODE> is 
+equivalent to <CODE>~+</CODE>, and <CODE>~+1</CODE> is the top of the stack.  <CODE>~-</CODE> 
+followed by a number is replaced by the directory that many positions from 
+the bottom of the stack.  <CODE>~-0</CODE> is the bottom of the stack.  The
+<CODE>PUSHD_MINUS</CODE> option exchanges the effects of <CODE>~+</CODE> and <CODE>~-</CODE> 
+where they are followed by a number.
+
+</P>
+<P>
+<A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+A <CODE>~</CODE> followed by anything not already covered is looked up
+as a named directory, and replaced by the value of that named directory if 
+found.  Named directories are typically home directories for users on the 
+system.  They may also be defined if the text after the <CODE>~</CODE> is the name 
+of a string shell parameter whose value begins with a <CODE>/</CODE>.  It is also
+possible to define directory names using the <SAMP>`-d'</SAMP> option to the 
+<CODE>hash</CODE> builtin.
+
+</P>
+<P>
+In  certain circumstances (in prompts, for instance), when the shell prints 
+a path, the path is checked to see if it has a named directory as its 
+prefix.  If so, then the prefix portion is replaced with a <CODE>~</CODE> followed 
+by the name of the directory.  The shortest way of referring to the directory 
+is used, with ties broken in favour of using a named directory, except when 
+the directory is <CODE>/</CODE>.
+
+</P>
+<P>
+If a word begins with an unquoted <CODE>=</CODE> and the <CODE>EQUALS</CODE>
+option is set, the remainder of the word is taken as the name of a
+command or alias.  If a command exists by that name, the word is
+replaced by the full pathname of the command.  If an alias exists by
+that name, the word is replaced with the text of the alias.  
+
+</P>
+<P>
+Filename expansion is performed on the right hand side of a parameter 
+assignment, including those appearing after commands of the <CODE>typeset</CODE> 
+family.  In this case, the right hand side will be treated as a 
+colon-separated list in the manner of <CODE>PATH</CODE> so that a <CODE>~</CODE> or 
+an <CODE>=</CODE> following a <CODE>:</CODE> is eligible  for expansion.  All such 
+behavior can be disabled by quoting the <CODE>~</CODE>, the <CODE>=</CODE>, or the whole  
+expression (but not simply the colon); the <CODE>EQUALS</CODE> option is also 
+respected.
+
+</P>
+<P>
+If the option <CODE>MAGIC_EQUAL_SUBST</CODE> is set, any unquoted shell argument in 
+the form <CODE><VAR>identifier</VAR>=<VAR>expression</VAR></CODE> becomes eligible for 
+file expansion as described in the previous  paragraph.  Quoting the first 
+<CODE>=</CODE> also inhibits this.
+
+</P>
+
+
+
+<H2><A NAME="SEC27" HREF="zsh_toc.html#TOC27">Process Substitution</A></H2>
+<P>
+<A NAME="IDX69"></A>
+<A NAME="IDX70"></A>
+
+</P>
+<P>
+Each command argument of the form <CODE>&#60;(<VAR>list</VAR>)</CODE>,
+<CODE>&#62;(<VAR>list</VAR>)</CODE> or <CODE>=(<VAR>list</VAR>)</CODE> is subject to process
+substitution.  In the case of the <CODE>&#60;</CODE> and <CODE>&#62;</CODE> forms, the shell
+will run process <VAR>list</VAR> asynchronously, connected to a named pipe
+(FIFO).  The name of this pipe will become the argument to the command.
+If the form with <CODE>&#62;</CODE> is selected then writing to this file will
+provide input for <VAR>list</VAR>.  If <CODE>&#60;</CODE> is used, then the file passed
+as an argument will be a named pipe connected to the output of the
+<VAR>list</VAR> process.  For example,
+
+</P>
+<P>
+<CODE>paste &#60;(cut -f1 <VAR>file1</VAR>) &#60;(cut -f3 <VAR>file2</VAR>) | tee &#62;(<VAR>process1</VAR>) &#62;(<VAR>process2</VAR>) &#62;/dev/null</CODE>
+
+</P>
+<P>
+<CODE>cut</CODE>s fields 1 and 3 from the files <VAR>file1</VAR> and <VAR>file2</VAR>
+respectively, <CODE>paste</CODE>s the results together, and sends it to the
+processes <VAR>process1</VAR> and <VAR>process2</VAR>.  Note that the file, which
+is passed as an argument to the command, is a system pipe so programs
+that expect to <CODE>lseek(2)</CODE> on the file will not work.  Also note
+that the previous example can be more compactly and efficiently written
+as:
+
+</P>
+<P>
+<CODE>paste &#60;(cut -f1 <VAR>file1</VAR>) &#60;(cut -f3 <VAR>file2</VAR>) &#62;&#62;(<VAR>process1</VAR>) &#62;&#62;(<VAR>process2</VAR>)</CODE>
+
+</P>
+<P>
+The shell uses pipes instead of FIFOs to implement the latter two
+process substitutions in the above example.
+
+</P>
+<P>
+If <CODE>=</CODE> is used, then the file passed as an argument will be the name
+of a temporary file containing the output of the <VAR>list</VAR> process.
+<A NAME="IDX71"></A>
+<A NAME="IDX72"></A>
+This may be used instead of the <CODE>&#60;</CODE> form for a program that expects
+to <CODE>lseek(2)</CODE> on the input file.
+
+</P>
+
+
+<H2><A NAME="SEC28" HREF="zsh_toc.html#TOC28">Parameter Expansion</A></H2>
+<P>
+<A NAME="IDX73"></A>
+<A NAME="IDX74"></A>
+
+</P>
+<P>
+The character <CODE>$</CODE> is used to introduce parameter expansions.
+See section <A HREF="zsh_15.html#SEC52">Parameters</A>, for a description of parameters.  In the expansions 
+discussed below that require a pattern, the form of the pattern is the same 
+as that used for filename generation; See section <A HREF="zsh_6.html#SEC32">Filename Generation</A>.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>${<VAR>name</VAR>}</CODE>
+<DD>
+The value, if any, of the parameter <VAR>name</VAR> is substituted.  The
+braces are required if <VAR>name</VAR> is followed by a letter, digit, or
+underscore that is not to be interpreted as part of its name.
+If <VAR>name</VAR> is an array parameter, then the value of each
+element of <VAR>name</VAR> is substituted, one element per word.
+Otherwise, the expansion results in one word only; no field
+splitting is done on the result unless the <CODE>SH_WORD_SPLIT</CODE>
+option is set.
+
+<DT><CODE>${+<VAR>name</VAR>}</CODE>
+<DD>
+If <VAR>name</VAR> is the name of a set parameter, <CODE>1</CODE> is substituted,
+otherwise <CODE>0</CODE> is substituted.
+
+<DT><CODE>${<VAR>name</VAR>:-<VAR>word</VAR>}</CODE>
+<DD>
+If <VAR>name</VAR> is set and is non-null then substitute its value;
+otherwise substitute <VAR>word</VAR>. If <VAR>name</VAR> is missing, substitute
+<VAR>word</VAR>.
+
+<DT><CODE>${<VAR>name</VAR>:=<VAR>word</VAR>}</CODE>
+<DD>
+If <VAR>name</VAR> is unset or is null then set it to <VAR>word</VAR>; the value
+of the parameter is then substituted.
+
+<DT><CODE>${<VAR>name</VAR>::=<VAR>word</VAR>}</CODE>
+<DD>
+Set <VAR>name</VAR> to <VAR>word</VAR>; the value of the parameter is then substituted.
+
+<DT><CODE>${<VAR>name</VAR>:?<VAR>word</VAR>}</CODE>
+<DD>
+If <VAR>name</VAR> is set and is non-null, then substitute its value;
+otherwise, print <VAR>word</VAR> and exit from the shell.  Interactive shells
+do not exit.  If <VAR>word</VAR> is omitted, then a standard message is
+printed.
+
+<DT><CODE>${<VAR>name</VAR>:+<VAR>word</VAR>}</CODE>
+<DD>
+If <VAR>name</VAR> is set and is non-null then substitute <VAR>word</VAR>;
+otherwise substitute nothing.
+
+<DT><CODE>${<VAR>name</VAR>#<VAR>pattern</VAR>}</CODE>
+<DD>
+<DT><CODE>${<VAR>name</VAR>##<VAR>pattern</VAR>}</CODE>
+<DD>
+If the <VAR>pattern</VAR> matches the beginning of the value of <VAR>name</VAR>,
+then substitute the value of <VAR>name</VAR> with the matched portion
+deleted; otherwise, just substitute the value of <VAR>name</VAR>.  In the
+first form, the smallest matching pattern is preferred; in the second
+form, the largest matching pattern is preferred.  If name is an array and
+the substitution is not quoted or the <CODE>@</CODE> flag or the
+<CODE><VAR>name</VAR>[@]</CODE> syntax is used, matching is performed on each
+array elements separately.
+
+<DT><CODE>${<VAR>name</VAR>%<VAR>pattern</VAR>}</CODE>
+<DD>
+<DT><CODE>${<VAR>name</VAR>%%<VAR>pattern</VAR>}</CODE>
+<DD>
+If the <VAR>pattern</VAR> matches the end of the value of <VAR>name</VAR>, then
+substitute the value of <VAR>name</VAR> with the matched portion deleted;
+otherwise, just substitute the value of <VAR>name</VAR>.  In the first form,
+the smallest matching pattern is preferred; in the second form, the
+largest matching pattern is preferred.  If name is an
+array and the substitution is not quoted or the <CODE>@</CODE> flag or the 
+<CODE><VAR>name[@]</VAR></CODE> syntax is used, matching is performed on each array 
+elements separately.
+
+<DT><CODE>${<VAR>name</VAR>:#<VAR>pattern</VAR>}</CODE>
+<DD>
+If the pattern matches the value of <VAR>name</VAR>, then substitute the empty 
+string; otherwise, just substitute the value of <VAR>name</VAR>.  If <VAR>name</VAR> 
+is an array and the substitution is not quoted or the <CODE>@</CODE> flag or the 
+<CODE><VAR>name</VAR>[@]</CODE> syntax is used, matching is performed on each array
+elements separately, and the matched array elements are removed (use the 
+<CODE>M</CODE> flag to remove the non-matched elements).
+
+<DT><CODE>${#<VAR>spec</VAR>}</CODE>
+<DD>
+If <VAR>spec</VAR> is one of the above substitutions, substitute the length
+in characters of the result instead of the result itself.  If <VAR>spec</VAR>
+is an array expression, substitute the number of elements of the
+result.
+
+<DT><CODE>${^<VAR>spec</VAR>}</CODE>
+<DD>
+Turn on the value of the <CODE>RC_EXPAND_PARAM</CODE> option for the evaluation
+<A NAME="IDX75"></A>
+of <VAR>spec</VAR>; if the <CODE>^</CODE> is doubled, turn it off.  When this option is 
+set, array expansions of the form
+<A NAME="IDX76"></A>
+<A NAME="IDX77"></A>
+<SAMP>`foo${xx}bar'</SAMP>, where the parameter <SAMP>`xx'</SAMP> is set to <SAMP>`(a b c)'</SAMP>, 
+are substituted with <SAMP>`fooabar foobbar foocbar'</SAMP> instead of the
+default <SAMP>`fooa b cbar'</SAMP>.
+
+<DT><CODE>${=<VAR>spec</VAR>}</CODE>
+<DD>
+Turn on the value of the <CODE>SH_WORD_SPLIT</CODE> option for the evaluation
+<A NAME="IDX78"></A>
+of <VAR>spec</VAR>; if the <CODE>=</CODE> is doubled, turn it off.  When this option is 
+set, parameter values are split into
+separate words using <CODE>IFS</CODE> as a delimiter before substitution.
+<A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
+<A NAME="IDX81"></A>
+This is done by default in most other shells.
+
+<DT><CODE>${~<VAR>spec</VAR>}</CODE>
+<DD>
+<A NAME="IDX82"></A>
+<A NAME="IDX83"></A>
+<A NAME="IDX84"></A>
+Turn on the value of the <CODE>GLOB_SUBST</CODE> option for the evaluation of
+<VAR>spec</VAR>; if the <CODE>~</CODE> is doubled, turn it off.  When this option is set,
+any pattern characters resulting from the substitution become eligible for 
+file expansion and filename generation.
+</DL>
+
+<P>
+If the colon is omitted from one of the above expressions containing a
+colon, then the shell only checks whether <VAR>name</VAR> is set or not, not
+whether it is null.
+
+</P>
+<P>
+If a <CODE>${...}</CODE> type parameter expression or a <CODE>$(...)</CODE>  
+type command substitution is used in place of <VAR>name</VAR> above, it is
+substituted first and the result is used as it were the value of <VAR>name</VAR>.
+
+</P>
+<P>
+Note that double quotes may appear around nested expansions, in which
+case only the part inside is treated as quoted; for example,
+<CODE>${(f)"$(foo)"}</CODE> quotes the result of <CODE>$(foo)</CODE>, but the flag
+`<CODE>(f)</CODE>' (see below) is applied using the rules for unquoted
+substitutions.  Note further that quotes are themselves nested in this
+context; for example, in <CODE>"${(f)"$(foo)"}"</CODE>, there are two sets
+of quotes, one surrounding the whole expression, the other (redundant)
+surrounding the <CODE>$(foo)</CODE> as before.
+
+</P>
+<P>
+If the opening brace is directly followed by an opening parenthesis
+the string up to the matching closing parenthesis will be taken as a
+list of flags.  Where arguments are valid, any character, or the
+matching pairs <CODE>(...)</CODE>, <CODE>{...}</CODE>, <CODE>[...]</CODE>,
+or <CODE>&#60;...&#62;</CODE>, may be used in place of the colon as delimiters.
+The following flags are supported:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>A</CODE>
+<DD>
+Create an array parameter with <CODE>${...:=...}</CODE>
+or <CODE>${...::=...}</CODE>.  Assignment is made before
+sorting or padding.
+
+<DT><CODE>@</CODE>
+<DD>
+In double quotes, array elements are put into separate words. Eg. 
+<CODE>${(@)<VAR>foo</VAR>}</CODE> is equivalent to <CODE>${<VAR>foo</VAR>[@]}</CODE> and
+<CODE>${(@)<VAR>foo</VAR>[1,2]}</CODE> is the same as 
+<CODE>$<VAR>foo</VAR>[1]</CODE> <CODE>$<VAR>foo</VAR>[2]</CODE>.
+
+<DT><CODE>e</CODE>
+<DD>
+Perform <STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG> and  
+<STRONG>arithmetic expansion</STRONG> on the result.  Such expansions can be nested but
+too deep recursion may have unpredictable effects.
+
+<DT><CODE>o</CODE>
+<DD>
+Sort the resulting words in ascending order.
+
+<DT><CODE>O</CODE>
+<DD>
+Sort the resulting words in descending order.
+
+<DT><CODE>i</CODE>
+<DD>
+With <CODE>o</CODE> or <CODE>O</CODE>, makes the sort case-insensitive.
+
+<DT><CODE>L</CODE>
+<DD>
+Converts all letters in the result to lowercase.
+
+<DT><CODE>U</CODE>
+<DD>
+Converts all letters in the result to uppercase.
+
+<DT><CODE>C</CODE>
+<DD>
+Capitalizes the resulting words
+
+<DT><CODE>c</CODE>
+<DD>
+With <CODE>${#<VAR>name</VAR>}</CODE>, count the total number of characters in an
+array, as if the elements were concatenated with spaces between
+them.
+
+<DT><CODE>w</CODE>
+<DD>
+With <CODE>${#<VAR>name</VAR>}</CODE>, count words in arrays or strings; the
+<CODE>s</CODE> flag may be used to set a word delimiter.
+
+<DT><CODE>W</CODE>
+<DD>
+Similar to <CODE>w</CODE> with the difference that empty words between repeated 
+delimiters are also counted.
+
+<DT><CODE>p</CODE>
+<DD>
+Recognize the same escape sequences as the <CODE>print</CODE> builtin in string 
+arguments to subsequent flags.
+
+<DT><CODE>l:<VAR>expr</VAR>::<VAR>string1</VAR>::<VAR>string2</VAR>:</CODE>
+<DD>
+Pad the resulting words on the left.  Each word will be truncated if
+required and placed in a field <VAR>expr</VAR> characters wide.  The space to
+the left will be filled with <VAR>string1</VAR> (concatenated as often as
+needed), or spaces if <VAR>string1</VAR> is not given.  If both <VAR>string1</VAR>
+and <VAR>string2</VAR> are given, this string is inserted once directly to
+the left of each word, before padding.
+
+<DT><CODE>r:<VAR>expr</VAR>::<VAR>string1</VAR>::<VAR>string2</VAR>:</CODE>
+<DD>
+As <CODE>l</CODE>, but pad the words on the right and insert <VAR>string2</VAR> on
+the right.
+
+<DT><CODE>j:<VAR>string</VAR>:</CODE>
+<DD>
+<A NAME="IDX85"></A>
+Join the words or arrays together using <VAR>string</VAR> as a separator.
+Note that this occurs before word splitting by the <CODE>SH_WORD_SPLIT</CODE>
+option.
+
+<DT><CODE>F</CODE>
+<DD>
+Join the words of arrays together using newline as a separator.  This is a 
+shorthand for <CODE>pj:\n:</CODE>.
+
+<DT><CODE>s:<VAR>string</VAR>:</CODE>
+<DD>
+Force word splitting (see the option <CODE>SH_WORD_SPLIT</CODE>) at the
+separator <VAR>string</VAR>.  Splitting only occurs in places where an array
+value is valid, and joining always occurs before splitting.
+
+<DT><CODE>f</CODE>
+<DD>
+Split the result of the expansion to lines.  This is a shorthand for 
+<CODE>ps:\n:</CODE>.
+
+(All remaining flags are useful only with the
+<CODE>${...#...}</CODE> and <CODE>${...%...}</CODE> forms.)
+
+<DT><CODE>S</CODE>
+<DD>
+Search substrings as well as beginnings or ends.
+
+<DT><CODE>I:<VAR>expr</VAR>:</CODE>
+<DD>
+Search the <VAR>expr</VAR>'th match (where <VAR>expr</VAR> evaluates to a number).
+
+<DT><CODE>M</CODE>
+<DD>
+Include the matched portion in the result.
+
+<DT><CODE>R</CODE>
+<DD>
+Include the unmatched portion in the result (the <VAR>R</VAR>est).
+
+<DT><CODE>B</CODE>
+<DD>
+Include the index of the beginning of the match in the result.
+
+<DT><CODE>E</CODE>
+<DD>
+Include the index of the end of the match in the result.
+
+<DT><CODE>N</CODE>
+<DD>
+Include the length of the match in the result.
+</DL>
+
+
+
+<H2><A NAME="SEC29" HREF="zsh_toc.html#TOC29">Command Substitution</A></H2>
+<P>
+<A NAME="IDX86"></A>
+<A NAME="IDX87"></A>
+
+</P>
+<P>
+A command enclosed in parentheses preceded by a dollar sign, like so: 
+<CODE>$(...)</CODE> or quoted with grave accents: <CODE>`...`</CODE> is replaced 
+with its standard output, with any trailing newlines deleted.  If the 
+substitution is not enclosed in double quotes, the output is broken into 
+words using the <CODE>IFS</CODE>
+<A NAME="IDX88"></A>
+parameter.  The substitution <CODE>$(cat <VAR>foo</VAR>)</CODE> may be replaced 
+by the equivalent but faster <CODE>$(&#60;<VAR>foo</VAR>)</CODE>.  In either case, if the 
+option <CODE>GLOB_SUBST</CODE> is set the output is eligible for filename
+generation.
+
+</P>
+
+
+<H2><A NAME="SEC30" HREF="zsh_toc.html#TOC30">Arithmetic Expansion</A></H2>
+<P>
+<A NAME="IDX89"></A>
+<A NAME="IDX90"></A>
+
+</P>
+<P>
+A string of the form <CODE>$[<VAR>exp</VAR>]</CODE> is substituted with the value
+of the arithmetic expression <VAR>exp</VAR>.  <VAR>exp</VAR> is subjected to 
+<STRONG>parameter expansion</STRONG>, <STRONG>command substitution</STRONG> and
+<STRONG>arithmetic expansion</STRONG> before it is evaluated.  See section <A HREF="zsh_11.html#SEC41">Arithmetic Evaluation</A>.
+
+</P>
+
+
+<H2><A NAME="SEC31" HREF="zsh_toc.html#TOC31">Brace Expansion</A></H2>
+<P>
+<A NAME="IDX91"></A>
+<A NAME="IDX92"></A>
+
+</P>
+<P>
+A string of the form <SAMP>`foo{xx,yy,zz}bar'</SAMP> is expanded to the
+individual words <SAMP>`fooxxbar'</SAMP>, <SAMP>`fooyybar'</SAMP>, and <SAMP>`foozzbar'</SAMP>.
+Left-to-right order is preserved.  This construct may be nested.
+Commas may be quoted in order to include them literally in a word.
+
+</P>
+<P>
+An expression of the form <CODE>{<VAR>n1</VAR>..<VAR>n2</VAR>}</CODE>, where <VAR>n1</VAR> and 
+<VAR>n2</VAR> are integers, is expanded to every number between <VAR>n1</VAR> and 
+<VAR>n2</VAR>, inclusive.  If either number begins with a zero, all the resulting 
+numbers will be padded with leading zeroes to that minimum width.  If the 
+numbers are in decreasing order the resulting sequence will also be in 
+decreasing order.
+
+</P>
+<P>
+<A NAME="IDX93"></A>
+If a brace expression matches none of the above forms, it is left unchanged, 
+unless the <CODE>BRACE_CCL</CODE> option is set.  In that case, it is expanded to a 
+sorted list of the individual characters between the braces, in the manner of
+a search set.  <CODE>-</CODE> is treated specially as in a search set,
+but <CODE>^</CODE> or <CODE>!</CODE> as the first character is treated normally.
+
+</P>
+
+
+<H2><A NAME="SEC32" HREF="zsh_toc.html#TOC32">Filename Generation</A></H2>
+<P>
+<A NAME="IDX94"></A>
+If a word contains an unquoted instance of one of the characters
+<A NAME="IDX95"></A>
+<CODE>*</CODE>, <CODE>|</CODE>, <CODE>&#60;</CODE>, <CODE>[</CODE>, or <CODE>?</CODE>, it is regarded as a
+pattern for filename generation, unless the <CODE>GLOB</CODE> option is
+<A NAME="IDX96"></A>
+unset.  If the <CODE>EXTENDED_GLOB</CODE> option is set, the <CODE>^</CODE>, <CODE>~</CODE>, and
+<A NAME="IDX97"></A>
+<CODE>#</CODE> characters also denote a pattern; they are not otherwise
+treated specially by the shell, except for an initial <CODE>~</CODE>
+(see section <A HREF="zsh_6.html#SEC26">Filename Expansion</A>).  The word is replaced with a list of
+sorted filenames that match the pattern.  If no matching pattern is
+found, the shell gives an error message, unless the <CODE>NULL_GLOB</CODE>
+<A NAME="IDX98"></A>
+option is set, in which case the word is deleted; or unless the
+<CODE>NOMATCH</CODE> option is unset, in which case the word is left
+<A NAME="IDX99"></A>
+unchanged.  In filename generation, the character <CODE>/</CODE> must be
+matched explicitly; also, a <CODE>.</CODE> must be matched explicitly at the
+beginning of a pattern or after a <CODE>/</CODE>, unless the <CODE>GLOB_DOTS</CODE>
+<A NAME="IDX100"></A>
+option is set.  No filename generation pattern matches the files
+<TT>`.'</TT> or <TT>`..'</TT>.  In other instances of pattern matching, the
+<CODE>/</CODE> and <CODE>.</CODE> are not treated specially.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>*</CODE>
+<DD>
+Matches any string, including the null string.
+
+<DT><CODE>?</CODE>
+<DD>
+Matches any character.
+
+<DT><CODE>[...]</CODE>
+<DD>
+Matches any of the enclosed characters. Ranges of characters can be specified 
+by separating two characters by a <CODE>-</CODE>.  A <CODE>-</CODE> or <CODE>]</CODE> may be 
+matched by including it as the first character in the list.
+
+<DT><CODE>[^...]</CODE>
+<DD>
+<DT><CODE>[!...]</CODE>
+<DD>
+Like <CODE>[...]</CODE>, except that it matches any character which is not in 
+the given set.
+
+<DT><CODE>&#60;x-y&#62;</CODE>
+<DD>
+Matches any number in the range <CODE>x</CODE> to <CODE>y</CODE>, inclusive.  If
+<CODE>x</CODE> is omitted, the number must be less than or equal to <CODE>y</CODE>.  If 
+<CODE>y</CODE> is omitted, the number must be greater than or equal to
+<CODE>x</CODE>.  A pattern of the form <CODE>&#60;-&#62;</CODE> matches any number.
+
+<DT><CODE>^x</CODE>
+<DD>
+Matches anything except the pattern <CODE>x</CODE>.
+
+<DT><CODE>x|y</CODE>
+<DD>
+Matches either <CODE>x</CODE> or <CODE>y</CODE>.
+
+<DT><CODE>x#</CODE>
+<DD>
+Matches zero or more occurrences of the pattern <CODE>x</CODE>.
+
+<DT><CODE>x##</CODE>
+<DD>
+Matches one or more occurrences of the pattern <CODE>x</CODE>.
+</DL>
+
+<P>
+Parentheses may be used for grouping.  Note that the <CODE>|</CODE> character
+must be within parentheses, so that the lexical analyzer does not think
+it is a pipe character.  Also note that <CODE>/</CODE> has a higher precedence
+than <CODE>^</CODE>; that is:
+
+</P>
+<P>
+<CODE>ls ^foo/bar</CODE>
+
+</P>
+<P>
+will search directories in <TT>`.'</TT> except <TT>`./foo'</TT> for a file named
+<TT>`bar'</TT>.
+
+</P>
+<P>
+A pathname component of the form <CODE>(<VAR>foo</VAR>/)#</CODE> matches a path
+consisting of zero or more directories matching the pattern <VAR>foo</VAR>.
+As a shorthand, <CODE>**/</CODE> is equivalent to <CODE>(*/)#</CODE>.  Thus:
+
+</P>
+<P>
+<CODE>ls (*/)#<VAR>bar</VAR></CODE>
+
+</P>
+<P>
+or
+
+</P>
+<P>
+<CODE>ls **/<VAR>bar</VAR></CODE>
+
+</P>
+<P>
+does a recursive directory search for files named <VAR>bar</VAR>, not following 
+symbolic links.  To follow symbolic links, use the form <CODE>***/</CODE>.
+
+</P>
+<P>
+If used for filename generation, a pattern may contain an exclusion
+<A NAME="IDX101"></A>
+<A NAME="IDX102"></A>
+specifier.  Such patterns are of the form <CODE><VAR>pat1</VAR>~<VAR>pat2</VAR></CODE>.
+This pattern will generate all files matching <VAR>pat1</VAR>, but which do
+not match <VAR>pat2</VAR>.  For example, <SAMP>`*.c~lex.c'</SAMP> will match all
+files ending in <TT>`.c'</TT>, except the file <TT>`lex.c'</TT>.  This may
+appear inside parentheses.  Note that <CODE>~</CODE> has higher precedence
+than <CODE>|</CODE>, so that <SAMP>`pat1|pat2~pat3'</SAMP> matches any time that
+<VAR>pat1</VAR> matches, or if <VAR>pat2</VAR> matches while <VAR>pat3</VAR> does not.
+Note also that any <CODE>/</CODE> characters are not treated specially in the
+exclusion specifier, so that a <CODE>*</CODE> will match multiple path
+segments if they appear in the pattern to the left of the
+<CODE>~</CODE>. 
+
+</P>
+<P>
+Patterns used for filename generation may also end in a list of
+<A NAME="IDX103"></A>
+<A NAME="IDX104"></A>
+qualifiers enclosed in parentheses.  The qualifiers specify which
+filenames that otherwise match the given pattern will be inserted in the
+argument list.  A qualifier may be any one of the following:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>/</CODE>
+<DD>
+Directories
+
+<DT><CODE>.</CODE>
+<DD>
+Plain files
+
+<DT><CODE>@</CODE>
+<DD>
+Symbolic links
+
+<DT><CODE>=</CODE>
+<DD>
+Sockets
+
+<DT><CODE>p</CODE>
+<DD>
+Named pipes (FIFOs)
+
+<DT><CODE>*</CODE>
+<DD>
+Executable plain files (0100)
+
+<DT><CODE>%</CODE>
+<DD>
+Device files (character or block special)
+
+<DT><CODE>%b</CODE>
+<DD>
+Block special files
+
+<DT><CODE>%c</CODE>
+<DD>
+Character special files
+
+<DT><CODE>r</CODE>
+<DD>
+owner-readable files (0400)
+
+<DT><CODE>w</CODE>
+<DD>
+owner-writable files (0200)
+
+<DT><CODE>x</CODE>
+<DD>
+owner-executable files (0100)
+
+<DT><CODE>A</CODE>
+<DD>
+group-readable files (0040)
+
+<DT><CODE>I</CODE>
+<DD>
+group-writable files (0020)
+
+<DT><CODE>E</CODE>
+<DD>
+group-executable files (0010)
+
+<DT><CODE>R</CODE>
+<DD>
+world-readable files (0004)
+
+<DT><CODE>W</CODE>
+<DD>
+world-writable files (0002)
+
+<DT><CODE>X</CODE>
+<DD>
+world-executable files (0001)
+
+<DT><CODE>s</CODE>
+<DD>
+Setuid files (04000)
+
+<DT><CODE>S</CODE>
+<DD>
+Setgid files (02000)
+
+<DT><CODE>t</CODE>
+<DD>
+files with the sticky bit (01000)
+
+<DT><CODE>d<VAR>dev</VAR></CODE>
+<DD>
+Files on the device <VAR>dev</VAR>
+
+<DT><CODE>l[+|-]<VAR>ct</VAR></CODE>
+<DD>
+Files having a link count less than <CODE><VAR>ct</VAR> (-)</CODE>, greater than 
+<CODE><VAR>ct</VAR> (+)</CODE>, or is equal to <CODE><VAR>ct</VAR></CODE>.
+
+<DT><CODE>U</CODE>
+<DD>
+Files owned by the effective user id.
+
+<DT><CODE>G</CODE>
+<DD>
+Files owned by the effective group id.
+
+<DT><CODE>u<VAR>id</VAR></CODE>
+<DD>
+Files owned by user <VAR>id</VAR> if <VAR>id</VAR> is a number.  If not, the
+character after the <CODE>u</CODE> will be used as a separator and the string
+between it and the next matching separator (<CODE>(</CODE>, <CODE>[</CODE>,
+<CODE>{</CODE>, and <CODE>&#60;</CODE> match <CODE>)</CODE>, <CODE>]</CODE>, <CODE>}</CODE>, and
+<CODE>&#62;</CODE> respectively; any other character matches itself) will be taken
+as a user name and translated into the corresponding user id (e.g.
+<CODE>u:foo:</CODE> or <CODE>u[foo]</CODE> for user <CODE>foo</CODE>).
+
+<DT><CODE>g<VAR>id</VAR></CODE>
+<DD>
+Like <CODE>u<VAR>id</VAR></CODE> but with group ids or names.
+
+<DT><CODE>a[Mwhms][-|+]<VAR>n</VAR></CODE>
+<DD>
+Files accessed exactly <VAR>n</VAR> days ago.  Files accessed within the last
+<VAR>n</VAR> days are selected using a negative value for <VAR>n</VAR>
+(<SAMP>`-n'</SAMP>).  Files accessed more than <VAR>n</VAR> days ago are selected by
+a positive <VAR>n</VAR> value (<CODE>+n</CODE>).  Optional unit specifiers
+<CODE>M</CODE>, <CODE>w</CODE>, <CODE>h</CODE>, <CODE>m</CODE>, or <CODE>s</CODE> (e.g. <CODE>ah5</CODE>)
+cause the check to be performed with months (of 30 days), weeks, hours,
+minutes, or seconds instead of days, respectively.  For instance,
+<CODE>echo *(ah-5)</CODE> would echo files accessed within the last five
+hours.
+
+<DT><CODE>m[Mwhms][-|+]<VAR>n</VAR></CODE>
+<DD>
+Like the file access qualifier, except that it uses the file modification 
+time.
+
+<DT><CODE>c[Mwhms][-|+]<VAR>n</VAR></CODE>
+<DD>
+Like the file access qualifier, except that it uses the file inode change 
+time.
+
+<DT><CODE>L[+-]<VAR>n</VAR></CODE>
+<DD>
+Files less than <VAR>n</VAR> bytes (<CODE>-</CODE>), more than <VAR>n</VAR> bytes
+(<CODE>+</CODE>), or exactly <VAR>n</VAR> bytes in length.  If this flag is directly 
+followed by a <CODE>k</CODE> (<CODE>K</CODE>), <CODE>m</CODE> (<CODE>M</CODE>), or <CODE>p</CODE> 
+(<CODE>P</CODE>) (e.g. <CODE>Lk+50</CODE>) the check is performed with kilobytes, 
+megabytes, or blocks (of 512 bytes) instead.
+
+<DT><CODE>^</CODE>
+<DD>
+Negates all qualifiers following it.
+
+<DT><CODE>-</CODE>
+<DD>
+Toggles between making the qualifiers work on symbolic links (the
+default), and the files they point to.
+
+<DT><CODE>M</CODE>
+<DD>
+Sets the <CODE>MARK_DIRS</CODE> option for the current pattern.
+<A NAME="IDX105"></A>
+
+<DT><CODE>T</CODE>
+<DD>
+Appends a trailing qualifier mark to the file names, analogous to the
+<CODE>LIST_TYPES</CODE>, for the current pattern (overrides <CODE>M</CODE>).
+
+<DT><CODE>N</CODE>
+<DD>
+Sets the <CODE>NULL_GLOB</CODE> option for the current pattern.
+<A NAME="IDX106"></A>
+
+<DT><CODE>D</CODE>
+<DD>
+Sets the <CODE>GLOB_DOTS</CODE> option for the current pattern.
+<A NAME="IDX107"></A>
+</DL>
+
+<P>
+More than one of these lists can be combined, separated by commas; the
+whole list matches if at least one of the sublists matches (they are
+<CODE>or</CODE>'ed, the qualifiers in the sublists are <CODE>and</CODE>'ed). 
+
+</P>
+<P>
+If a <CODE>:</CODE> appears in a qualifier list, the remainder of the
+expression in parentheses is interpreted as a modifier
+(See section <A HREF="zsh_6.html#SEC36">Modifiers</A>).  Note that each modifier must be introduced by a
+separate <CODE>:</CODE>.  Note also that the result after modification does
+not have to be an existing file.  The name of any existing file can be
+followed by a modifier of the form <CODE>(:...)</CODE> even if no filename
+generation is performed.
+
+</P>
+<P>
+Thus:
+
+</P>
+<P>
+<CODE>ls *(-/)</CODE>
+
+</P>
+<P>
+lists all directories and symbolic links that point to directories, and
+
+</P>
+<P>
+<CODE>ls *(%W)</CODE>
+
+</P>
+<P>
+lists all world-writable device files in the current directory, and
+
+</P>
+<P>
+<CODE>ls *(W,X)</CODE>
+
+</P>
+<P>
+lists all files in the current directory that are world-writable or
+world-executable, and
+
+</P>
+<P>
+<CODE>echo /tmp/foo*(u0^@:t)</CODE>
+
+</P>
+<P>
+outputs the basename of all root-owned files beginning with the string
+<CODE>foo</CODE> in <TT>`/tmp'</TT>, ignoring symlinks, and
+
+</P>
+<P>
+<CODE>ls *.*~(lex|parse).[ch](^D^l1)</CODE>
+
+</P>
+<P>
+lists all files having a link count of one whose names contain a dot
+(but not those starting with a dot, since <CODE>GLOB_DOTS</CODE> is explicitly
+switched off) except for <TT>`lex.c'</TT>, <TT>`lex.h'</TT>, <TT>`parse.c'</TT>, and
+<TT>`parse.h'</TT>.
+
+</P>
+
+
+<H2><A NAME="SEC33" HREF="zsh_toc.html#TOC33">History Expansion</A></H2>
+<P>
+<A NAME="IDX108"></A>
+<A NAME="IDX109"></A>
+<A NAME="IDX110"></A>
+
+</P>
+<P>
+History substitution allows you to use words from previous command lines 
+in the command line you are typing.  This simplifies spelling corrections 
+and the repetition of complicated commands or arguments.  Command lines are 
+saved in the history list, the size of which is controlled by the 
+<CODE>HISTSIZE</CODE> variable.  The most recent command is retained in any 
+<A NAME="IDX111"></A>
+case.  A history substitution begins with the first character of the 
+<CODE>histchars</CODE> parameter which is <CODE>!</CODE> by default and may occur 
+anywhere on the command line; history substitutions do not nest.  The 
+<CODE>!</CODE> can be escaped with <CODE>\</CODE> or can be enclosed between a pair of 
+single quotes (<TT>''</TT>) 
+to suppress its special meaning. Double quotes will not work for this.
+
+</P>
+<P>
+Input lines containing history substitutions are echoed on the terminal 
+after being expanded, but before any other substitutions take place or the 
+command gets executed.
+
+</P>
+
+
+
+<H3><A NAME="SEC34" HREF="zsh_toc.html#TOC34">Event Designators</A></H3>
+<P>
+<A NAME="IDX112"></A>
+<A NAME="IDX113"></A>
+
+</P>
+<P>
+An event designator is a reference to a command-line entry in the history 
+list.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>!</CODE>
+<DD>
+Start a history substitution, except when followed by a blank, newline, 
+<CODE>=</CODE>, or <CODE>(</CODE>.
+
+<DT><CODE>!!</CODE>
+<DD>
+Refer to the previous command.  By itself, this substitution repeats the 
+previous command.
+
+<DT><CODE>!<VAR>n</VAR></CODE>
+<DD>
+Refer to command-line <VAR>n</VAR>.
+
+<DT><CODE>!-<VAR>n</VAR></CODE>
+<DD>
+Refer to the current command-line minus <VAR>n</VAR>.
+
+<DT><CODE>!<VAR>str</VAR></CODE>
+<DD>
+Refer to the most recent command starting with <VAR>str</VAR>.
+
+<DT><CODE>!?<VAR>str</VAR>[?]</CODE>
+<DD>
+Refer to the most recent command containing <VAR>str</VAR>.
+
+<DT><CODE>!#</CODE>
+<DD>
+Refer to the current command line typed in so far.  The line is treated as if 
+it were complete up to and including the word before the one with the 
+<CODE>!#</CODE> reference.
+
+<DT><CODE>!{...}</CODE>
+<DD>
+Insulate a history reference from adjacent characters (if necessary).
+</DL>
+
+
+
+<H3><A NAME="SEC35" HREF="zsh_toc.html#TOC35">Word Designators</A></H3>
+<P>
+<A NAME="IDX114"></A>
+<A NAME="IDX115"></A>
+
+</P>
+<P>
+A word designator indicates which word or words of a given command line will 
+be included in a history reference.  A <CODE>:</CODE> separates the event 
+specification from the word designator.  It can be omitted if the word 
+designator begins with a <CODE>^</CODE>, <CODE>$</CODE>, <CODE>*</CODE>, <CODE>-</CODE> or 
+<CODE>%</CODE>.  Word designators include:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>0</CODE>
+<DD>
+The first input word (command).
+
+<DT><CODE><VAR>n</VAR></CODE>
+<DD>
+The <VAR>n</VAR>'th argument.
+
+<DT><CODE>^</CODE>
+<DD>
+The first argument, that is, <CODE>1</CODE>.
+
+<DT><CODE>$</CODE>
+<DD>
+The last argument.
+
+<DT><CODE>%</CODE>
+<DD>
+The word matched by (the most recent) <CODE>?<VAR>str</VAR></CODE> search.
+
+<DT><CODE>x-y</CODE>
+<DD>
+A range of words; <SAMP>`-y'</SAMP> abbreviates <CODE>0-y</CODE>.
+
+<DT><CODE>*</CODE>
+<DD>
+All the arguments, or a null value if there is just one word in the event.
+
+<DT><CODE>x*</CODE>
+<DD>
+Abbreviates <CODE>x-$</CODE>.
+
+<DT><CODE>x-</CODE>
+<DD>
+Like <CODE>x*</CODE> but omitting word <CODE>$</CODE>.
+</DL>
+
+<P>
+Note that a <CODE>%</CODE> word designator will only work when used as <CODE>!%</CODE>, 
+<CODE>!:%</CODE>, <CODE>!?str?:%</CODE> and only when used after a <CODE>!?</CODE> 
+substitution.  Anything else will result in an error, although the error may 
+not be the most obvious one.
+
+</P>
+
+
+
+<H3><A NAME="SEC36" HREF="zsh_toc.html#TOC36">Modifiers</A></H3>
+<P>
+<A NAME="IDX116"></A>
+<A NAME="IDX117"></A>
+
+</P>
+<P>
+After the optional word designator, you can add a sequence of one or more of 
+the following modifiers, each preceded by a <CODE>:</CODE>.  These modifiers also 
+work on the result of filename and parameter expansion.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>h</CODE>
+<DD>
+Remove a trailing pathname component,  leaving the head.
+
+<DT><CODE>r</CODE>
+<DD>
+Remove a trailing suffix of the form <CODE>.xxx</CODE>, leaving the basename.
+
+<DT><CODE>e</CODE>
+<DD>
+Remove all but the suffix.
+
+<DT><CODE>t</CODE>
+<DD>
+Remove all leading pathname components, leaving the tail.
+
+<DT><CODE>&#38;</CODE>
+<DD>
+Repeat the previous substitution.
+
+<DT><CODE>g</CODE>
+<DD>
+Apply the change to the first occurrence of a match in each word, by 
+prefixing the above (for example, <CODE>g&#38;</CODE>).
+
+<DT><CODE>p</CODE>
+<DD>
+Print the new command but do not execute it.
+
+<DT><CODE>q</CODE>
+<DD>
+Quote the substituted words, escaping further substitutions.
+
+<DT><CODE>x</CODE>
+<DD>
+Like <CODE>q</CODE>, but break into words at each blank.
+
+<DT><CODE>l</CODE>
+<DD>
+Convert the words to all lowercase.
+
+<DT><CODE>u</CODE>
+<DD>
+Convert the words to all uppercase.
+
+<DT><CODE>f</CODE>
+<DD>
+Repeats the immediately (without a colon) following modifier until the 
+resulting word doesn't change any more.  This and the following  <CODE>F</CODE>,  
+<CODE>w</CODE> and <CODE>W</CODE> modifier only work with parameter and filename expansion.
+
+<DT><CODE>F:<VAR>expr</VAR>:</CODE>
+<DD>
+Like <CODE>f</CODE>, but repeats only <CODE>n</CODE> times if the expression <VAR>expr</VAR> 
+evaluates to <CODE>n</CODE>. Any character can be used instead of the <CODE>:</CODE>,  
+if any of <CODE>(</CODE>, <CODE>[</CODE>, or <CODE>{</CODE> is used as the opening delimiter 
+the second one has to be <CODE>)</CODE>, <CODE>]</CODE>, or <CODE>}</CODE> respectively.
+
+<DT><CODE>w</CODE>
+<DD>
+Makes the immediately following modifier work on each word in the string.
+
+<DT><CODE>W:<VAR>sep</VAR>:</CODE>
+<DD>
+Like <CODE>w</CODE> but words are considered to be the parts of the string that are
+separated by <VAR>sep</VAR>.  Any character can be used instead of the <CODE>:</CODE>,  
+opening parentheses are handled specially, see above.
+
+<DT><CODE>s/<VAR>l</VAR>/<VAR>r</VAR>[/]</CODE>
+<DD>
+Substitute <VAR>r</VAR> for <VAR>l</VAR>.
+</DL>
+
+<P>
+Unless preceded by a <CODE>g</CODE>, the substitution is done only  for
+the first string that matches <CODE>l</CODE>.
+
+</P>
+<P>
+The left-hand side of substitutions are not regular expressions, but 
+character strings.  Any character can be used as the delimiter in place of 
+<CODE>/</CODE>.  A backslash quotes the delimiter character.  The character 
+<CODE>&#38;</CODE>, in the right hand side, is replaced by the text from the 
+left-hand-side.  The <CODE>&#38;</CODE> can be quoted with a backslash.   A null 
+<CODE>l</CODE> uses the previous string either from a <CODE>l</CODE> or from a 
+contextual scan string <CODE>s</CODE> from <CODE>!?s</CODE>.  You can omit the rightmost
+delimiter if a newline immediately follows <CODE>r</CODE>; the right-most <CODE>?</CODE>
+in a context scan can similarly be omitted.
+
+</P>
+<P>
+By default, a history reference with no event specification refers to the 
+same line as the last history reference on that command line, unless it is 
+the first history reference in a command.  In that case, a history reference
+with no event specification always refers to the previous command.   However,
+if the option <CODE>CSH_JUNKIE_HISTORY</CODE> is set, then history reference with  
+no event specification will always refer to the previous command.  For example,
+<CODE>!!:1</CODE> will always refer to the first word of the previous command and 
+<CODE>!!$</CODE> will always refer to the last word of the previous command.  And 
+with <CODE>CSH_JUNKIE_HISTORY</CODE> set, then <CODE>!:1</CODE> and <CODE>!$</CODE> will 
+function in the same manner as <CODE>!!:1</CODE> and <CODE>!!$</CODE>, 
+respectively.   However, if <CODE>CSH_JUNKIE_HISTORY</CODE> is unset, then 
+<CODE>!:1</CODE> and <CODE>!$</CODE> will refer to the first and last words respectively, 
+of the last command referenced on the current command line.  However, if they
+are the first history reference on the command line, then they refer to the
+previous command.
+
+</P>
+<P>
+The character sequence <CODE>^<VAR>foo</VAR>^<VAR>bar</VAR></CODE> repeats the last command,
+replacing the string <VAR>foo</VAR> with the string <VAR>bar</VAR>.
+
+</P>
+<P>
+If the shell encounters the character sequence <CODE>!"</CODE> in the input, the 
+history mechanism is temporarily disabled until the current list is fully 
+parsed.  The <CODE>!"</CODE> is removed from the input, and any subsequent 
+<CODE>!</CODE> characters have no special significance.
+
+</P>
+<P>
+A less convenient but more comprehensible form of command history support 
+is provided by the <CODE>fc</CODE> builtin 
+<A NAME="IDX118"></A>
+(see section <A HREF="zsh_17.html#SEC64">Shell Builtin Commands</A>).
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_5.html">previous</A>, <A HREF="zsh_7.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,149 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from ./zsh.texi on 17 October 1999 -->
+
+<TITLE>zsh - Jobs &#38; Signals</TITLE>
+<link href="zsh_11.html" rel=Next>
+<link href="zsh_9.html" rel=Previous>
+<link href="zsh_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_9.html">previous</A>, <A HREF="zsh_11.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC40" HREF="zsh_toc.html#TOC40">Jobs &#38; Signals</A></H1>
+<P>
+<A NAME="IDX142"></A>
+
+</P>
+<P>
+If the <CODE>MONITOR</CODE> option is set, an interactive shell associates a
+<A NAME="IDX143"></A>
+<STRONG>job</STRONG> with each pipeline.  It keeps a table of current jobs,
+<A NAME="IDX144"></A>
+printed by the <CODE>jobs</CODE> command, and assigns them small integer
+numbers.  When a job is started asynchronously with <CODE>&#38;</CODE>, the shell
+prints a line which looks like:
+
+</P>
+<P>
+<CODE>[1] 1234</CODE>
+
+</P>
+<P>
+indicating that the job which was started asynchronously was job number
+1 and had one (top-level) process, whose process id was 1234.
+
+</P>
+<P>
+If a job is started with <CODE>&#38;|</CODE> or <CODE>&#38;!</CODE>, then that job is
+immediately disowned.  After startup, it does not have a place in the job
+table, and is not subject to the job control features described here.
+
+</P>
+<P>
+If you are running a job and wish to do something else you may hit the
+key <KBD>^Z</KBD> (control-Z) which sends a <CODE>TSTP</CODE> signal to the current
+<A NAME="IDX145"></A>
+<A NAME="IDX146"></A>
+<A NAME="IDX147"></A>
+job.  The shell will then normally indicate that the job has been
+<STRONG>suspended</STRONG>, and print another prompt.  You can then manipulate the
+state of this job, putting it into the background with the <CODE>bg</CODE>
+<A NAME="IDX148"></A>
+command, or run some other commands and then eventually bring the job
+back into the foreground with the foreground command <CODE>fg</CODE>.  A
+<A NAME="IDX149"></A>
+<KBD>^Z</KBD> takes effect immediately and is like an interrupt in that
+pending output and unread input are discarded when it is typed.
+
+</P>
+<P>
+A job being run in the background will suspend if it tries to read from
+<A NAME="IDX150"></A>
+<A NAME="IDX151"></A>
+the terminal.  Background jobs are normally allowed to produce output,
+but this can be disabled by giving the command <CODE>stty tostop</CODE>.  If
+you set this tty option, then background jobs will suspend when they try
+to produce output, like they do when they try to read input.
+
+</P>
+<P>
+There are several ways to refer to jobs in the shell.  A job can be
+<A NAME="IDX152"></A>
+<A NAME="IDX153"></A>
+referred to by the process id of any process of the job or by one of the
+following:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>%<VAR>number</VAR></CODE>
+<DD>
+The job with the given number.
+
+<DT><CODE>%<VAR>string</VAR></CODE>
+<DD>
+Any job whose command line begins with <VAR>string</VAR>.
+
+<DT><CODE>%?<VAR>string</VAR></CODE>
+<DD>
+Any job whose command line contains <VAR>string</VAR>.
+
+<DT><CODE>%%</CODE>
+<DD>
+Current job.
+
+<DT><CODE>%+</CODE>
+<DD>
+Equivalent to <CODE>%%</CODE>.
+
+<DT><CODE>%-</CODE>
+<DD>
+Previous job.
+</DL>
+
+<P>
+The shell learns immediately whenever a process changes state.  It
+normally informs you whenever a job becomes blocked so that no further
+progress is possible.  If <CODE>notify</CODE> is not set, it waits until just
+<A NAME="IDX154"></A>
+before it prints a prompt before it informs you.
+
+</P>
+<P>
+When the monitor mode is on, each background job that completes triggers
+any trap set for <CODE>CHLD</CODE>.
+
+</P>
+<P>
+When you try to leave the shell while jobs are running or suspended, you
+will be warned that <SAMP>`You have suspended (running) jobs'</SAMP>.  You may
+use the <CODE>jobs</CODE> command to see what they are.  If you do this or
+immediately try to exit again, the shell will not warn you a second
+time; the suspended jobs will be terminated, and the running jobs will
+be sent a <CODE>SIGHUP</CODE> signal.  To avoid having the shell terminate the
+running jobs, either use the <CODE>nohup(1)</CODE> command or the
+<CODE>disown</CODE> builtin (see section <A HREF="zsh_17.html#SEC64">Shell Builtin Commands</A>).
+<A NAME="IDX155"></A>
+<A NAME="IDX156"></A>
+<A NAME="IDX157"></A>
+
+</P>
+<P>
+The <CODE>INT</CODE> and <CODE>QUIT</CODE> signals for an invoked command are
+<A NAME="IDX158"></A>
+ignored if the command is followed by <CODE>&#38;</CODE> and the job <CODE>monitor</CODE>
+option is not active.  Otherwise, signals have the values inherited by
+the shell from its parent (but See section <A HREF="zsh_9.html#SEC39">Functions</A>, for the
+<CODE>TRAP<VAR>xxx</VAR></CODE> special functions).
+
+</P>
+
+<P><HR><P>
+<p>Go to the <A HREF="zsh_1.html">first</A>, <A HREF="zsh_9.html">previous</A>, <A HREF="zsh_11.html">next</A>, <A HREF="zsh_24.html">last</A> section, <A HREF="zsh_toc.html">table of contents</A>.
+</BODY>
+</HTML>
