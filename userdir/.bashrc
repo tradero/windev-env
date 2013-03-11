@@ -68,6 +68,6 @@ bind '"\e[3~": delete-char'       # delete key
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export PS1="$BBlack[$Time] [$$:$PPID] $UHost $LError[$DStat] $Cyan[$Jobs:$Hist] $BRed$GITB$Color_Off$EOL$ "
-export HOME=%HOMEDIR%
+export HOME="%HOMEDIR%"
 
 cd $HOME
