@@ -7,9 +7,9 @@
 # some utf chars -_-
 # ↑ ↓ ↕ ➔
 
-source git-prompt.sh
-source git-completion.bash
-source colors.sh
+source /userdir/git-prompt.sh
+source /userdir/git-completion.bash
+source /userdir/colors.sh
 
 alias ls="ls --color=auto"
 alias dir="ls"
