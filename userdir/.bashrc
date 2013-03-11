@@ -69,5 +69,6 @@ bind '"\e[3~": delete-char'       # delete key
 
 export PS1="$BBlack[$Time] [$$:$PPID] $UHost $LError[$DStat] $Cyan[$Jobs:$Hist] $BRed$GITB$Color_Off$EOL$ "
 export HOME="%HOMEDIR%"
+export PATH="$PATH:$PROGRAMFILES/nodejs:$APPDATA/npm";
 
 cd $HOME
