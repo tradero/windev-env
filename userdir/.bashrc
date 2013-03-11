@@ -13,10 +13,6 @@ source colors.sh
 
 alias ls="ls --color=auto"
 alias dir="ls"
-alias subl="'D:/_software/Sublime Text 2/sublime_text.exe'"
-alias editme="subl /d/_software/_console/userdir/.bashrc"
-alias dns="subl /c/Windows/system32/drivers/etc/hosts"
-alias rte="route add 10.0.0.0 mask 255.255.255.0 192.168.1.1"
 
 # ripple
 alias ripple-sr="ripple start release"
@@ -31,22 +27,6 @@ alias rff="ripple finish feature"
 # /ripple
 
 export EDITOR='subl -w'
-
-# git config --global mergetool.sublime.cmd "subl -w \$MERGED"
-git config --global mergetool.sublime.cmd "d:/s/subl.exe -w \$MERGED"
-git config --global mergetool.sublime.trustExitCode false
-git config --global merge.tool sublime
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-alias bsl="cd ~/tradero/bookmarks"
-alias bsldeploy="bsl && yeoman build && cd temp && af update bsl"
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-alias deploy-webui='cd /d/_projects/tradero/webui/source;yeoman build;dest="/home/workers/xk/projects/public/web-app/htdocs/tests/webui3"; ssh xk@10.0.0.2 "rm -rf $dest; mkdir $dest"; scp -r dist/* xk@10.0.0.2:$dest'
-
-#
 
 PathShort="\w"
 PathFull="\W"
@@ -88,8 +68,6 @@ bind '"\e[3~": delete-char'       # delete key
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export PS1="$BBlack[$Time] [$$:$PPID] $UHost $LError[$DStat] $Cyan[$Jobs:$Hist] $BRed$GITB$Color_Off$EOL$ "
-export PATH=$PATH:"/c/Program Files/Git/bin":"/c/Program Files/Git/libexec/git-core":/d/_software/_console/bin:/d/_software/_console/unix:/d/xampp/php
-export PATH=$PATH:/d/_projects/tests/yeoman/yeoman-custom/cli/bin
-export HOME=/d/_projects
+export HOME=%HOMEDIR%
 
 cd $HOME
